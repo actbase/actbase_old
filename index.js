@@ -1,3 +1,2 @@
 
-
-export default {};
+module.exports = require('./components');
