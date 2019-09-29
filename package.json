@@ -1,0 +1,28 @@
+{
+  "name": "actbase",
+  "version": "0.0.1",
+  "description": "React & React-Native Design Components",
+  "main": "index.js",
+  "author": {
+    "name": "Trabricks LLC",
+    "email": "apps@trabricks.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "mobile",
+    "zoom"
+  ],
+  "homepage": "https://github.com/actbase/actbase",
+  "bugs": {
+    "url": "https://github.com/actbase/actbase/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/actbase/actbase.git"
+  },
+  "dependencies": {
+  }
+}
