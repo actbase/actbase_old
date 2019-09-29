@@ -9,4 +9,7 @@ export const Aside = View;
 export const Article = View;
 export const Text = RNText;
 
+export const Button = require('./Button').default;
+
+
 export default ActBase;

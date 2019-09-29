@@ -24,5 +24,11 @@
     "url": "git://github.com/actbase/actbase.git"
   },
   "dependencies": {
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "less": "^3.10.3",
+    "react-native-less-transformer": "^1.3.0"
   }
 }
