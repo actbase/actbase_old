@@ -1,7 +1,9 @@
 import { View, Text as RNText } from 'react-native';
 
-export const ActBase = require('./ABApp/index.native').default;
+export const ActBase = require('./ABApp').default;
+
 export const Div = View;
+export const View = View;
 export const Header = View;
 export const Footer = View;
 export const Section = View;
