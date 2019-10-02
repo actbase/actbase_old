@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import _styles from './style';
 
-const styles = StyleSheet.create({
-  default: {
-    height: 40,
-    backgroundColor: '#1890ff',
-    borderColor: '#1890ff',
-    borderWidth: 1,
-    borderRadius: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  defaultText: {
-    color: '#FFF',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-});
+const styles = StyleSheet.create(_styles);
+// {
+//   default: {
+//     height: 40,
+//     backgroundColor: '#1890ff',
+//     borderColor: '#1890ff',
+//     borderWidth: 1,
+//     borderRadius: 4,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+//   defaultText: {
+//     color: '#FFF',
+//     fontSize: 14,
+//     fontWeight: 'bold',
+//   },
+// });
 
-const coverStyle = [styles.default];
+const coverStyle = [styles['ab-button']];
 
 const Button = ({ children }) => {
+
+  console.log(styles);
+
   try {
 
     const [pressed, setPressed] = useState(false);

@@ -1,14 +1,14 @@
-import { View, Text as RNText } from 'react-native';
+import { View as RNView, Text as RNText } from 'react-native';
 
 export const ActBase = require('./ABApp').default;
 
-export const Div = View;
-export const View = View;
-export const Header = View;
-export const Footer = View;
-export const Section = View;
-export const Aside = View;
-export const Article = View;
+export const Div = RNView;
+export const View = RNView;
+export const Header = RNView;
+export const Footer = RNView;
+export const Section = RNView;
+export const Aside = RNView;
+export const Article = RNView;
 export const Text = RNText;
 
 export const Button = require('./Button').default;
