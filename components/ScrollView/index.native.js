@@ -1,173 +1,147 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { Animated, Dimensions, findNodeHandle, Keyboard, UIManager } from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  findNodeHandle,
+  Keyboard,
+  Platform,
+  ScrollView as RNScrollView,
+  UIManager,
+} from 'react-native';
 
 const { height } = Dimensions.get('screen');
 
-export default class ScrollView extends React.PureComponent {
-
-  constructor(props) {
-    super(props);
-    this.keyboardHeight = new Animated.Value(0);
-    this.scrollRef = React.createRef();
-    this._offsetY = 0;
-  }
-
-  componentDidMount() {
-    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
-    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
-    this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-    this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
-  }
-
-  componentWillUnmount() {
-    this.keyboardWillShowSub.remove();
-    this.keyboardWillHideSub.remove();
-    this.keyboardDidShowSub.remove();
-    this.keyboardDidHideSub.remove();
-  }
-
-  async onLayout() {
-    if (!this.scrollRef.current) {
-      return;
+const measure = (target) => {
+  return new Promise((resolve, reject) => {
+    try {
+      UIManager.measure(target, (originX, originY, width, height, pageX, pageY) => resolve({
+        originX,
+        originY,
+        width,
+        height,
+        pageX,
+        pageY,
+      }));
+    } catch (e) {
+      reject(e);
     }
-    const _p = await this.measure(findNodeHandle(this.scrollRef.current));
-    this._gap = height - (_p.height + _p.pageY);
-    this._spo = _p.pageY;
-    this._sph = _p.height;
-  }
+  });
+};
 
-  el() {
-    const el = this.scrollRef.current;
-    return (el.getNode) ? el.getNode() : el;
-  }
+const ScrollView = (props) => {
+  let animated = null;
+  let focusItem = null;
+  const scrollRef = React.createRef();
+  const keyboardHeight = new Animated.Value(0);
 
-  keyboardWillShow = (event) => {
+  const movePosition = async (posScroll, toValue) => {
+    if (focusItem) {
+      const posContainer = await measure(scrollRef.current.getInnerViewNode());
+      const posFocus = await measure(focusItem);
+      const offset = posScroll.pageY - posContainer.pageY;
+      const y = (posFocus.pageY - posScroll.pageY);
 
-    if (!this._focus) {
-      this._spg = this._sph - (event.endCoordinates.height - (this._gap || 0));
-      this.moveTo();
-    }
-
-    this._focus = true;
-    this.props.onKeyboardShow && this.props.onKeyboardShow(false);
-
-    this.setState({ show: true });
-
-    if (this.animated) {
-      this.animated.stop();
-      this.animated = null;
-    }
-    this.animated = Animated.parallel([
-      Animated.timing(this.keyboardHeight, {
-        duration: event.duration,
-        toValue: event.endCoordinates.height - (this._gap || 0),
-      }),
-    ]);
-    this.animated.start();
-  };
-
-  keyboardWillHide = (event) => {
-    this._focus = false;
-    this.props.onKeyboardHide && this.props.onKeyboardHide(false);
-
-    if (this.animated) {
-      this.animated.stop();
-      this.animated = null;
-    }
-
-    this.animated = Animated.parallel([
-      Animated.timing(this.keyboardHeight, {
-        duration: event.duration,
-        toValue: this.props.paddingBottom ? this.props.paddingBottom : 0,
-      }),
-    ]);
-    this.animated.start();
-  };
-
-  keyboardDidShow = (event) => {
-    this._focus = true;
-    this.props.onKeyboardShow && this.props.onKeyboardShow(true);
-    this.setState({ show: true });
-    this.moveTo(false);
-  };
-
-  keyboardDidHide = (event) => {
-    this._focus = false;
-    this.props.onKeyboardHide && this.props.onKeyboardHide(true);
-    this.setState({ show: false });
-  };
-
-
-  onFocus(e) {
-    this._lt = e.target || e.currentTarget;
-    if (this._focus) {
-      this.moveTo();
-    }
-  }
-
-  async moveTo(animated = true) {
-    if (!this._lt) {
-      return;
-    }
-    const { pageY, height } = await this.measure(this._lt);
-    const _y = pageY - this._spo + this._offsetY;
-
-    if (pageY < 10) {
-      this.el()?.scrollTo({ y: _y, animated });
-    }
-    else if (_y + height > this._spg + this._offsetY) {
-      this.el()?.scrollTo({ y: _y - this._spg + height, animated });
-    }
-  }
-
-  measure(target) {
-    return new Promise((resolve, reject) => {
-      try {
-        UIManager.measure(target, (originX, originY, width, height, pageX, pageY) => resolve({
-          originX,
-          originY,
-          width,
-          height,
-          pageX,
-          pageY,
-        }));
+      if (y < 0) {
+        scrollRef.current?.scrollTo({ y: (offset + y) - 30, animated: true });
+      } else {
+        const nowY = posFocus.pageY - posScroll.pageY + 50;
+        if (nowY > posScroll.height - toValue) {
+          const moveY = offset + (nowY - (posScroll.height - toValue));
+          scrollRef.current?.scrollTo({ y: moveY, animated: true });
+        }
       }
-      catch (e) {
-        reject(e);
-      }
+    }
+  };
+
+
+  const handleKWS = async (e) => {
+    const posScroll = await measure(findNodeHandle(scrollRef.current));
+    const bottom = height - (posScroll.pageY + posScroll.height);
+    const toValue = e.endCoordinates.height - bottom;
+    if (animated) {
+      animated.stop();
+      animated = null;
+    }
+    keyboardHeight.setValue(toValue);
+    await movePosition(posScroll, toValue);
+  };
+
+  const handleKWH = (e) => {
+    if (animated) animated.stop();
+    animated = Animated.timing(keyboardHeight, {
+      duration: e.duration,
+      toValue: 0,
     });
-  }
+    animated.start();
+  };
 
-  render() {
-    const { children, onFocus, onLayout, onMomentumScrollEnd, ...props } = this.props;
+  const handleKDS = async (e) => {
+    const posScroll = await measure(findNodeHandle(scrollRef.current));
+    const bottom = height - (posScroll.pageY + posScroll.height);
+    const toValue = e.endCoordinates.height - bottom;
+    if (animated) {
+      animated.stop();
+      animated = null;
+    }
+    keyboardHeight.setValue(toValue);
+    if (Platform.OS === 'android') {
+      await movePosition(posScroll, toValue);
+    }
+  };
 
-    const Element = this.props.onScroll ? Animated.ScrollView : ScrollView;
+  const handleKDH = () => {
+    if (animated) {
+      animated.stop();
+      animated = null;
+    }
+    keyboardHeight.setValue(0);
+  };
 
-    return (
-      <Element
-        ref={this.scrollRef}
-        keyboardShouldPersistTaps={'handled'}
-        onMomentumScrollEnd={(e) => {
-          this._offsetY = e.nativeEvent.contentOffset.y;
-          onMomentumScrollEnd && onMomentumScrollEnd(e);
-        }}
-        onLayout={(e) => {
-          this.onLayout();
-          onLayout && onLayout(e);
-        }}
-        onFocus={(e) => {
-          this.onFocus(e);
-          onFocus && onFocus(e);
-        }}
-        {...props}>
-        {children}
-        <Animated.View style={{ height: this.keyboardHeight }} />
-      </Element>
-    );
-  }
+  useEffect(() => {
+    const listeners = [];
+    if (Platform.OS === 'ios') {
+      listeners.push(Keyboard.addListener('keyboardWillShow', handleKWS));
+      listeners.push(Keyboard.addListener('keyboardWillHide', handleKWH));
+    }
+    listeners.push(Keyboard.addListener('keyboardDidShow', handleKDS));
+    listeners.push(Keyboard.addListener('keyboardDidHide', handleKDH));
 
-}
+    return () => {
+      listeners.forEach(listener => listener?.remove && listener?.remove());
+    };
+  }, []);
 
+  const {
+    keyboardShouldPersistTaps,
+    onFocus,
+    onBlur,
+    children,
+    ...oProps
+  } = props;
+
+  const Element = props.onScroll ? Animated.ScrollView : RNScrollView;
+  return (
+    <Element
+      ref={scrollRef}
+      {...oProps}
+      onFocus={(e) => {
+        focusItem = findNodeHandle(e.target);
+        onFocus && onFocus(e);
+      }}
+      onBlur={(e) => {
+        focusItem = null;
+        onBlur && onBlur(e);
+      }}
+      keyboardShouldPersistTaps={keyboardShouldPersistTaps || 'handled'}
+    >
+      {children}
+      <Animated.View style={{ height: keyboardHeight }}/>
+    </Element>
+  );
+
+};
+
+export default ScrollView;
 
 
