@@ -11,9 +11,7 @@
   "keywords": [
     "react",
     "react-native",
-    "react-component",
-    "mobile",
-    "zoom"
+    "react-component"
   ],
   "homepage": "https://github.com/actbase/actbase",
   "bugs": {
@@ -25,10 +23,11 @@
   },
   "dependencies": {
     "lodash": "^4.17.15",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
-    "less": "^3.10.3",
-    "react-native-less-transformer": "^1.3.0"
+    "react": "16.9.0",
+    "react-native": "0.61.5"
   }
 }

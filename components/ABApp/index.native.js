@@ -1,6 +1,7 @@
 import React from 'react';
 
-const ABApp = (RootComponent) => (props) => {
+const ABApp = (RootComponent, theme) => (props) => {
+  console.log(theme);
   return (
     <>
       <RootComponent {...props} />
