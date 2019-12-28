@@ -2,10 +2,12 @@ import React from 'react';
 import { ABContext } from '../utils';
 
 const ABApp = (RootComponent, theme) => (props) => {
-  console.log(theme);
+  const value = { theme };
   return (
-    <ABContext.Provider value={{ theme }}>
-      <RootComponent {...props} />
+    <ABContext.Provider value={value}>
+      <>
+        <RootComponent {...props} />
+      </>
     </ABContext.Provider>
   );
 };

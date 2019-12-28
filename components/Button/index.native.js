@@ -1,14 +1,13 @@
-import React, {useContext, useState, useCallback, useRef} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
   ActivityIndicator,
   SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import {pick, omit} from 'lodash';
+import {omit, pick} from 'lodash';
 import styles from './styles.css';
 import {ABContext, TEXT_STYLE_NAMES} from '../utils';
 
@@ -16,7 +15,6 @@ const STYLE_GROUP_NAME = 'ab-button';
 
 const Button = props => {
   const {
-    color,
     size,
     type,
     style,
@@ -126,10 +124,9 @@ const Button = props => {
 
   return (
     <TouchableWithoutFeedback
+      onPress={handleClick}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      activeOpacity={1}
-      onPress={handleClick}
       disabled={process > 0 || disabled}
       {...oProps}>
       <Element1 style={coverStyle} {...args}>
