@@ -1,0 +1,40 @@
+._ab-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f00;
+  border-radius: 4px;
+  padding: 10px;
+  height: 48px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+._ab-button-hover {
+  background-color: #0ff000;
+}
+
+._ab-button-press {
+  background-color: #0f0;
+}
+
+._ab-button-disabled {
+  background-color: #00f;
+}
+
+._ab-button-size-xs {
+  padding: 5px;
+  height: 28px;
+}
+
+._ab-button-size-lg {
+  padding: 12px;
+  height: 58px;
+}
+
+._ab-button-size-xlg {
+  padding: 12px;
+  height: 68px;
+}
