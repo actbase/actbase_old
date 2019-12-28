@@ -1,3 +1,7 @@
+import React, { createContext } from 'react';
+
+export const ABContext = createContext({});
+
 export const TEXT_STYLE_NAMES = [
   'color',
   'fontFamily',
@@ -21,5 +25,6 @@ export const TEXT_STYLE_NAMES = [
 ];
 
 export default {
+  ABContext,
   TEXT_STYLE_NAMES,
 };

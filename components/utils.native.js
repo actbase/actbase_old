@@ -1,4 +1,7 @@
+import React, { createContext } from 'react';
 import { UIManager } from 'react-native';
+
+export const ABContext = createContext({});
 
 export const measure = target => {
   return new Promise((resolve, reject) => {
@@ -44,6 +47,7 @@ export const TEXT_STYLE_NAMES = [
 ];
 
 export default {
+  ABContext,
   TEXT_STYLE_NAMES,
   measure,
 };

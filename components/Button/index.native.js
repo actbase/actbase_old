@@ -3,17 +3,22 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
-import {pick} from 'lodash';
+import {pick, omit} from 'lodash';
 import styles from './styles.css';
-import {TEXT_STYLE_NAMES} from '../utils';
+import {ABContext, TEXT_STYLE_NAMES} from '../utils';
+
+const STYLE_GROUP_NAME = 'ab-button';
 
 const Button = props => {
   const {
     color,
     size,
-    theme,
+    type,
     style,
     children,
     disabled,
@@ -24,16 +29,19 @@ const Button = props => {
     ...oProps
   } = props;
 
-  const classes = ['_ab-button'];
+  const classes = [`_${STYLE_GROUP_NAME}`];
+  const context = useContext(ABContext);
 
   const [press, setPress] = useState(false);
-  if (press) classes.push('_ab-button-press');
+  if (press) classes.push(`_${STYLE_GROUP_NAME}-press`);
 
   const [hover, setHover] = useState(false);
-  if (hover) classes.push('_ab-button-hover');
+  if (hover) classes.push(`_${STYLE_GROUP_NAME}-hover`);
 
-  if (['xs', 'lg', 'xlg'].indexOf(size) >= 0)
-    classes.push(`_ab-button-size-${size}`);
+  if (disabled) classes.push(`_${STYLE_GROUP_NAME}-disabled`);
+
+  if (['xs', 'lg'].indexOf(size) >= 0)
+    classes.push(`_${STYLE_GROUP_NAME}-size-${size}`);
 
   const handlePressIn = useCallback(e => {
     onPressIn && onPressIn(e);
@@ -71,30 +79,63 @@ const Button = props => {
     [process],
   );
 
-  const className = classes.concat(classes.map(v => v.substring(1)));
+  let className = classes.concat(classes.map(v => v.substring(1)));
+  if (type) {
+    const ix = STYLE_GROUP_NAME.length + 1;
+    className = className.concat(
+      classes.map(v => `${STYLE_GROUP_NAME}-${type}${v.substring(ix)}`),
+    );
+  }
+
   const elementStyle = StyleSheet.flatten(
-    className.map(v => styles[v]).concat([style]),
+    className.map(v => context.theme[v] || styles[v]).concat([style]),
   );
 
   let contents = children;
-  if (typeof contents === 'string') {
+  if (process === 2) {
+    contents = <ActivityIndicator />;
+  } else if (typeof contents === 'string') {
     contents = (
       <Text style={pick(elementStyle, TEXT_STYLE_NAMES)}>{props.children}</Text>
     );
   }
 
+  let Element1 = View;
+  let Element2 = View;
+  let args = {};
+  let coverStyle = elementStyle;
+  let innerStyle = {};
+
+  if (forceInset) {
+    Element1 = SafeAreaView;
+    Element2 = View;
+    coverStyle = omit(elementStyle, [
+      'height',
+      'minHeight',
+      'maxHeight',
+      'borderRadius',
+    ]);
+    innerStyle = pick(elementStyle, [
+      'height',
+      'minHeight',
+      'maxHeight',
+      'alignItems',
+      'justifyContent'
+    ]);
+  }
+
   return (
-    <TouchableOpacity
+    <TouchableWithoutFeedback
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       activeOpacity={1}
       onPress={handleClick}
       disabled={process > 0 || disabled}
-      style={elementStyle}
-      // children={contents}
       {...oProps}>
-      {process === 2 ? <ActivityIndicator /> : contents}
-    </TouchableOpacity>
+      <Element1 style={coverStyle} {...args}>
+        <Element2 style={innerStyle} children={contents} />
+      </Element1>
+    </TouchableWithoutFeedback>
   );
 };
 
