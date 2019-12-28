@@ -2,3 +2,7 @@
 
 /node_modules
 /dist
+
+.idea
+.watchmanconfig
+package-lock.json
