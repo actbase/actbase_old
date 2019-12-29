@@ -1,5 +1,5 @@
 
-export const ActBase = require('./ABApp').default;
+export const ActBase = require('./App').default;
 
 export const Div = div;
 export const View = div;

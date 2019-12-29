@@ -1,6 +1,6 @@
 import { View as RNView, Text as RNText } from 'react-native';
 
-export const ActBase = require('./ABApp').default;
+export const ActBase = require('./App').default;
 
 export const Div = RNView;
 export const View = RNView;
