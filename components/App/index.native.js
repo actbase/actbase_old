@@ -1,5 +1,5 @@
 import React from 'react';
-import { ABContext } from '../utils';
+import { ABContext } from './utils';
 
 const ABApp = (RootComponent, theme) => (props) => {
   const value = { theme };

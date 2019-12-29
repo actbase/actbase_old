@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { findNodeHandle, View } from 'react-native';
-import { measure } from '../utils';
+import { measure } from '../../App/utils';
 
 export const FormContext = React.createContext({});
 

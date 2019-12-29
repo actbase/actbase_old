@@ -11,7 +11,7 @@ export const Aside = RNView;
 export const Article = RNView;
 export const Text = RNText;
 
-export const Button = require('./Button').default;
+export const Button = require('./General/Button').default;
 
 
 export default ActBase;

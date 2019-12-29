@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {omit, pick} from 'lodash';
 import styles from './styles.css';
-import {ABContext, TEXT_STYLE_NAMES} from '../utils';
+import {ABContext, TEXT_STYLE_NAMES} from '../../App/utils';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
