@@ -11,7 +11,19 @@ export const Aside = RNView;
 export const Article = RNView;
 export const Text = RNText;
 
+// General
 export const Button = require('./General/Button').default;
 
+// Layout
+
+// Navigation
+
+// Data Entry
+
+// Data Display
+
+// Feedback
+
+// Other
 
 export default ActBase;

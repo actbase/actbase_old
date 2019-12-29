@@ -10,7 +10,20 @@ export const Aside = aside;
 export const Article = article;
 export const Text = span;
 
+// General
 export const Button = require('./General/Button').default;
+
+// Layout
+
+// Navigation
+
+// Data Entry
+
+// Data Display
+
+// Feedback
+
+// Other
 
 
 export default ActBase;
