@@ -1,2 +1,2 @@
 
-module.exports = require('./components');
+module.exports = require('./dist/actbase');

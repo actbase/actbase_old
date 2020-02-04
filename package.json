@@ -27,7 +27,24 @@
     "styled-components": "^4.4.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/node": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.7.5",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "core-js": "^3.6.2",
+    "cross-env": "^6.0.3",
+    "prettier": "^1.19.1",
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-css-transformer": "^1.2.4",
+    "rollup": "^1.29.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "rollup-plugin-uglify": "^6.0.4"
   }
 }
