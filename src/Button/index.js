@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
+import styles from './styles.css';
 import { ABContext } from '../App/utils';
 
 const Button = props => {
@@ -73,9 +74,9 @@ const Button = props => {
     );
   }
 
-  const elementStyle = StyleSheet.flatten(
-    className.map(v => context.theme[v] || styles[v]).concat([style]),
-  );
+  // const elementStyle = StyleSheet.flatten(
+  //   className.map(v => context.theme[v] || styles[v]).concat([style]),
+  // );
 
   let Element1 = View;
   let Element2 = View;

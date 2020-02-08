@@ -48,7 +48,7 @@ const plugins = [
 
 export default [
   {
-    input: p.resolve('src/index.js'),
+    input: p.resolve('src/index._js'),
     output: {
       file: p.resolve(`dist/actbase.js`),
       format: 'umd',

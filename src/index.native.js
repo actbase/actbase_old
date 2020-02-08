@@ -1,19 +1,17 @@
-
 import App from './App/index.native';
+import { View as RNView, Text as RNText } from 'react-native';
 import _Button from './Button/index.native';
-
-const reactNative = require('react-native');
 
 export const ActBase = App;
 
-export const Div = reactNative.View;
-export const View = reactNative.View;
-export const Header = reactNative.View;
-export const Footer = reactNative.View;
-export const Section = reactNative.View;
-export const Aside = reactNative.View;
-export const Article = reactNative.View;
-export const Text = reactNative.Text;
+export const Div = RNView;
+export const View = RNView;
+export const Header = RNView;
+export const Footer = RNView;
+export const Section = RNView;
+export const Aside = RNView;
+export const Article = RNView;
+export const Text = RNText;
 
 // General
 export const Button = _Button;

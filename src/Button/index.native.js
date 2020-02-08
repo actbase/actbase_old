@@ -1,12 +1,10 @@
-import React, {useCallback, useContext, useState} from 'react';
-// import styles from './styles.css';
-import {ABContext, TEXT_STYLE_NAMES} from '../App/utils';
+import React, { useCallback, useContext, useState } from 'react';
+import styles from './styles.css';
+import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
-const styles = {};
-
-const {omit, pick} = require('lodash');
+const { omit, pick } = require('lodash');
 const {
   ActivityIndicator,
   SafeAreaView,
@@ -121,7 +119,7 @@ const Button = props => {
       'minHeight',
       'maxHeight',
       'alignItems',
-      'justifyContent'
+      'justifyContent',
     ]);
   }
 
@@ -131,7 +129,8 @@ const Button = props => {
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       disabled={process > 0 || disabled}
-      {...oProps}>
+      {...oProps}
+    >
       <Element1 style={coverStyle} {...args}>
         <Element2 style={innerStyle} children={contents} />
       </Element1>
