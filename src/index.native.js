@@ -10,6 +10,9 @@ export { default as Button } from './Button/index.native';
 import buttonStyle from './Button/styles.css';
 styles = assign(styles, transform(buttonStyle));
 
+// Data Entry
+export { default as Form } from './DataEntry/Form/index.native';
+
 // Web Migrated
 export const Div = RNView;
 export const View = RNView;
@@ -26,8 +29,6 @@ export const ActBase = App;
 // Layout
 
 // Navigation
-
-// Data Entry
 
 // Data Display
 
