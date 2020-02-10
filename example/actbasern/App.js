@@ -30,7 +30,7 @@ const App: () => React$Node = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <Button>가나다라</Button>
+        <Button type={"link"}>가나다라</Button>
       </SafeAreaView>
     </>
   );
@@ -38,7 +38,6 @@ const App: () => React$Node = () => {
 
 const styles = StyleSheet.create({
   'ab-button': {
-    backgroundColor: '#F00',
   },
 });
 

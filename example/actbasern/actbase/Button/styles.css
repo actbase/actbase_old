@@ -58,16 +58,16 @@
 }
 
 
-.ab-button-link {
+.ab-button-type-link {
   background: transparent;
   color: #007bff;
   border: 1px solid transparent;
 }
 
-.ab-button-link-press {
+.ab-button-type-link-press {
   color: #f00;
 }
 
-.ab-button-link-disabled {
+.ab-button-type-link-disabled {
   color: rgba(0, 0, 0, 0.25);
 }

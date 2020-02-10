@@ -27,17 +27,24 @@ const Button = props => {
     ...oProps
   } = props;
 
-  const classes = [`${STYLE_GROUP_NAME}`];
   const context = useContext(ABContext);
   const styles = context.styles;
 
+  let suffix = "";
+  console.log(`${STYLE_GROUP_NAME}-type-${type}`, styles[`${STYLE_GROUP_NAME}-type-${type}`]);
+  if (type && styles[`${STYLE_GROUP_NAME}-type-${type}`]) {
+    suffix = `-type-${type}`;
+  }
+
+  const classes = [`${STYLE_GROUP_NAME}${suffix}`];
+
   const [press, setPress] = useState(false);
-  if (press) classes.push(`${STYLE_GROUP_NAME}-press`);
+  if (press) classes.push(`${STYLE_GROUP_NAME}${suffix}-press`);
 
   const [hover, setHover] = useState(false);
-  if (hover) classes.push(`${STYLE_GROUP_NAME}-hover`);
+  if (hover) classes.push(`${STYLE_GROUP_NAME}${suffix}-hover`);
 
-  if (disabled) classes.push(`${STYLE_GROUP_NAME}-disabled`);
+  if (disabled) classes.push(`${STYLE_GROUP_NAME}${suffix}-disabled`);
 
   const handlePressIn = useCallback(e => {
     onPressIn && onPressIn(e);
@@ -76,12 +83,7 @@ const Button = props => {
   );
 
   let className = classes.concat(classes.map(v => v.substring(1)));
-  if (type) {
-    const ix = STYLE_GROUP_NAME.length + 1;
-    className = className.concat(
-      classes.map(v => `${STYLE_GROUP_NAME}-${type}${v.substring(ix)}`),
-    );
-  }
+  console.log(classes);
 
   //context.theme[v] ||
   const elementStyle = StyleSheet.flatten(

@@ -55,24 +55,31 @@ var Button = function Button(props) {
       forceInset = props.forceInset,
       oProps = _objectWithoutProperties(props, ["size", "type", "style", "children", "disabled", "onPress", "onPressIn", "onPressOut", "forceInset"]);
 
-  var classes = ["".concat(STYLE_GROUP_NAME)];
   var context = (0, _react.useContext)(_utils.ABContext);
   var styles = context.styles;
+  var suffix = "";
+  console.log("".concat(STYLE_GROUP_NAME, "-type-").concat(type), styles["".concat(STYLE_GROUP_NAME, "-type-").concat(type)]);
+
+  if (type && styles["".concat(STYLE_GROUP_NAME, "-type-").concat(type)]) {
+    suffix = "-type-".concat(type);
+  }
+
+  var classes = ["".concat(STYLE_GROUP_NAME).concat(suffix)];
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
       press = _useState2[0],
       setPress = _useState2[1];
 
-  if (press) classes.push("".concat(STYLE_GROUP_NAME, "-press"));
+  if (press) classes.push("".concat(STYLE_GROUP_NAME).concat(suffix, "-press"));
 
   var _useState3 = (0, _react.useState)(false),
       _useState4 = _slicedToArray(_useState3, 2),
       hover = _useState4[0],
       setHover = _useState4[1];
 
-  if (hover) classes.push("".concat(STYLE_GROUP_NAME, "-hover"));
-  if (disabled) classes.push("".concat(STYLE_GROUP_NAME, "-disabled"));
+  if (hover) classes.push("".concat(STYLE_GROUP_NAME).concat(suffix, "-hover"));
+  if (disabled) classes.push("".concat(STYLE_GROUP_NAME).concat(suffix, "-disabled"));
   var handlePressIn = (0, _react.useCallback)(function (e) {
     onPressIn && onPressIn(e);
     setPress(true);
@@ -115,14 +122,7 @@ var Button = function Button(props) {
   var className = classes.concat(classes.map(function (v) {
     return v.substring(1);
   }));
-
-  if (type) {
-    var ix = STYLE_GROUP_NAME.length + 1;
-    className = className.concat(classes.map(function (v) {
-      return "".concat(STYLE_GROUP_NAME, "-").concat(type).concat(v.substring(ix));
-    }));
-  } //context.theme[v] ||
-
+  console.log(classes); //context.theme[v] ||
 
   var elementStyle = StyleSheet.flatten(className.map(function (v) {
     return styles[v];
