@@ -30,8 +30,7 @@ const Button = props => {
   const context = useContext(ABContext);
   const styles = context.styles;
 
-  let suffix = "";
-  console.log(`${STYLE_GROUP_NAME}-type-${type}`, styles[`${STYLE_GROUP_NAME}-type-${type}`]);
+  let suffix = '';
   if (type && styles[`${STYLE_GROUP_NAME}-type-${type}`]) {
     suffix = `-type-${type}`;
   }
@@ -83,9 +82,7 @@ const Button = props => {
   );
 
   let className = classes.concat(classes.map(v => v.substring(1)));
-  console.log(classes);
 
-  //context.theme[v] ||
   const elementStyle = StyleSheet.flatten(
     className.map(v => styles[v]).concat([style]),
   );

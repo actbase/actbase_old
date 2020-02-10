@@ -1,6 +1,9 @@
 import React, { useCallback, useContext, useState } from 'react';
-import styles from './styles.css';
-import { ABContext } from '../App/utils';
+import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
+
+const STYLE_GROUP_NAME = 'ab-button';
+
+const { omit, pick } = require('lodash');
 
 const Button = props => {
   const {
@@ -16,19 +19,23 @@ const Button = props => {
     ...oProps
   } = props;
 
-  const classes = [`_${STYLE_GROUP_NAME}`];
   const context = useContext(ABContext);
+  const styles = context.styles;
+
+  let suffix = '';
+  if (type && styles[`${STYLE_GROUP_NAME}-type-${type}`]) {
+    suffix = `-type-${type}`;
+  }
+
+  const classes = [`${STYLE_GROUP_NAME}${suffix}`];
 
   const [press, setPress] = useState(false);
-  if (press) classes.push(`_${STYLE_GROUP_NAME}-press`);
+  if (press) classes.push(`${STYLE_GROUP_NAME}${suffix}-press`);
 
   const [hover, setHover] = useState(false);
-  if (hover) classes.push(`_${STYLE_GROUP_NAME}-hover`);
+  if (hover) classes.push(`${STYLE_GROUP_NAME}${suffix}-hover`);
 
-  if (disabled) classes.push(`_${STYLE_GROUP_NAME}-disabled`);
-
-  if (['xs', 'lg'].indexOf(size) >= 0)
-    classes.push(`_${STYLE_GROUP_NAME}-size-${size}`);
+  if (disabled) classes.push(`${STYLE_GROUP_NAME}${suffix}-disabled`);
 
   const handlePressIn = useCallback(e => {
     onPressIn && onPressIn(e);
@@ -67,16 +74,19 @@ const Button = props => {
   );
 
   let className = classes.concat(classes.map(v => v.substring(1)));
-  if (type) {
-    const ix = STYLE_GROUP_NAME.length + 1;
-    className = className.concat(
-      classes.map(v => `${STYLE_GROUP_NAME}-${type}${v.substring(ix)}`),
+
+  const elementStyle = StyleSheet.flatten(
+    className.map(v => styles[v]).concat([style]),
+  );
+
+  let contents = children;
+  if (process === 2) {
+    contents = <span />;
+  } else if (typeof contents === 'string') {
+    contents = (
+      <span style={pick(elementStyle, TEXT_STYLE_NAMES)}>{props.children}</span>
     );
   }
-
-  // const elementStyle = StyleSheet.flatten(
-  //   className.map(v => context.theme[v] || styles[v]).concat([style]),
-  // );
 
   let Element1 = View;
   let Element2 = View;
@@ -84,7 +94,37 @@ const Button = props => {
   let coverStyle = elementStyle;
   let innerStyle = {};
 
-  return <button></button>;
+  if (forceInset) {
+    Element1 = div;
+    Element2 = div;
+    coverStyle = omit(elementStyle, [
+      'height',
+      'minHeight',
+      'maxHeight',
+      'borderRadius',
+    ]);
+    innerStyle = pick(elementStyle, [
+      'height',
+      'minHeight',
+      'maxHeight',
+      'alignItems',
+      'justifyContent',
+    ]);
+  }
+
+  return (
+    <button
+      onPress={handleClick}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      disabled={process > 0 || disabled}
+      {...oProps}
+    >
+      <Element1 style={coverStyle} {...args}>
+        <Element2 style={innerStyle} children={contents} />
+      </Element1>
+    </button>
+  );
 };
 
 export default Button;
