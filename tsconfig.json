@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es3",
     "module": "esnext",
     "lib": [
       "dom",
@@ -20,7 +20,7 @@
     "resolveJsonModule": true,
     "pretty": true,
     "sourceMap": true,
-    "outDir": "lib",
+    "outDir": "dist",
     "removeComments": false,
     "strict": true,
     "noImplicitAny": true,
@@ -33,16 +33,11 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "types": [
-      "react",
-      "react-native"
-    ],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "typeRoots": [
       "node_modules/@types",
       "@types"
