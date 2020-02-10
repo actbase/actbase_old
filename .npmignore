@@ -2,6 +2,7 @@
 .idea/
 .git*
 src/
+example/
 
 .babelrc.js
 .gitignore

@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useState } from 'react';
-import styles from './styles.css';
 import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
 
 const STYLE_GROUP_NAME = 'ab-button';
@@ -28,19 +27,23 @@ const Button = props => {
     ...oProps
   } = props;
 
-  const classes = [`_${STYLE_GROUP_NAME}`];
   const context = useContext(ABContext);
+  const styles = context.styles;
+
+  let suffix = '';
+  if (type && styles[`${STYLE_GROUP_NAME}-type-${type}`]) {
+    suffix = `-type-${type}`;
+  }
+
+  const classes = [`${STYLE_GROUP_NAME}${suffix}`];
 
   const [press, setPress] = useState(false);
-  if (press) classes.push(`_${STYLE_GROUP_NAME}-press`);
+  if (press) classes.push(`${STYLE_GROUP_NAME}${suffix}-press`);
 
   const [hover, setHover] = useState(false);
-  if (hover) classes.push(`_${STYLE_GROUP_NAME}-hover`);
+  if (hover) classes.push(`${STYLE_GROUP_NAME}${suffix}-hover`);
 
-  if (disabled) classes.push(`_${STYLE_GROUP_NAME}-disabled`);
-
-  if (['xs', 'lg'].indexOf(size) >= 0)
-    classes.push(`_${STYLE_GROUP_NAME}-size-${size}`);
+  if (disabled) classes.push(`${STYLE_GROUP_NAME}${suffix}-disabled`);
 
   const handlePressIn = useCallback(e => {
     onPressIn && onPressIn(e);
@@ -79,15 +82,9 @@ const Button = props => {
   );
 
   let className = classes.concat(classes.map(v => v.substring(1)));
-  if (type) {
-    const ix = STYLE_GROUP_NAME.length + 1;
-    className = className.concat(
-      classes.map(v => `${STYLE_GROUP_NAME}-${type}${v.substring(ix)}`),
-    );
-  }
 
   const elementStyle = StyleSheet.flatten(
-    className.map(v => context.theme[v] || styles[v]).concat([style]),
+    className.map(v => styles[v]).concat([style]),
   );
 
   let contents = children;
