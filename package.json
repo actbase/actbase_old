@@ -25,7 +25,6 @@
     "url": "git://github.com/actbase/actbase.git"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.149",
     "css-to-react-native-transform": "^1.9.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
