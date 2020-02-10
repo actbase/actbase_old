@@ -20,7 +20,7 @@
     "resolveJsonModule": true,
     "pretty": true,
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "removeComments": false,
     "strict": true,
     "noImplicitAny": true,
@@ -44,8 +44,17 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "@types"
     ],
     "importHelpers": true
-  }
+  },
+  "include": [
+    "src/**/*",
+    "@types"
+  ],
+  "exclude": [
+    "node_modules",
+    "index.ts"
+  ]
 }
