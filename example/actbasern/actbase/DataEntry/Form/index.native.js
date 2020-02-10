@@ -13,6 +13,8 @@ var _reactNative = require("react-native");
 
 var _utils = require("../../App/utils");
 
+var _lodash = require("lodash");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -47,76 +49,76 @@ var Form = function Form(props) {
       data = _useState2[0],
       setData = _useState2[1];
 
+  var _useState3 = (0, _react.useState)({}),
+      _useState4 = _slicedToArray(_useState3, 2),
+      lastLayout = _useState4[0],
+      setLastLayout = _useState4[1];
+
   var onLayout = props.onLayout,
       oProps = _objectWithoutProperties(props, ["onLayout"]);
 
-  var addTarget =
-  /*#__PURE__*/
-  function () {
-    var _ref = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee(name, input, fn) {
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              elements.current[name] = {
-                input: input,
-                fn: fn
-              };
-
-            case 1:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function addTarget(_x, _x2, _x3) {
-      return _ref.apply(this, arguments);
+  var addTarget = (0, _react.useCallback)(function (name, input, fn) {
+    elements.current[name] = {
+      name: name,
+      input: input,
+      fn: fn
     };
-  }();
+  }, []);
 
   var handleLayout =
   /*#__PURE__*/
   function () {
-    var _ref2 = _asyncToGenerator(
+    var _ref = _asyncToGenerator(
     /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee2(e) {
+    regeneratorRuntime.mark(function _callee(e) {
       var _items$sort;
 
-      var _i2, _Object$keys, key, el, pos, area, items;
+      var _e$nativeEvent$layout, width, height, pos, _i2, _Object$keys, key, el, _pos, area, items;
 
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context.prev = _context.next) {
             case 0:
               onLayout && onLayout(e);
+              _e$nativeEvent$layout = e.nativeEvent.layout, width = _e$nativeEvent$layout.width, height = _e$nativeEvent$layout.height;
+              pos = {
+                width: width,
+                height: height
+              };
+
+              if (!(0, _lodash.isEqual)(lastLayout, pos)) {
+                _context.next = 5;
+                break;
+              }
+
+              return _context.abrupt("return");
+
+            case 5:
+              setLastLayout(pos);
               _i2 = 0, _Object$keys = Object.keys(elements === null || elements === void 0 ? void 0 : elements.current);
 
-            case 2:
+            case 7:
               if (!(_i2 < _Object$keys.length)) {
-                _context2.next = 13;
+                _context.next = 18;
                 break;
               }
 
               key = _Object$keys[_i2];
               el = elements === null || elements === void 0 ? void 0 : elements.current[key];
-              _context2.next = 7;
+              _context.next = 12;
               return (0, _utils.measure)((0, _reactNative.findNodeHandle)(el.input));
 
-            case 7:
-              pos = _context2.sent;
-              area = parseFloat("".concat(Math.floor(pos.pageX), ".").concat(Math.floor(pos.pageY)));
+            case 12:
+              _pos = _context.sent;
+              area = parseFloat("".concat(Math.floor(_pos.pageY), ".").concat(Math.floor(_pos.pageX)));
               elements.current[key].area = area;
 
-            case 10:
+            case 15:
               _i2++;
-              _context2.next = 2;
+              _context.next = 7;
               break;
 
-            case 13:
+            case 18:
               items = Object.values(elements.current);
               items === null || items === void 0 ? void 0 : (_items$sort = items.sort(function (a, b) {
                 return a.area > b.area ? 1 : a.area < b.area ? -1 : 0;
@@ -135,32 +137,45 @@ var Form = function Form(props) {
                 v.fn(args);
               });
 
-            case 15:
+            case 20:
             case "end":
-              return _context2.stop();
+              return _context.stop();
           }
         }
-      }, _callee2);
+      }, _callee);
     }));
 
-    return function handleLayout(_x4) {
-      return _ref2.apply(this, arguments);
+    return function handleLayout(_x) {
+      return _ref.apply(this, arguments);
     };
   }();
 
-  var onChangeText = function onChangeText(name, value) {
+  var onChangeText = (0, _react.useCallback)(function (name, value) {
     setData(function (state) {
       state[name] = value;
       return state;
     });
-  };
+  }, []);
 
-  var onSubmit = function onSubmit(input) {};
+  var submit = function submit(input) {
+    var _props$onSubmit;
+
+    var result = data;
+
+    if (props.output === 'FormData') {
+      result = new FormData();
+      (0, _lodash.forIn)(data, function (value, name) {
+        return result.append(name, "".concat(value));
+      });
+    }
+
+    props === null || props === void 0 ? void 0 : (_props$onSubmit = props.onSubmit) === null || _props$onSubmit === void 0 ? void 0 : _props$onSubmit.call(props, result);
+  };
 
   var value = {
     addTarget: addTarget,
     onChangeText: onChangeText,
-    onSubmit: onSubmit
+    submit: submit
   };
   return _react["default"].createElement(FormContext.Provider, {
     value: value

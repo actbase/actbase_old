@@ -13,6 +13,10 @@ styles = assign(styles, transform(buttonStyle));
 // Data Entry
 export { default as Form } from './DataEntry/Form/index.native';
 
+export { default as Input } from './DataEntry/Input/index.native';
+import inputStyle from './DataEntry/Input/styles.css';
+styles = assign(styles, transform(inputStyle));
+
 // Web Migrated
 export const Div = RNView;
 export const View = RNView;

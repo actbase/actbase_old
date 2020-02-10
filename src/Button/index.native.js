@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
+import { FormContext } from '../DataEntry/Form/index.native';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
@@ -28,6 +29,7 @@ const Button = props => {
   } = props;
 
   const context = useContext(ABContext);
+  const formContext = useContext(FormContext);
   const styles = context.styles;
 
   let suffix = '';
@@ -61,18 +63,34 @@ const Button = props => {
       if (process > 0) return;
       setProcess(1);
       try {
-        const o = onPress && onPress();
-        if (o instanceof Promise) {
-          setProcess(2);
-          o.then(() => {
-            setProcess(0);
-          }).catch(e => {
-            setProcess(0);
-            console.warn(e);
-          });
-        } else {
-          setTimeout(() => setProcess(0), 200);
+        let isPromise = false;
+        if (onPress) {
+          const o = onPress && onPress();
+          if (o instanceof Promise) {
+            isPromise = true;
+            setProcess(2);
+            o.then(() => {
+              setProcess(0);
+            }).catch(e => {
+              setProcess(0);
+              console.warn(e);
+            });
+          }
+        } else if (formContext?.submit) {
+          const o = formContext?.submit && formContext?.submit();
+          if (o instanceof Promise) {
+            isPromise = true;
+            setProcess(2);
+            o.then(() => {
+              setProcess(0);
+            }).catch(e => {
+              setProcess(0);
+              console.warn(e);
+            });
+          }
         }
+
+        if (!isPromise) setTimeout(() => setProcess(0), 200);
       } catch (e) {
         console.warn(e);
         setProcess(0);

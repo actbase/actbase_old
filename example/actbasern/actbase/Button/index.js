@@ -9,15 +9,13 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _styles = _interopRequireDefault(require("./styles.css"));
-
 var _utils = require("../App/utils");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -31,6 +29,12 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
+var STYLE_GROUP_NAME = 'ab-button';
+
+var _require = require('lodash'),
+    omit = _require.omit,
+    pick = _require.pick;
+
 var Button = function Button(props) {
   var size = props.size,
       type = props.type,
@@ -43,24 +47,30 @@ var Button = function Button(props) {
       forceInset = props.forceInset,
       oProps = _objectWithoutProperties(props, ["size", "type", "style", "children", "disabled", "onPress", "onPressIn", "onPressOut", "forceInset"]);
 
-  var classes = ["_".concat(STYLE_GROUP_NAME)];
   var context = (0, _react.useContext)(_utils.ABContext);
+  var styles = context.styles;
+  var suffix = '';
+
+  if (type && styles["".concat(STYLE_GROUP_NAME, "-type-").concat(type)]) {
+    suffix = "-type-".concat(type);
+  }
+
+  var classes = ["".concat(STYLE_GROUP_NAME).concat(suffix)];
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
       press = _useState2[0],
       setPress = _useState2[1];
 
-  if (press) classes.push("_".concat(STYLE_GROUP_NAME, "-press"));
+  if (press) classes.push("".concat(STYLE_GROUP_NAME).concat(suffix, "-press"));
 
   var _useState3 = (0, _react.useState)(false),
       _useState4 = _slicedToArray(_useState3, 2),
       hover = _useState4[0],
       setHover = _useState4[1];
 
-  if (hover) classes.push("_".concat(STYLE_GROUP_NAME, "-hover"));
-  if (disabled) classes.push("_".concat(STYLE_GROUP_NAME, "-disabled"));
-  if (['xs', 'lg'].indexOf(size) >= 0) classes.push("_".concat(STYLE_GROUP_NAME, "-size-").concat(size));
+  if (hover) classes.push("".concat(STYLE_GROUP_NAME).concat(suffix, "-hover"));
+  if (disabled) classes.push("".concat(STYLE_GROUP_NAME).concat(suffix, "-disabled"));
   var handlePressIn = (0, _react.useCallback)(function (e) {
     onPressIn && onPressIn(e);
     setPress(true);
@@ -103,23 +113,43 @@ var Button = function Button(props) {
   var className = classes.concat(classes.map(function (v) {
     return v.substring(1);
   }));
+  var elementStyle = StyleSheet.flatten(className.map(function (v) {
+    return styles[v];
+  }).concat([style]));
+  var contents = children;
 
-  if (type) {
-    var ix = STYLE_GROUP_NAME.length + 1;
-    className = className.concat(classes.map(function (v) {
-      return "".concat(STYLE_GROUP_NAME, "-").concat(type).concat(v.substring(ix));
-    }));
-  } // const elementStyle = StyleSheet.flatten(
-  //   className.map(v => context.theme[v] || styles[v]).concat([style]),
-  // );
-
+  if (process === 2) {
+    contents = _react["default"].createElement("span", null);
+  } else if (typeof contents === 'string') {
+    contents = _react["default"].createElement("span", {
+      style: pick(elementStyle, _utils.TEXT_STYLE_NAMES)
+    }, props.children);
+  }
 
   var Element1 = View;
   var Element2 = View;
   var args = {};
   var coverStyle = elementStyle;
   var innerStyle = {};
-  return _react["default"].createElement("button", null);
+
+  if (forceInset) {
+    Element1 = div;
+    Element2 = div;
+    coverStyle = omit(elementStyle, ['height', 'minHeight', 'maxHeight', 'borderRadius']);
+    innerStyle = pick(elementStyle, ['height', 'minHeight', 'maxHeight', 'alignItems', 'justifyContent']);
+  }
+
+  return _react["default"].createElement("button", _extends({
+    onPress: handleClick,
+    onPressIn: handlePressIn,
+    onPressOut: handlePressOut,
+    disabled: process > 0 || disabled
+  }, oProps), _react["default"].createElement(Element1, _extends({
+    style: coverStyle
+  }, args), _react["default"].createElement(Element2, {
+    style: innerStyle,
+    children: contents
+  })));
 };
 
 var _default = Button;

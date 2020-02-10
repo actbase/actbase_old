@@ -15,7 +15,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import ActBase, {Button} from 'actbase/index.native';
+import ActBase, {Button, Form, Input} from 'actbase/index.native';
 
 import {
   Header,
@@ -30,7 +30,13 @@ const App: () => React$Node = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <Button type={"link"}>가나다라</Button>
+        <Form style={{ padding: 10 }} onSubmit={(data) => alert(JSON.stringify(data))}>
+
+          <Input name={"id"} />
+          <Input name={"passowrd"} />
+
+          <Button type={"link"}>가나다라</Button>
+        </Form>
       </SafeAreaView>
     </>
   );

@@ -11,6 +11,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _utils = require("../App/utils");
 
+var _index = require("../DataEntry/Form/index.native");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -56,9 +58,9 @@ var Button = function Button(props) {
       oProps = _objectWithoutProperties(props, ["size", "type", "style", "children", "disabled", "onPress", "onPressIn", "onPressOut", "forceInset"]);
 
   var context = (0, _react.useContext)(_utils.ABContext);
+  var formContext = (0, _react.useContext)(_index.FormContext);
   var styles = context.styles;
-  var suffix = "";
-  console.log("".concat(STYLE_GROUP_NAME, "-type-").concat(type), styles["".concat(STYLE_GROUP_NAME, "-type-").concat(type)]);
+  var suffix = '';
 
   if (type && styles["".concat(STYLE_GROUP_NAME, "-type-").concat(type)]) {
     suffix = "-type-".concat(type);
@@ -99,21 +101,40 @@ var Button = function Button(props) {
     setProcess(1);
 
     try {
-      var o = onPress && onPress();
+      var isPromise = false;
 
-      if (o instanceof Promise) {
-        setProcess(2);
-        o.then(function () {
-          setProcess(0);
-        })["catch"](function (e) {
-          setProcess(0);
-          console.warn(e);
-        });
-      } else {
-        setTimeout(function () {
-          return setProcess(0);
-        }, 200);
+      if (onPress) {
+        var o = onPress && onPress();
+
+        if (o instanceof Promise) {
+          isPromise = true;
+          setProcess(2);
+          o.then(function () {
+            setProcess(0);
+          })["catch"](function (e) {
+            setProcess(0);
+            console.warn(e);
+          });
+        }
+      } else if (formContext === null || formContext === void 0 ? void 0 : formContext.submit) {
+        var _o = (formContext === null || formContext === void 0 ? void 0 : formContext.submit) && (formContext === null || formContext === void 0 ? void 0 : formContext.submit());
+
+        if (_o instanceof Promise) {
+          isPromise = true;
+          setProcess(2);
+
+          _o.then(function () {
+            setProcess(0);
+          })["catch"](function (e) {
+            setProcess(0);
+            console.warn(e);
+          });
+        }
       }
+
+      if (!isPromise) setTimeout(function () {
+        return setProcess(0);
+      }, 200);
     } catch (e) {
       console.warn(e);
       setProcess(0);
@@ -122,8 +143,6 @@ var Button = function Button(props) {
   var className = classes.concat(classes.map(function (v) {
     return v.substring(1);
   }));
-  console.log(classes); //context.theme[v] ||
-
   var elementStyle = StyleSheet.flatten(className.map(function (v) {
     return styles[v];
   }).concat([style]));
