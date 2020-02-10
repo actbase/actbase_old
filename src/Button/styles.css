@@ -1,4 +1,4 @@
-._ab-button {
+.ab-button {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,27 +13,27 @@
   color: rgba(0, 0, 0, 0.65);
 }
 
-._ab-button-hover {
+.ab-button-hover {
 }
 
-._ab-button-press {
+.ab-button-press {
   border: 1px solid #007bff;
   color: #007bff;
 }
 
-._ab-button-disabled {
+.ab-button-disabled {
   color: rgba(0, 0, 0, 0.25);
   background-color: #f5f5f5;
   border-color: #d9d9d9;
 }
 
-._ab-button-size-xs {
+.ab-button-size-xs {
   padding: 0px 5px;
   height: 31px;
   font-size: 12px;
 }
 
-._ab-button-size-lg {
+.ab-button-size-lg {
   padding: 0px 12px;
   height: 48px;
   font-size: 18px;
