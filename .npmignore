@@ -1,0 +1,10 @@
+
+.idea/
+.git*
+src/
+
+.babelrc.js
+.gitignore
+.npmignore
+.prettierrc.js
+yarn.lock

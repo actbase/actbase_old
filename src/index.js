@@ -1,6 +1,7 @@
-
-export { default as Actbase } from './App';
+import App from './App';
 import _Button from './Button/index';
+
+export const ActBase = App;
 
 export const Div = div;
 export const View = div;
@@ -25,6 +26,5 @@ export const Button = _Button;
 // Feedback
 
 // Other
-
 
 export default ActBase;
