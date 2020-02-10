@@ -8,7 +8,7 @@
     "email": "apps@trabricks.com"
   },
   "scripts": {
-    "build": "babel src --out-dir dist --copy-files"
+    "build": "tsc -p src/tsconfig.json && cd src && copyfiles -F **/*.css ../lib/ && cd .. && babel lib --out-dir dist --copy-files"
   },
   "license": "MIT",
   "keywords": [
@@ -44,6 +44,7 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-native": "^0.61.12",
     "babel-plugin-inline-import": "git+ssh://git@github.com/actbase/babel-plugin-inline-import.git",
+    "copyfiles": "^2.2.0",
     "core-js": "^3.6.4",
     "cross-env": "^6.0.3",
     "esifycss": "^1.4.12",
