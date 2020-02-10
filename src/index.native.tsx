@@ -7,7 +7,6 @@ let styles = {};
 
 // General
 export { default as Button } from './Button/index.native';
-// @ts-ignore
 import buttonStyle from './Button/styles.css';
 styles = assign(styles, transform(buttonStyle));
 
@@ -15,7 +14,6 @@ styles = assign(styles, transform(buttonStyle));
 export { default as Form } from './DataEntry/Form/index.native';
 
 export { default as Input } from './DataEntry/Input/index.native';
-// @ts-ignore
 import inputStyle from './DataEntry/Input/styles.css';
 styles = assign(styles, transform(inputStyle));
 

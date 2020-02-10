@@ -87,8 +87,7 @@ var Input = function Input(props) {
       oProps = _objectWithoutProperties(props, ["type", "style", "name", "onChangeText", "leftDeco", "rightDeco", "focusStyle", "onBlur", "onFocus", "disabled"]);
 
   var context = (0, _react.useContext)(_utils.ABContext);
-  var formContext = (0, _react.useContext)(_index.FormContext);
-  var styles = context.styles;
+  var formContext = (0, _react.useContext)(_index.FormContext); // const styles = context.styles;
 
   var _useState = (0, _react.useState)({}),
       _useState2 = _slicedToArray(_useState, 2),
