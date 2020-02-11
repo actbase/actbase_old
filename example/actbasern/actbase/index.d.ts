@@ -1,0 +1,12 @@
+import * as React from 'react';
+export declare const ActBase: (RootComponent: any, theme: any) => (props: any) => JSX.Element;
+export declare const Div: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>>;
+export declare const View: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>>;
+export declare const Header: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>>;
+export declare const Footer: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>>;
+export declare const Section: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>>;
+export declare const Aside: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>>;
+export declare const Article: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>>;
+export declare const Text: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>>;
+export declare const Button: (props: any) => JSX.Element;
+export default ActBase;

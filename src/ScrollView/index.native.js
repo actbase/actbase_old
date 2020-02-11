@@ -7,7 +7,7 @@ import {
   Platform,
   ScrollView as RNScrollView,
 } from 'react-native';
-import {measure} from '../../App/utils';
+import {measure} from '../App/utils';
 
 const { height } = Dimensions.get('screen');
 

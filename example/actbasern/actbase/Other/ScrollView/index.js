@@ -9,8 +9,8 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var ScrollView = function ScrollView(_ref) {
-  var children = _ref.children;
+var ScrollView = function ScrollView(_a) {
+  var children = _a.children;
   return _react["default"].createElement("div", {
     style: {
       overflowY: 'scroll'
