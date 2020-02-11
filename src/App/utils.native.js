@@ -46,8 +46,24 @@ export const TEXT_STYLE_NAMES = [
   'writingDirection',
 ];
 
+export const COVER_STYLE_NAMES = [
+  'borderWidth',
+  'borderColor',
+  'borderRadius',
+  'borderTopWidth',
+  'borderTopColor',
+  'borderLeftWidth',
+  'borderLeftColor',
+  'borderRightWidth',
+  'borderRightColor',
+  'borderBottomWidth',
+  'borderBottomColor',
+  'backgroundColor',
+];
+
 export default {
   ABContext,
   TEXT_STYLE_NAMES,
+  COVER_STYLE_NAMES,
   measure,
 };

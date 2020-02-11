@@ -1,9 +1,28 @@
 .ab-input {
   border-radius: 4px;
-  padding: 0px 14px;
+  padding: 0px 10px;
   height: 38px;
   font-size: 14px;
   background: #fff;
   border: 1px solid #d9d9d9;
   color: rgba(0, 0, 0, 0.65);
+  flex-direction: row;
+}
+
+.ab-input-focused {
+  border-color: #f00;
+}
+.ab-input-disabled {
+  background-color: #eee;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.ab-input-clear {
+  background-color: #ccc;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
 }

@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { findNodeHandle, View } from 'react-native';
-import { measure } from '../App/utils';
+import { measure } from '../App/utils.native';
 import { forIn, isEqual } from 'lodash';
 
 export const FormContext = React.createContext({});
@@ -38,6 +38,7 @@ const Form = props => {
         const args = {};
         if (items.length - 1 <= index) {
           args.returnKeyType = 'done';
+          args.onSubmitEditing = submit;
         } else {
           args.returnKeyType = 'next';
           args.onSubmitEditing = items[index + 1].input?.focus;
@@ -53,13 +54,13 @@ const Form = props => {
     });
   }, []);
 
-  const submit = input => {
+  const submit = () => {
     let result = data;
     if (props.output === 'FormData') {
       result = new FormData();
       forIn(data, (value, name) => result.append(name, `${value}`));
     }
-    props?.onSubmit?.(result);
+    return props?.onSubmit?.(result);
   };
 
   const value = { addTarget, onChangeText, submit };

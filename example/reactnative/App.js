@@ -26,15 +26,27 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 const App = () => {
+  const [text, setText] = React.useState('ㅁㄴㅇㄹㄴㅇㄹa');
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <Form
-          style={{padding: 10}}
+          style={{padding: 20}}
           onSubmit={data => alert(JSON.stringify(data))}>
-          <Input name={'id'} />
-          <Input name={'passowrd'} />
+          <Input
+            name={'id'}
+            style={{marginBottom: 20}}
+            disabled
+            value={'MOON'}
+          />
+          <Input
+            name={'passowrd'}
+            style={{marginBottom: 20}}
+            value={text}
+            onChangeText={setText}
+          />
 
           <Button type={'link'}>가나다라</Button>
         </Form>

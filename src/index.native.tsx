@@ -10,6 +10,9 @@ export { default as Button } from './Button/index.native';
 import buttonStyle from './Button/styles.css';
 styles = assign(styles, transform(buttonStyle));
 
+export { default as ScrollView } from './ScrollView/index.native';
+
+
 // Data Entry
 export { default as Form } from './Form/index.native';
 
