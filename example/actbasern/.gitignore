@@ -2,6 +2,8 @@
 #
 .DS_Store
 
+actbase/
+
 # Xcode
 #
 build/
