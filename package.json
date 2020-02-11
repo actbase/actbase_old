@@ -2,7 +2,7 @@
   "name": "actbase",
   "version": "0.0.7",
   "description": "React & React-Native Design Components",
-  "main": "index.ts",
+  "main": "index.js",
   "author": {
     "name": "Trabricks LLC",
     "email": "apps@trabricks.com"
