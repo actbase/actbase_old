@@ -32,6 +32,7 @@ const propTemplate = {
 const TextField = React.forwardRef((props, ref) => {
   const {
     type,
+    tpl,
     style,
     name,
     onChangeText,
@@ -53,8 +54,8 @@ const TextField = React.forwardRef((props, ref) => {
   const [extraProps, setExtraProps] = useState({});
 
   let suffix = '';
-  if (type && styles[`${STYLE_GROUP_NAME}-type-${type}`]) {
-    suffix = `-type-${type}`;
+  if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
+    suffix = `-tpl-${tpl}`;
   }
 
   const classes = [`${STYLE_GROUP_NAME}${suffix}`];

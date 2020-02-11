@@ -32,8 +32,8 @@ const Button = props => {
   const styles = context.styles;
 
   let suffix = '';
-  if (tpl && styles[`${STYLE_GROUP_NAME}-type-${tpl}`]) {
-    suffix = `-type-${tpl}`;
+  if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
+    suffix = `-tpl-${tpl}`;
   }
 
   const classes = [`${STYLE_GROUP_NAME}${suffix}`];

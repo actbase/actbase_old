@@ -57,17 +57,16 @@
   border-color: #d9d9d9;
 }
 
-
-.ab-button-type-link {
+.ab-button-tpl-link {
   background: transparent;
   color: #007bff;
   border: 1px solid transparent;
 }
 
-.ab-button-type-link-press {
+.ab-button-tpl-link-press {
   color: #f00;
 }
 
-.ab-button-type-link-disabled {
+.ab-button-tpl-link-disabled {
   color: rgba(0, 0, 0, 0.25);
 }
