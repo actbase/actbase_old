@@ -30,14 +30,5 @@ export const Text = RNText;
 App.styles = styles;
 export const ActBase = App;
 
-// Layout
-
-// Navigation
-
-// Data Display
-
-// Feedback
-
-// Other
 
 export default ActBase;
