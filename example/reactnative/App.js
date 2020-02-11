@@ -25,6 +25,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+function sleep(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
 const App = () => {
   const [text, setText] = React.useState('ㅁㄴㅇㄹㄴㅇㄹa');
 
@@ -34,7 +38,10 @@ const App = () => {
       <SafeAreaView>
         <Form
           style={{padding: 20}}
-          onSubmit={data => alert(JSON.stringify(data))}>
+          onSubmit={async data => {
+            await sleep(3000);
+            alert(JSON.stringify(data));
+          }}>
           <Input
             name={'id'}
             style={{marginBottom: 20}}

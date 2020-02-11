@@ -8,8 +8,8 @@ const INPUT_TYPES = {
 };
 
 const Input = props => {
-  if (INPUT_TYPES[props.type]) {
-    const Element = INPUT_TYPES[props.type];
+  if (INPUT_TYPES[props?.type]) {
+    const Element = INPUT_TYPES[props?.type];
     return <Element {...props} />;
   } else {
     return <TextField {...props} />;

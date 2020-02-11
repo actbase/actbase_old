@@ -1,11 +1,12 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { findNodeHandle, View } from 'react-native';
 import { measure } from '../App/utils.native';
 import { forIn, isEqual } from 'lodash';
 
 export const FormContext = React.createContext({});
 
-const Form = props => {
+const Form = React.memo(props => {
+  const buttons = useRef({});
   const elements = useRef({});
   const [data, setData] = useState({});
   const [lastLayout, setLastLayout] = useState({});
@@ -15,7 +16,11 @@ const Form = props => {
     elements.current[name] = { name, input, fn };
   }, []);
 
-  const handleLayout = async e => {
+  const addSubmit = useCallback((name, input, fn) => {
+    buttons.current[name] = { name, input, fn };
+  }, []);
+
+  const handleLayout = useCallback(async e => {
     onLayout && onLayout(e);
     const { width, height } = e.nativeEvent.layout;
     const pos = { width, height };
@@ -45,7 +50,7 @@ const Form = props => {
         }
         v.fn(args);
       });
-  };
+  }, []);
 
   const onChangeText = useCallback((name, value) => {
     setData(state => {
@@ -54,14 +59,14 @@ const Form = props => {
     });
   }, []);
 
-  const submit = () => {
+  const submit = useCallback(() => {
     let result = data;
     if (props.output === 'FormData') {
       result = new FormData();
       forIn(data, (value, name) => result.append(name, `${value}`));
     }
     return props?.onSubmit?.(result);
-  };
+  }, []);
 
   const value = { addTarget, onChangeText, submit };
   return (
@@ -69,6 +74,6 @@ const Form = props => {
       <View onLayout={handleLayout} {...oProps} />
     </FormContext.Provider>
   );
-};
+});
 
 export default Form;
