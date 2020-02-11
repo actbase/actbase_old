@@ -30,12 +30,13 @@ const App = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <Form style={{ padding: 10 }} onSubmit={(data) => alert(JSON.stringify(data))}>
+        <Form
+          style={{padding: 10}}
+          onSubmit={data => alert(JSON.stringify(data))}>
+          <Input name={'id'} />
+          <Input name={'passowrd'} />
 
-          <Input name={"id"} />
-          <Input name={"passowrd"} />
-
-          <Button type={"link"}>가나다라</Button>
+          <Button type={'link'}>가나다라</Button>
         </Form>
       </SafeAreaView>
     </>
@@ -43,8 +44,7 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-  'ab-button': {
-  },
+  'ab-button': {},
 });
 
 export default ActBase(App, styles);

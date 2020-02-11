@@ -1,9 +1,8 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
+import { omit, pick } from 'lodash';
 
 const STYLE_GROUP_NAME = 'ab-button';
-
-const { omit, pick } = require('lodash');
 
 const Button = props => {
   const {
@@ -88,29 +87,11 @@ const Button = props => {
     );
   }
 
-  let Element1 = View;
-  let Element2 = View;
+  let Element1 = div;
+  let Element2 = div;
   let args = {};
   let coverStyle = elementStyle;
   let innerStyle = {};
-
-  if (forceInset) {
-    Element1 = div;
-    Element2 = div;
-    coverStyle = omit(elementStyle, [
-      'height',
-      'minHeight',
-      'maxHeight',
-      'borderRadius',
-    ]);
-    innerStyle = pick(elementStyle, [
-      'height',
-      'minHeight',
-      'maxHeight',
-      'alignItems',
-      'justifyContent',
-    ]);
-  }
 
   return (
     <button

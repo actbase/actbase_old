@@ -1,18 +1,17 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
-import { FormContext } from '../DataEntry/Form/index.native';
-
-const STYLE_GROUP_NAME = 'ab-button';
-
-const { omit, pick } = require('lodash');
-const {
+import {
   ActivityIndicator,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
-} = require('react-native');
+} from 'react-native';
+import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
+import { FormContext } from '../Form/index.native';
+import { omit, pick } from 'lodash';
+
+const STYLE_GROUP_NAME = 'ab-button';
 
 const Button = props => {
   const {
