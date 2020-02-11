@@ -46,13 +46,8 @@ export const TEXT_STYLE_NAMES = [
   'writingDirection',
 ];
 
-export const styleIndexer = {
-  'ab-button': 'button',
-};
-
 export default {
   ABContext,
   TEXT_STYLE_NAMES,
-  styleIndexer,
   measure,
 };
