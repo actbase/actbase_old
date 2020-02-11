@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { findNodeHandle, View } from 'react-native';
-import { measure } from '../../App/utils';
+import { measure } from '../App/utils';
 import { forIn, isEqual } from 'lodash';
 
 export const FormContext = React.createContext({});

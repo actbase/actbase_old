@@ -11,10 +11,10 @@ import buttonStyle from './Button/styles.css';
 styles = assign(styles, transform(buttonStyle));
 
 // Data Entry
-export { default as Form } from './Form/index.native';
+export { default as Form } from './DataEntry/Form/index.native';
 
-export { default as Input } from './Input/index.native';
-import inputStyle from './Input/styles.css';
+export { default as Input } from './DataEntry/Input/index.native';
+import inputStyle from './DataEntry/Input/styles.css';
 styles = assign(styles, transform(inputStyle));
 
 // Web Migrated

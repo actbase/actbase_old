@@ -8,7 +8,7 @@
     "email": "apps@trabricks.com"
   },
   "scripts": {
-    "build": "tsc -p src/tsconfig.json && cd src && copyfiles -F **/*.css ../dist/ && cd .. && babel dist --out-dir dist"
+    "build": "tsc -p src/tsconfig.json && copyfiles -u 1 ./src/**/*.css ./dist/ && babel dist --out-dir dist"
   },
   "license": "MIT",
   "keywords": [
