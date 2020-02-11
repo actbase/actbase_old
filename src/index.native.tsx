@@ -16,7 +16,7 @@ export { default as ScrollView } from './ScrollView/index.native';
 // Data Entry
 export { default as Form } from './Form/index.native';
 
-export { default as Input } from './Input/index.native';
+export { default as Input } from './Input/TextField.native';
 import inputStyle from './Input/styles.css';
 styles = assign(styles, transform(inputStyle));
 

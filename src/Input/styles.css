@@ -1,4 +1,4 @@
-.ab-input {
+.ab-input-text {
   border-radius: 4px;
   padding: 0px 10px;
   height: 38px;
@@ -9,15 +9,15 @@
   flex-direction: row;
 }
 
-.ab-input-focused {
+.ab-input-text-focused {
   border-color: #f00;
 }
-.ab-input-disabled {
+.ab-input-text-disabled {
   background-color: #eee;
   color: rgba(0, 0, 0, 0.45);
 }
 
-.ab-input-clear {
+.ab-input-text-clear {
   background-color: #ccc;
   width: 14px;
   height: 14px;

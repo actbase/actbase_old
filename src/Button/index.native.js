@@ -16,7 +16,7 @@ const STYLE_GROUP_NAME = 'ab-button';
 const Button = props => {
   const {
     size,
-    type,
+    tpl,
     style,
     children,
     disabled,
@@ -32,8 +32,8 @@ const Button = props => {
   const styles = context.styles;
 
   let suffix = '';
-  if (type && styles[`${STYLE_GROUP_NAME}-type-${type}`]) {
-    suffix = `-type-${type}`;
+  if (tpl && styles[`${STYLE_GROUP_NAME}-type-${tpl}`]) {
+    suffix = `-type-${tpl}`;
   }
 
   const classes = [`${STYLE_GROUP_NAME}${suffix}`];
