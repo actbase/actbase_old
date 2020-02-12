@@ -6,7 +6,7 @@ import { forIn, isEqual } from 'lodash';
 export const FormContext = React.createContext({});
 
 const Form = React.memo(props => {
-  const buttons = useRef({});
+  const buttons = useRef([]);
   const elements = useRef({});
   const [data, setData] = useState({});
   const [lastLayout, setLastLayout] = useState({});
@@ -16,8 +16,12 @@ const Form = React.memo(props => {
     elements.current[name] = { name, input, fn };
   }, []);
 
-  const addSubmit = useCallback((name, input, fn) => {
-    buttons.current[name] = { name, input, fn };
+  const addSubmit = useCallback((index, input, fn) => {
+    if (index < 0 || index === undefined) {
+      index = buttons.current?.length;
+    }
+    buttons.current[index] = { input, fn };
+    return index;
   }, []);
 
   const handleLayout = useCallback(async e => {
@@ -59,13 +63,18 @@ const Form = React.memo(props => {
     });
   }, []);
 
-  const submit = useCallback(() => {
+  const submit = useCallback(async () => {
     let result = data;
     if (props.output === 'FormData') {
       result = new FormData();
       forIn(data, (value, name) => result.append(name, `${value}`));
     }
-    return props?.onSubmit?.(result);
+
+    forIn(buttons.current, el => el.fn({ submitting: true }));
+    const o = await props?.onSubmit?.(result);
+    forIn(buttons.current, el => el.fn({ submitting: false }));
+
+    return o;
   }, []);
 
   const value = { addTarget, addSubmit, onChangeText, submit };

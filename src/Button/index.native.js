@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { createRef, useCallback, useContext, useState } from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
 import { FormContext } from '../Form/index.native';
-import { omit, pick } from 'lodash';
+import { isEqual, omit, pick } from 'lodash';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
@@ -27,9 +27,12 @@ const Button = React.memo(props => {
     ...oProps
   } = props;
 
+  const buttonIndex = createRef();
   const context = useContext(ABContext);
   const formContext = useContext(FormContext);
   const styles = context.styles;
+
+  const [extraProps, setExtraProps] = useState({});
 
   let suffix = '';
   if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
@@ -55,6 +58,12 @@ const Button = React.memo(props => {
     onPressOut && onPressOut(e);
     setPress(false);
   }, []);
+
+  const handleProps = props => {
+    if (!isEqual(props, extraProps)) {
+      setExtraProps(p => ({ ...p, ...props }));
+    }
+  };
 
   const [process, setProcess] = useState(0);
   const handleClick = useCallback(
@@ -105,7 +114,7 @@ const Button = React.memo(props => {
   );
 
   let contents = children;
-  if (process === 2) {
+  if (process === 2 || extraProps?.submitting) {
     contents = <ActivityIndicator />;
   } else if (typeof contents === 'string') {
     contents = (
@@ -139,10 +148,17 @@ const Button = React.memo(props => {
 
   return (
     <TouchableWithoutFeedback
+      ref={el => {
+        buttonIndex.current = formContext.addSubmit(
+          buttonIndex.current,
+          el,
+          handleProps,
+        );
+      }}
       onPress={handleClick}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      disabled={process > 0 || disabled}
+      disabled={process > 0 || disabled || extraProps?.submitting}
       {...oProps}
     >
       <Element1 style={coverStyle} {...args}>
