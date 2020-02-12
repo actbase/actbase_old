@@ -43,6 +43,8 @@ const TextField = React.forwardRef((props, ref) => {
     onFocus,
     disabled,
     multiline,
+    clearButtonMode,
+    readonly,
     ...oProps
   } = props;
 
@@ -67,14 +69,16 @@ const TextField = React.forwardRef((props, ref) => {
   if (multiline) classes.push(`${STYLE_GROUP_NAME}${suffix}-multiline`);
 
   const handleChangeText = text => {
+    console.log('handleChangeText');
     onChangeText && onChangeText(text);
     setText?.(text);
-    formContext?.onChangeText && formContext?.onChangeText(name, text);
+    formContext?.onChangeText?.(name, text);
   };
 
   const handleRef = el => {
     inputRef.current = el;
     formContext.addTarget?.(name, el, handleProps);
+    formContext?.onChangeText?.(name, text);
     if (typeof ref === 'function') {
       ref(el);
     } else if (ref && Object.keys(ref).indexOf('current') >= 0) {
@@ -86,6 +90,11 @@ const TextField = React.forwardRef((props, ref) => {
     if (!isEqual(props, extraProps)) {
       setExtraProps(p => ({ ...p, ...props }));
     }
+  };
+
+  const handleClear = props => {
+    inputRef.current?.clear();
+    setText('');
   };
 
   const containerStyle = [],
@@ -100,6 +109,8 @@ const TextField = React.forwardRef((props, ref) => {
   const elementStyle = StyleSheet.flatten(
     className.map(v => styles[v]).concat([style]),
   );
+
+  //clearButtonMode !== 'never'
 
   return (
     <View style={pick(elementStyle, marginStyle)}>
@@ -131,29 +142,32 @@ const TextField = React.forwardRef((props, ref) => {
           }}
           editable={!disabled}
           multiline={multiline}
+          clearButtonMode={'never'}
           {...propTemplate[type]}
           {...extraProps}
           {...oProps}
         />
-        {!!text && !disabled && false && (
-          <TouchableOpacity activeOpacity={1} style={styles['ab-input-clear']}>
+        {!!text && !disabled && (
+          <TouchableOpacity
+            onPress={handleClear}
+            activeOpacity={0.2}
+            style={styles['ab-input-text-clear']}
+          >
             <View
-              style={{
-                position: 'absolute',
-                transform: [{ rotateZ: '45deg' }],
-                width: 2,
-                height: 8,
-                backgroundColor: styles['ab-input-clear'].color,
-              }}
+              style={[
+                styles['ab-input-text-clear-line'],
+                {
+                  transform: [{ rotateZ: '45deg' }],
+                },
+              ]}
             />
             <View
-              style={{
-                position: 'absolute',
-                transform: [{ rotateZ: '-45deg' }],
-                width: 2,
-                height: 8,
-                backgroundColor: styles['ab-input-clear'].color,
-              }}
+              style={[
+                styles['ab-input-text-clear-line'],
+                {
+                  transform: [{ rotateZ: '-45deg' }],
+                },
+              ]}
             />
           </TouchableOpacity>
         )}
