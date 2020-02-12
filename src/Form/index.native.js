@@ -68,7 +68,7 @@ const Form = React.memo(props => {
     return props?.onSubmit?.(result);
   }, []);
 
-  const value = { addTarget, onChangeText, submit };
+  const value = { addTarget, addSubmit, onChangeText, submit };
   return (
     <FormContext.Provider value={value}>
       <View onLayout={handleLayout} {...oProps} />

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { createRef, useContext, useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { isEqual, omit, pick } from 'lodash';
 import { FormContext } from '../Form/index.native';
@@ -46,6 +46,7 @@ const TextField = React.forwardRef((props, ref) => {
     ...oProps
   } = props;
 
+  const inputRef = createRef();
   const context = useContext(ABContext);
   const formContext = useContext(FormContext);
   const [text, setText] = useState(props?.value || '');
@@ -71,6 +72,16 @@ const TextField = React.forwardRef((props, ref) => {
     formContext?.onChangeText && formContext?.onChangeText(name, text);
   };
 
+  const handleRef = el => {
+    inputRef.current = el;
+    formContext.addTarget?.(name, el, handleProps);
+    if (typeof ref === 'function') {
+      ref(el);
+    } else if (ref && Object.keys(ref).indexOf('current') >= 0) {
+      ref.current = el;
+    }
+  };
+
   const handleProps = props => {
     if (!isEqual(props, extraProps)) {
       setExtraProps(p => ({ ...p, ...props }));
@@ -84,24 +95,11 @@ const TextField = React.forwardRef((props, ref) => {
     inputStyle.push(pick(StyleSheet.flatten(focusStyle), TEXT_STYLE_NAMES));
   }
 
-  // if (props.multiline) {
-  //   inputStyle.push({
-  //     height: StyleSheet.flatten(style).height || '100%',
-  //     textAlignVertical: 'top',
-  //     paddingTop: 10,
-  //     paddingHorizontal: 10,
-  //     paddingBottom: 10,
-  //   });
-  // }
-  //
-
   let className = classes.concat(classes.map(v => v.substring(1)));
 
   const elementStyle = StyleSheet.flatten(
     className.map(v => styles[v]).concat([style]),
   );
-
-  console.log(elementStyle);
 
   return (
     <View style={pick(elementStyle, marginStyle)}>
@@ -117,10 +115,7 @@ const TextField = React.forwardRef((props, ref) => {
       >
         {leftDeco}
         <TextInput
-          ref={el =>
-            formContext.addTarget &&
-            formContext.addTarget(name, el, handleProps)
-          }
+          ref={handleRef}
           onChangeText={handleChangeText}
           style={[
             { flex: 1, height: elementStyle?.height },

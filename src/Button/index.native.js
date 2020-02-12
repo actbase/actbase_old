@@ -13,7 +13,7 @@ import { omit, pick } from 'lodash';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
-const Button = props => {
+const Button = React.memo(props => {
   const {
     size,
     tpl,
@@ -150,6 +150,6 @@ const Button = props => {
       </Element1>
     </TouchableWithoutFeedback>
   );
-};
+});
 
 export default Button;

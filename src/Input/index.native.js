@@ -7,13 +7,13 @@ const INPUT_TYPES = {
   hidden: null,
 };
 
-const Input = props => {
+const Input = React.forwardRef((props, ref) => {
   if (INPUT_TYPES[props?.type]) {
     const Element = INPUT_TYPES[props?.type];
-    return <Element {...props} />;
+    return <Element ref={ref} {...props} />;
   } else {
-    return <TextField {...props} />;
+    return <TextField ref={ref} {...props} />;
   }
-};
+});
 
 export default Input;

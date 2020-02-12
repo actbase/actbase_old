@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React from 'react';
+import React, {createRef, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -32,6 +32,14 @@ function sleep(time) {
 const App = () => {
   const [text, setText] = React.useState('ㅁㄴㅇㄹㄴㅇㄹa');
 
+  const inputRef = createRef();
+
+  useEffect(() => {
+
+    console.log(inputRef);
+
+  }, []);
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -49,6 +57,7 @@ const App = () => {
             value={'MOON'}
           />
           <Input
+            ref={inputRef}
             name={'passowrd'}
             style={{marginBottom: 20}}
             value={text}
