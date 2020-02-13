@@ -1,6 +1,6 @@
 import * as React from 'react';
-import App from './App';
-import _Button from './Button/index';
+import App from './app';
+import _Button from './button/index';
 
 export const ActBase = App;
 

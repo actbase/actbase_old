@@ -29,7 +29,8 @@
     "css-to-react-native-transform": "^1.9.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "styled-components": "^4.4.1"
+    "styled-components": "^4.4.1",
+    "prop-types": "latest"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.2",

@@ -5,6 +5,8 @@ import React, {
   useState,
   useCallback,
 } from 'react';
+import PropTypes from 'prop-types';
+
 import {
   StyleSheet,
   TextInput,
@@ -13,8 +15,8 @@ import {
   View,
 } from 'react-native';
 import { isEqual, omit, pick } from 'lodash';
-import { FormContext } from '../Form/index.native';
-import { ABContext, TEXT_STYLE_NAMES } from '../App/utils.native';
+import { FormContext } from '../form/index.native';
+import { ABContext, TEXT_STYLE_NAMES } from '../app/utils.native';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
@@ -170,7 +172,7 @@ const TextField = React.forwardRef((props, ref) => {
           {...extraProps}
           {...oProps}
         />
-        {!!text && !disabled && (
+        {!!text && focused && (
           <TouchableOpacity
             onPress={handleClear}
             activeOpacity={0.2}
