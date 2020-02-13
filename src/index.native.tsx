@@ -12,11 +12,10 @@ styles = assign(styles, transform(buttonStyle));
 
 export { default as ScrollView } from './ScrollView/index.native';
 
-
 // Data Entry
 export { default as Form } from './Form/index.native';
 
-export { default as Input } from './Input/TextField.native';
+export { default as Input } from './Input';
 import inputStyle from './Input/styles.css';
 styles = assign(styles, transform(inputStyle));
 
@@ -32,6 +31,5 @@ export const Text = RNText;
 
 App.styles = styles;
 export const ActBase = App;
-
 
 export default ActBase;

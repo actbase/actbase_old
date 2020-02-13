@@ -50,6 +50,7 @@ const App = () => {
             await sleep(3000);
             alert(JSON.stringify(data));
           }}>
+          <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
           <Input name={'id'} style={{marginBottom: 20}} value={'MOON'} />
           <Input
             ref={inputRef}

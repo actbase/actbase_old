@@ -1,20 +1,21 @@
 import React from 'react';
 import TextField from './TextField';
 import Radio from './Radio';
+import Hidden from './Hidden';
 
 const INPUT_TYPES = {
   checkbox: null,
   radio: Radio,
-  hidden: null,
+  hidden: Hidden,
 };
 
-const Input = props => {
-  if (INPUT_TYPES[props.type]) {
+const Input = React.forwardRef((props, ref) => {
+  if (INPUT_TYPES[props.type?.toLowerCase()]) {
     const Element = INPUT_TYPES[props.type];
-    return <Element {...props} />;
+    return <Element ref={ref} {...props} />;
   } else {
-    return <TextField {...props} />;
+    return <TextField ref={ref} {...props} />;
   }
-};
+});
 
 export default Input;

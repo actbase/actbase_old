@@ -35,11 +35,13 @@ const Form = React.memo(props => {
 
     for (let key of Object.keys(items?.current)) {
       const el = items?.current[key];
-      const pos = await measure(findNodeHandle(el.input));
-      const area = parseFloat(
-        `${Math.floor(pos.pageY)}.${Math.floor(pos.pageX)}`,
-      );
-      items.current[key].area = area;
+      if (el.input) {
+        const pos = await measure(findNodeHandle(el.input));
+        const area = parseFloat(
+          `${Math.floor(pos.pageY)}.${Math.floor(pos.pageX)}`,
+        );
+        items.current[key].area = area;
+      }
     }
 
     const elements = Object.values(items.current)
@@ -61,7 +63,7 @@ const Form = React.memo(props => {
 
   const submit = useCallback(async () => {
     const elements = Object.values(items?.current).filter(v => {
-      v.options?.setProps({ submitting: true });
+      v.options?.setProps?.({ submitting: true });
       return !!v.options?.name;
     });
 
@@ -93,7 +95,7 @@ const Form = React.memo(props => {
     const o = await props?.onSubmit?.(result);
 
     forIn(items?.current, v => {
-      v.options?.setProps({ submitting: false });
+      v.options?.setProps?.({ submitting: false });
     });
 
     return o;
