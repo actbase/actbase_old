@@ -6,23 +6,25 @@ import { forIn, isEqual } from 'lodash';
 export const FormContext = React.createContext({});
 
 const Form = React.memo(props => {
-  const buttons = useRef([]);
-  const elements = useRef({});
-  const [data, setData] = useState({});
+  const items = useRef({});
+  const index = useRef(0);
+  const subscribe = useCallback((oRef, input, options) => {
+    let name = oRef.current;
+    if (!name) {
+      name = `FormField_${index.current}`;
+      oRef.current = name;
+      index.current = index.current + 1;
+    }
+    items.current[name] = { input, options };
+  }, []);
+
+  const unsubscribe = useCallback(oRef => {
+    let name = oRef.current;
+    delete items.current[name];
+  }, []);
+
   const [lastLayout, setLastLayout] = useState({});
   const { onLayout, ...oProps } = props;
-
-  const addTarget = useCallback((name, input, fn) => {
-    elements.current[name] = { name, input, fn };
-  }, []);
-
-  const addSubmit = useCallback((index, input, fn) => {
-    if (index < 0 || index === undefined) {
-      index = buttons.current?.length;
-    }
-    buttons.current[index] = { input, fn };
-    return index;
-  }, []);
 
   const handleLayout = useCallback(async e => {
     onLayout && onLayout(e);
@@ -31,53 +33,73 @@ const Form = React.memo(props => {
     if (isEqual(lastLayout, pos)) return;
     setLastLayout(pos);
 
-    for (let key of Object.keys(elements?.current)) {
-      const el = elements?.current[key];
+    for (let key of Object.keys(items?.current)) {
+      const el = items?.current[key];
       const pos = await measure(findNodeHandle(el.input));
       const area = parseFloat(
         `${Math.floor(pos.pageY)}.${Math.floor(pos.pageX)}`,
       );
-      elements.current[key].area = area;
+      items.current[key].area = area;
     }
 
-    const items = Object.values(elements.current);
-    items
-      ?.sort((a, b) => (a.area > b.area ? 1 : a.area < b.area ? -1 : 0))
-      ?.map((v, index) => {
-        const args = {};
-        if (items.length - 1 <= index) {
-          args.returnKeyType = 'done';
-          args.onSubmitEditing = submit;
-        } else {
-          args.returnKeyType = 'next';
-          args.onSubmitEditing = items[index + 1].input?.focus;
-        }
-        v.fn(args);
-      });
-  }, []);
+    const elements = Object.values(items.current)
+      ?.filter(v => !!v.options.focus)
+      ?.sort((a, b) => (a.area > b.area ? 1 : a.area < b.area ? -1 : 0));
 
-  const onChangeText = useCallback((name, value) => {
-    setData(state => {
-      state[name] = value;
-      return state;
+    elements?.forEach((v, index) => {
+      const args = {};
+      if (elements.length - 1 <= index) {
+        args.returnKeyType = 'done';
+        args.onSubmitEditing = submit;
+      } else {
+        args.returnKeyType = 'next';
+        args.onSubmitEditing = elements[index + 1].options.focus;
+      }
+      v.options?.setProps?.(args);
     });
   }, []);
 
   const submit = useCallback(async () => {
-    let result = data;
+    const elements = Object.values(items?.current).filter(v => {
+      v.options?.setProps({ submitting: true });
+      return !!v.options?.name;
+    });
+
+    const params = {};
+    elements.forEach(v => {
+      const opt = v.options;
+      if (params[opt.name] === undefined) {
+        params[opt.name] = opt.getValue();
+      } else if (params[opt.name]?.push !== undefined) {
+        params[opt.name].push(opt.getValue());
+      } else if (params[opt.name] !== null && result[opt.name] !== undefined) {
+        const values = [...params[opt.name], opt.getValue()];
+        params[opt.name] = values;
+      }
+    });
+
+    let result = params;
     if (props.output === 'FormData') {
       result = new FormData();
-      forIn(data, (value, name) => result.append(name, `${value}`));
+      forIn(params, (value, name) => {
+        if (value?.push) {
+          value?.forEach(v => result.append(name, `${v}`));
+        } else {
+          result.append(name, `${value}`);
+        }
+      });
     }
 
-    forIn(buttons.current, el => el.fn({ submitting: true }));
     const o = await props?.onSubmit?.(result);
-    forIn(buttons.current, el => el.fn({ submitting: false }));
+
+    forIn(items?.current, v => {
+      v.options?.setProps({ submitting: false });
+    });
 
     return o;
   }, []);
 
-  const value = { addTarget, addSubmit, onChangeText, submit };
+  const value = { subscribe, unsubscribe, submit };
   return (
     <FormContext.Provider value={value}>
       <View onLayout={handleLayout} {...oProps} />

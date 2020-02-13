@@ -35,9 +35,9 @@ const App = () => {
   const inputRef = createRef();
 
   useEffect(() => {
+    // console.log(inputRef);
 
-    console.log(inputRef);
-
+    console.log(typeof []);
   }, []);
 
   return (
@@ -50,12 +50,7 @@ const App = () => {
             await sleep(3000);
             alert(JSON.stringify(data));
           }}>
-          <Input
-            name={'id'}
-            style={{marginBottom: 20}}
-            disabled
-            value={'MOON'}
-          />
+          <Input name={'id'} style={{marginBottom: 20}} value={'MOON'} />
           <Input
             ref={inputRef}
             name={'passowrd'}

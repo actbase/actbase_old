@@ -1,5 +1,17 @@
-import React, { createRef, useContext, useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import React, {
+  createRef,
+  useRef,
+  useContext,
+  useState,
+  useCallback,
+} from 'react';
+import {
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { isEqual, omit, pick } from 'lodash';
 import { FormContext } from '../Form/index.native';
 import { ABContext, TEXT_STYLE_NAMES } from '../App/utils.native';
@@ -48,7 +60,8 @@ const TextField = React.forwardRef((props, ref) => {
     ...oProps
   } = props;
 
-  const inputRef = createRef();
+  const fname = useRef();
+  const inputRef = useRef();
   const context = useContext(ABContext);
   const formContext = useContext(FormContext);
   const [text, setText] = useState(props?.value || '');
@@ -69,26 +82,36 @@ const TextField = React.forwardRef((props, ref) => {
   if (multiline) classes.push(`${STYLE_GROUP_NAME}${suffix}-multiline`);
 
   const handleChangeText = text => {
-    console.log('handleChangeText');
     onChangeText && onChangeText(text);
     setText?.(text);
-    formContext?.onChangeText?.(name, text);
+  };
+
+  const setProps = useCallback(
+    props => {
+      if (!isEqual(props, extraProps)) {
+        setExtraProps(p => ({ ...p, ...props }));
+      }
+    },
+    [extraProps],
+  );
+
+  const getValue = () => {
+    return text;
   };
 
   const handleRef = el => {
     inputRef.current = el;
-    formContext.addTarget?.(name, el, handleProps);
-    formContext?.onChangeText?.(name, text);
+    formContext.subscribe?.(fname, el, {
+      name,
+      setProps,
+      getValue,
+      focus: () => inputRef.current?.focus(),
+    });
+
     if (typeof ref === 'function') {
       ref(el);
     } else if (ref && Object.keys(ref).indexOf('current') >= 0) {
       ref.current = el;
-    }
-  };
-
-  const handleProps = props => {
-    if (!isEqual(props, extraProps)) {
-      setExtraProps(p => ({ ...p, ...props }));
     }
   };
 

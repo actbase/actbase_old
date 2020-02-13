@@ -1,4 +1,10 @@
-import React, { createRef, useCallback, useContext, useState } from 'react';
+import React, {
+  useRef,
+  useEffect,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -27,7 +33,7 @@ const Button = React.memo(props => {
     ...oProps
   } = props;
 
-  const buttonIndex = createRef();
+  const fname = useRef(null);
   const context = useContext(ABContext);
   const formContext = useContext(FormContext);
   const styles = context.styles;
@@ -59,7 +65,7 @@ const Button = React.memo(props => {
     setPress(false);
   }, []);
 
-  const handleProps = props => {
+  const setProps = props => {
     if (!isEqual(props, extraProps)) {
       setExtraProps(p => ({ ...p, ...props }));
     }
@@ -146,15 +152,11 @@ const Button = React.memo(props => {
     ]);
   }
 
+  useEffect(() => () => formContext.unsubscribe?.(fname), []);
+
   return (
     <TouchableWithoutFeedback
-      ref={el => {
-        buttonIndex.current = formContext.addSubmit(
-          buttonIndex.current,
-          el,
-          handleProps,
-        );
-      }}
+      ref={el => formContext.subscribe?.(fname, el, { setProps })}
       onPress={handleClick}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}

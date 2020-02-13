@@ -1,9 +1,10 @@
 import React from 'react';
 import TextField from './TextField';
+import Radio from './Radio';
 
 const INPUT_TYPES = {
   checkbox: null,
-  radio: null,
+  radio: Radio,
   hidden: null,
 };
 
