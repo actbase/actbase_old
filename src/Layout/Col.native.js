@@ -7,7 +7,7 @@ import { RowContext } from './Row.native';
 const STYLE_GROUP_NAME = 'ab-layout';
 
 const Col = props => {
-  const { xs, sm, md, lg, xlg, children } = props;
+  const { xs, sm, md, lg, xlg, ...oProps } = props;
 
   const { width } = Dimensions.get('screen');
   const context = useContext(ABContext);
@@ -32,12 +32,17 @@ const Col = props => {
     styles[`${STYLE_GROUP_NAME}-col`],
     {
       width: `${100 * (Math.abs(ratio) / 12)}%`,
-      paddingLeft: gap,
-      paddingRight: gap,
+      maxWidth: `${100 * (Math.abs(ratio) / 12)}%`,
+      paddingLeft: gap / 2,
+      paddingRight: gap / 2,
     },
   ]);
 
-  return <View style={elementStyle}>{children}</View>;
+  return (
+    <View style={elementStyle}>
+      <View {...oProps} />
+    </View>
+  );
 };
 
 Col.propTypes = {

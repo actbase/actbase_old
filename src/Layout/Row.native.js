@@ -8,7 +8,7 @@ const STYLE_GROUP_NAME = 'ab-layout';
 export const RowContext = React.createContext({});
 
 const Row = props => {
-  const { children } = props;
+  const { style, ...oProps } = props;
 
   const context = useContext(ABContext);
   const styles = context.styles;
@@ -17,14 +17,16 @@ const Row = props => {
   const elementStyle = StyleSheet.flatten([
     styles[`${STYLE_GROUP_NAME}-row`],
     {
-      marginLeft: -gap,
-      marginRight: -gap,
+      marginLeft: -(gap / 2),
+      marginRight: -(gap / 2),
     },
   ]);
 
   return (
     <RowContext.Provider value={{ gap }}>
-      <View style={elementStyle}>{children}</View>
+      <View style={style}>
+        <View style={elementStyle} {...oProps} />
+      </View>
     </RowContext.Provider>
   );
 };
