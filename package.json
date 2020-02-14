@@ -8,7 +8,7 @@
     "email": "apps@trabricks.com"
   },
   "scripts": {
-    "build": "rm -rf ./dist && tsc -p src/tsconfig.json && copyfiles -u 1 ./src/**/*.css ./dist/ && babel dist --out-dir dist",
+    "build": "rm -rf ./dist && tsc -p src/tsconfig.json && copyfiles -u 1 ./src/**/*.css ./src/**/**/*.css ./dist/ && babel dist --out-dir dist",
     "example": "npm run build && rm -rf ./example/reactnative/actbase && cp -r ./dist ./example/reactnative/actbase"
   },
   "license": "MIT",

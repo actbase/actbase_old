@@ -15,7 +15,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import ActBase, {Button, Form, Input} from 'actbase/index.native';
+import ActBase, {Button, Form, Input, Row, Col} from 'actbase/index.native';
 
 import {
   Header,
@@ -59,6 +59,27 @@ const App = () => {
             value={text}
             onChangeText={setText}
           />
+
+          <Row>
+            <Col>
+              <Text>aaa</Text>
+            </Col>
+            <Col>
+              <Text>aaa</Text>
+            </Col>
+            <Col>
+              <Text>aaa</Text>
+            </Col>
+            <Col>
+              <Text>aaa</Text>
+            </Col>
+            <Col>
+              <Text>aaa</Text>
+            </Col>
+            <Col>
+              <Text>aaa</Text>
+            </Col>
+          </Row>
 
           <Button type={'link'}>가나다라</Button>
         </Form>

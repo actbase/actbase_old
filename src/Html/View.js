@@ -4,4 +4,4 @@ const View = React.memo(props => {
   return <div {...props} />;
 });
 
-return View;
+export default View;

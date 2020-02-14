@@ -15,8 +15,8 @@ import {
   View,
 } from 'react-native';
 import { isEqual, omit, pick } from 'lodash';
-import { FormContext } from '../form/index.native';
-import { ABContext, TEXT_STYLE_NAMES } from '../app/utils.native';
+import { FormContext } from '../Form/index.native';
+import { ABContext, TEXT_STYLE_NAMES } from '../App/utils.native';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
