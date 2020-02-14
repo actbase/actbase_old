@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, {
   useRef,
   useEffect,
@@ -21,7 +22,7 @@ const STYLE_GROUP_NAME = 'ab-button';
 
 const Button = React.memo(props => {
   const {
-    size,
+    type,
     tpl,
     style,
     children,
@@ -66,7 +67,7 @@ const Button = React.memo(props => {
   }, []);
 
   const setProps = props => {
-    if (!isEqual(props, extraProps)) {
+    if (!isEqual(props, extraProps) && type === 'submit') {
       setExtraProps(p => ({ ...p, ...props }));
     }
   };
@@ -120,7 +121,7 @@ const Button = React.memo(props => {
   );
 
   let contents = children;
-  if (process === 2 || extraProps?.submitting) {
+  if (process === 2 || (extraProps?.submitting && !onPress)) {
     contents = <ActivityIndicator />;
   } else if (typeof contents === 'string') {
     contents = (
@@ -169,5 +170,14 @@ const Button = React.memo(props => {
     </TouchableWithoutFeedback>
   );
 });
+
+Button.propTypes = {
+  type: PropTypes.oneOf(['button', 'submit']),
+  ...View.propTypes,
+};
+
+Button.defaultProps = {
+  type: 'submit',
+};
 
 export default Button;

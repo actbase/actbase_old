@@ -26,6 +26,8 @@ styles = assign(styles, transform(selectStyle));
 // Layout
 export { default as Row } from './Layout/Row.native';
 export { default as Col } from './Layout/Col.native';
+import layoutStyle from './Layout/styles.css';
+styles = assign(styles, transform(layoutStyle));
 
 // Web Migrated
 export { default as View } from './Html/View.native';

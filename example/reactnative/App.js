@@ -15,8 +15,8 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import ActBase, {Button, Form, Input, Row, Col} from 'actbase/native';
-
+import ActBase, {Button, Form, Input, Row, Col} from 'actbase';
+import {range} from 'lodash';
 import {
   Header,
   LearnMoreLinks,
@@ -60,25 +60,14 @@ const App = () => {
             onChangeText={setText}
           />
 
-          <Row>
-            <Col>
-              <Text>aaa</Text>
-            </Col>
-            <Col>
-              <Text>aaa</Text>
-            </Col>
-            <Col>
-              <Text>aaa</Text>
-            </Col>
-            <Col>
-              <Text>aaa</Text>
-            </Col>
-            <Col>
-              <Text>aaa</Text>
-            </Col>
-            <Col>
-              <Text>aaa</Text>
-            </Col>
+          <Row gap={10}>
+            {range(0, 10).map(v => (
+              <Col xs={6}>
+                <View style={{backgroundColor: '#F00'}}>
+                  <Text>aaa</Text>
+                </View>
+              </Col>
+            ))}
           </Row>
 
           <Button type={'link'}>가나다라</Button>
