@@ -5,7 +5,7 @@ module.exports = api => {
     plugins: [
       [
         'babel-plugin-inline-import',
-        { extensions: ['css'], refextends: ['native.js'] },
+        { extensions: ['css'], refextends: ['native.js', '/native/'] },
       ],
       '@babel/plugin-transform-react-jsx',
       '@babel/plugin-proposal-object-rest-spread',

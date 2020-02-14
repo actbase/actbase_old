@@ -1,6 +1,6 @@
 {
   "name": "actbase",
-  "version": "0.0.14",
+  "version": "0.0.17",
   "description": "React & React-Native Design Components",
   "main": "index.js",
   "author": {
@@ -9,7 +9,8 @@
   },
   "scripts": {
     "build": "rm -rf ./dist && tsc -p src/tsconfig.json && copyfiles -u 1 ./src/**/*.css ./src/**/**/*.css ./dist/ && babel dist --out-dir dist",
-    "example": "npm run build && rm -rf ./example/reactnative/actbase && cp -r ./dist ./example/reactnative/actbase"
+    "example": "npm run build && rm -rf ./example/reactnative/actbase && cp -r ./dist ./example/reactnative/actbase",
+    "prepublish": "npm run build"
   },
   "license": "MIT",
   "keywords": [

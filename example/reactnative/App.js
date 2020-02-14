@@ -15,7 +15,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import ActBase, {Button, Form, Input, Row, Col} from 'actbase/index.native';
+import ActBase, {Button, Form, Input, Row, Col} from 'actbase/native';
 
 import {
   Header,

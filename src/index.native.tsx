@@ -42,3 +42,7 @@ App.styles = styles;
 export const ActBase = App;
 
 export default ActBase;
+
+//
+// export { default as Actbase } from './native';
+// export default Actbase;

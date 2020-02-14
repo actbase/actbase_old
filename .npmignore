@@ -3,6 +3,7 @@
 .git*
 src/
 example/
+docs/
 
 .babelrc.js
 .gitignore
