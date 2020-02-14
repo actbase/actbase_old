@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { ABContext } from '../App/utils.native';
-import Row, { RowContext } from './Row.native';
+import { RowContext } from './Row.native';
 
 const STYLE_GROUP_NAME = 'ab-layout';
 
@@ -15,13 +15,13 @@ const Col = props => {
   const styles = context.styles;
 
   let ratio = 12;
-  if (width < 576) {
+  if (width <= 576) {
     ratio = xs || sm || md || lg || xlg;
-  } else if (width < 768) {
+  } else if (width <= 768) {
     ratio = sm || md || lg || xlg;
-  } else if (width < 992) {
+  } else if (width <= 992) {
     ratio = md || lg || xlg;
-  } else if (width < 1200) {
+  } else if (width <= 1200) {
     ratio = lg || xlg;
   } else {
     ratio = xlg;
