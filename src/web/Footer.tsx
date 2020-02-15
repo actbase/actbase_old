@@ -1,6 +1,10 @@
 import * as React from 'react';
 
-const Footer: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>> = props => {
+export interface FooterProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
+  style?: any;
+}
+
+const Footer: React.FC<FooterProps> = props => {
   return <footer {...props} />;
 };
 

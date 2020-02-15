@@ -9,6 +9,13 @@ export interface MeasureResult {
   pageY: number;
 }
 
+export interface ScaledSize {
+  width: number;
+  height: number;
+  scale: number;
+  fontScale: number;
+}
+
 export interface ContextArgs {
   styles?: any;
 }
@@ -23,6 +30,10 @@ export const measure = (target: number): Promise<MeasureResult | Error | null> =
       reject(null);
     }
   });
+};
+
+export const getWindowSize = (): ScaledSize => {
+  return { width: 0, height: 0, scale: 1, fontScale: 1 };
 };
 
 export const TEXT_STYLE_NAMES: string[] = [
@@ -64,7 +75,8 @@ export const COVER_STYLE_NAMES: string[] = [
 
 export default {
   ABContext,
+  measure,
+  getWindowSize,
   TEXT_STYLE_NAMES,
   COVER_STYLE_NAMES,
-  measure,
 };

@@ -1,61 +1,65 @@
-import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
-import { ABContext } from '../App/utils.native';
+import { ABContext, getWindowSize } from '../App/utils';
 import { RowContext } from './Row';
+import View from '../web/View';
+
+export interface ColProps {
+  span: number;
+  xs?: number;
+  sm?: number;
+  md?: number;
+  lg?: number;
+  xlg?: number;
+  style?: any;
+}
 
 const STYLE_GROUP_NAME = 'ab-layout';
 
-const Col = props => {
-  const { xs, sm, md, lg, xlg, ...oProps } = props;
+const Col: React.FC<ColProps> = (props: ColProps): React.ReactElement => {
+  const { xs, sm, md, lg, xlg, span, ...oProps } = props;
 
-  const { width } = Dimensions.get('screen');
+  const { width } = getWindowSize();
   const context = useContext(ABContext);
   const rowContext = useContext(RowContext);
   const styles = context.styles;
 
-  let ratio = 12;
+  let ratio: number = 12;
   if (width <= 576) {
-    ratio = xs || sm || md || lg || xlg;
+    ratio = xs || sm || md || lg || xlg || span;
   } else if (width <= 768) {
-    ratio = sm || md || lg || xlg;
+    ratio = sm || md || lg || xlg || span;
   } else if (width <= 992) {
-    ratio = md || lg || xlg;
+    ratio = md || lg || xlg || span;
   } else if (width <= 1200) {
-    ratio = lg || xlg;
+    ratio = lg || xlg || span;
   } else {
-    ratio = xlg;
+    ratio = xlg || span;
   }
 
-  const gap = rowContext.gap || 0;
-  const elementStyle = StyleSheet.flatten([
-    styles[`${STYLE_GROUP_NAME}-col`],
-    {
-      width: `${100 * (Math.abs(ratio) / 12)}%`,
-      maxWidth: `${100 * (Math.abs(ratio) / 12)}%`,
-      paddingLeft: gap / 2,
-      paddingRight: gap / 2,
-    },
-  ]);
+  const gutterH = rowContext.gutter[0] || 0;
+  const gutterV = rowContext.gutter[1] || 0;
 
   return (
-    <View style={elementStyle}>
+    <View
+      style={[
+        styles[`${STYLE_GROUP_NAME}-col`],
+        {
+          width: `${100 * (Math.abs(ratio) / 12)}%`,
+          maxWidth: `${100 * (Math.abs(ratio) / 12)}%`,
+          paddingLeft: gutterH / 2,
+          paddingRight: gutterH / 2,
+          paddingTop: gutterV / 2,
+          paddingBottom: gutterV / 2,
+        },
+      ]}
+    >
       <View {...oProps} />
     </View>
   );
 };
 
-Col.propTypes = {
-  w: PropTypes.number,
-  xs: PropTypes.number,
-  sm: PropTypes.number,
-  md: PropTypes.number,
-  lg: PropTypes.number,
-  xlg: PropTypes.number,
-};
-
 Col.defaultProps = {
-  xlg: 12,
+  span: 12,
 };
 
 export default Col;

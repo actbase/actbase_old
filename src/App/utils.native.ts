@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { findNodeHandle, UIManager } from 'react-native';
+import { Dimensions, findNodeHandle, ScaledSize, UIManager } from 'react-native';
 
 export interface MeasureResult {
   originX: number;
@@ -15,6 +15,10 @@ export interface ContextArgs {
 }
 
 export const ABContext: React.Context<ContextArgs> = React.createContext<ContextArgs>({});
+
+export const getWindowSize = (): ScaledSize => {
+  return Dimensions.get('screen');
+};
 
 export const measure = (target: null | number | React.Component<any, any> | React.ComponentClass<any>): Promise<MeasureResult | Error> => {
   return new Promise((resolve, reject) => {
@@ -76,7 +80,8 @@ export const COVER_STYLE_NAMES: string[] = [
 
 export default {
   ABContext,
+  getWindowSize,
+  measure,
   TEXT_STYLE_NAMES,
   COVER_STYLE_NAMES,
-  measure,
 };

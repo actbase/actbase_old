@@ -1,44 +1,53 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { isArray } from 'lodash';
 import { ABContext, ContextArgs } from '../App/utils';
 import View from '../web/View';
 
-const STYLE_GROUP_NAME = 'ab-layout';
-
-export const RowContext = React.createContext({});
+export type RowAligns = 'top' | 'middle' | 'bottom' | 'stretch';
+export type RowJustify = 'start' | 'end' | 'center' | 'space-around' | 'space-between';
 
 export interface RowProps {
-  gap: number;
-  style: any;
+  gutter: [number, number] | number;
+  align?: RowAligns;
+  justify?: RowJustify;
+  style?: any;
 }
 
+export interface RowContextProps {
+  gutter: [number, number];
+}
+
+export const STYLE_GROUP_NAME = 'ab-layout';
+export const RowContext: React.Context<RowContextProps> = React.createContext<RowContextProps>({
+  gutter: [10, 10],
+});
+
 const Row: React.FC<RowProps> = (props: RowProps): React.ReactElement => {
-  const { style, ...oProps } = props;
+  const { style, align, justify, ...oProps } = props;
 
   const context: ContextArgs = React.useContext(ABContext);
   const styles = context.styles;
 
-  const gap = props.gap || 0;
-  // @ts-ignore
-  const elementStyle = StyleSheet.flatten([
-    styles[`${STYLE_GROUP_NAME}-row`],
-    {
-      marginLeft: -(gap / 2),
-      marginRight: -(gap / 2),
-    },
-  ]);
+  const gutter: [number, number] = isArray(props.gutter) ? props.gutter : [props.gutter, props.gutter];
+
+  const extStyle = {
+    marginLeft: -(gutter[0] / 2),
+    marginRight: -(gutter[0] / 2),
+    marginTop: -(gutter[1] / 2),
+    marginBottom: -(gutter[1] / 2),
+  };
 
   return (
-    <RowContext.Provider value={{ gap }}>
+    <RowContext.Provider value={{ gutter: gutter }}>
       <View style={style}>
-        <View style={elementStyle} {...oProps} />
+        <View style={[styles[`${STYLE_GROUP_NAME}-row`], extStyle]} {...oProps} />
       </View>
     </RowContext.Provider>
   );
 };
 
 Row.defaultProps = {
-  gap: 10,
+  gutter: [10, 10],
 };
 
 export default Row;

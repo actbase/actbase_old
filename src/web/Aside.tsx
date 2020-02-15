@@ -1,6 +1,10 @@
 import * as React from 'react';
 
-const Aside: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>> = props => {
+export interface AsideProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
+  style?: any;
+}
+
+const Aside: React.FC<AsideProps> = props => {
   return <Aside {...props} />;
 };
 

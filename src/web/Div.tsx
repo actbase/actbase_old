@@ -1,7 +1,11 @@
 import * as React from 'react';
 
-const View: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>> = props => {
+export interface DivProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+  style?: any;
+}
+
+const Div: React.FC<DivProps> = props => {
   return <div {...props} />;
 };
 
-export default View;
+export default Div;

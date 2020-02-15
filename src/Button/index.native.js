@@ -1,38 +1,14 @@
 import PropTypes from 'prop-types';
-import React, {
-  useRef,
-  useEffect,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
-import { FormContext } from '../Form/index.native';
+import { FormContext } from '../Form';
 import { isEqual, omit, pick } from 'lodash';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
 const Button = React.memo(props => {
-  const {
-    type,
-    tpl,
-    style,
-    children,
-    disabled,
-    onPress,
-    onPressIn,
-    onPressOut,
-    forceInset,
-    ...oProps
-  } = props;
+  const { type, tpl, style, children, disabled, onPress, onPressIn, onPressOut, forceInset, ...oProps } = props;
 
   const fname = useRef(null);
   const context = useContext(ABContext);
@@ -116,17 +92,13 @@ const Button = React.memo(props => {
 
   let className = classes.concat(classes.map(v => v.substring(1)));
 
-  const elementStyle = StyleSheet.flatten(
-    className.map(v => styles[v]).concat([style]),
-  );
+  const elementStyle = StyleSheet.flatten(className.map(v => styles[v]).concat([style]));
 
   let contents = children;
   if (process === 2 || (extraProps?.submitting && !onPress)) {
     contents = <ActivityIndicator />;
   } else if (typeof contents === 'string') {
-    contents = (
-      <Text style={pick(elementStyle, TEXT_STYLE_NAMES)}>{props.children}</Text>
-    );
+    contents = <Text style={pick(elementStyle, TEXT_STYLE_NAMES)}>{props.children}</Text>;
   }
 
   let Element1 = View;
@@ -138,19 +110,8 @@ const Button = React.memo(props => {
   if (forceInset) {
     Element1 = SafeAreaView;
     Element2 = View;
-    coverStyle = omit(elementStyle, [
-      'height',
-      'minHeight',
-      'maxHeight',
-      'borderRadius',
-    ]);
-    innerStyle = pick(elementStyle, [
-      'height',
-      'minHeight',
-      'maxHeight',
-      'alignItems',
-      'justifyContent',
-    ]);
+    coverStyle = omit(elementStyle, ['height', 'minHeight', 'maxHeight', 'borderRadius']);
+    innerStyle = pick(elementStyle, ['height', 'minHeight', 'maxHeight', 'alignItems', 'justifyContent']);
   }
 
   useEffect(() => () => formContext.unsubscribe?.(fname), []);

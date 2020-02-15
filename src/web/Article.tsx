@@ -1,6 +1,10 @@
 import * as React from 'react';
 
-const Article: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>> = props => {
+export interface ArticleProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
+  style?: any;
+}
+
+const Article: React.FC<ArticleProps> = props => {
   return <Article {...props} />;
 };
 

@@ -15,11 +15,9 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import ActBase, {Form, Input, Col} from 'actbase';
-import Row from 'actbase/Layout/Row.native';
+import ActBase, {Form, Input, Col, Button} from 'actbase';
+import Row from 'actbase/Layout/Row';
 import {range} from 'lodash';
-
-import Button from 'actbase/Button/index.native';
 
 function sleep(time) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -56,9 +54,9 @@ const App = () => {
             onChangeText={setText}
           />
 
-          <Row gap={10}>
+          <Row gutter={[5, 15]} align={'top'}>
             {range(0, 10).map(v => (
-              <Col xs={6}>
+              <Col key={`${v}`} xs={6}>
                 <View style={{backgroundColor: '#F00'}}>
                   <Text>aaa</Text>
                 </View>
