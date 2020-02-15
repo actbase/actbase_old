@@ -7,3 +7,4 @@
 .idea
 .watchmanconfig
 package-lock.json
+.next
