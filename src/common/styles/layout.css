@@ -1,8 +1,0 @@
-.ab-layout-row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.ab-layout-col {
-  flex-grow: 1;
-}
