@@ -3,7 +3,6 @@
   "compilerOptions": {
     "outDir": "../dist",
     "baseUrl": ".",
-    "lib": ["dom", "es2015", "esnext.intl", "es2018.intl", "es2017.intl", "es2017.object"],
-    "forceConsistentCasingInFileNames": true
+    "lib": ["dom", "es2017"]
   }
 }

@@ -20,7 +20,7 @@ export interface ContextArgs {
   styles?: any;
 }
 
-export const ABContext: React.Context<ContextArgs> = React.createContext<ContextArgs>({});
+export const ABContext = React.createContext<ContextArgs>({});
 
 export const measure = (target: number): Promise<MeasureResult> => {
   return new Promise((resolve, reject) => {

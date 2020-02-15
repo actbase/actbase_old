@@ -8,9 +8,9 @@ import App from './App';
 // export { default as Input } from './Input';
 // export { default as Select } from './Select';
 //
-// // Layout
-// export { default as Row } from './Layout/Row';
-// export { default as Col } from './Layout/Col';
+// Layout
+export { default as Row } from './Layout/Row';
+export { default as Col } from './Layout/Col';
 
 // Web Migrated
 export { default as View } from './web/View';
