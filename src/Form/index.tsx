@@ -6,13 +6,14 @@ import { measure } from '../App/utils';
 export interface FormProps {
   style?: any;
   output: 'json' | 'FormData';
-  onSubmit?: (data: any) => void;
-  onLayout?: (e: any) => void;
+  onSubmit?: (data: FormData | ResultData) => void;
+  onLayout?: (event: { nativeEvent: { layout: { x: number; y: number; width: number; height: number } } }) => void;
 }
 
 export interface ResultProps {
   returnKeyType?: string;
   onSubmitEditing?: any;
+  submitting?: boolean;
 }
 
 export interface ResultData {
@@ -25,8 +26,8 @@ export interface FieldItems {
     options: {
       name?: string;
       focus?: boolean;
-      setProps: any;
-      getValue: any;
+      setProps: (data: ResultProps) => void;
+      getValue: () => any;
     };
     area: number;
   };
