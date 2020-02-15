@@ -22,10 +22,10 @@ export interface ContextArgs {
 
 export const ABContext: React.Context<ContextArgs> = React.createContext<ContextArgs>({});
 
-export const measure = (target: number): Promise<MeasureResult | Error | null> => {
+export const measure = (target: number): Promise<MeasureResult> => {
   return new Promise((resolve, reject) => {
     if (target) {
-      resolve(null);
+      resolve({ originX: 0, originY: 0, width: 0, height: 0, pageX: 0, pageY: 0 });
     } else {
       reject(null);
     }
