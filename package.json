@@ -1,8 +1,10 @@
 {
   "name": "actbase",
-  "version": "0.0.29",
+  "version": "0.0.39",
   "description": "React & React-Native Design Components",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "author": {
     "name": "Trabricks LLC",
     "email": "apps@trabricks.com"
@@ -30,8 +32,7 @@
     "css-to-react-native-transform": "^1.9.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "styled-components": "^4.4.1",
-    "prop-types": "latest"
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.2",
@@ -49,7 +50,6 @@
     "babel-eslint": "^10.0.3",
     "babel-plugin-inline-import": "git+ssh://git@github.com/actbase/babel-plugin-inline-import.git",
     "copyfiles": "^2.2.0",
-    "core-js": "^3.6.4",
     "cross-env": "^6.0.3",
     "esifycss": "^1.4.12",
     "eslint": "^6.8.0",

@@ -15,15 +15,11 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import ActBase, {Button, Form, Input, Row, Col} from 'actbase';
+import ActBase, {Form, Input, Col} from 'actbase';
+import Row from 'actbase/Layout/Row.native';
 import {range} from 'lodash';
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+
+import Button from 'actbase/Button/index.native';
 
 function sleep(time) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -70,7 +66,9 @@ const App = () => {
             ))}
           </Row>
 
-          <Button type={'link'}>가나다라</Button>
+          <Button type={'submit'}>asdf</Button>
+
+          <Button tpl={'link'}>가나다라</Button>
         </Form>
       </SafeAreaView>
     </>

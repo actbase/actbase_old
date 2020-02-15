@@ -1,19 +1,25 @@
-import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ABContext } from '../App/utils.native';
+import * as React from 'react';
+import { StyleSheet } from 'react-native';
+import { ABContext, ContextArgs } from '../App/utils';
+import View from '../web/View';
 
 const STYLE_GROUP_NAME = 'ab-layout';
 
 export const RowContext = React.createContext({});
 
-const Row = props => {
+export interface RowProps {
+  gap: number;
+  style: any;
+}
+
+const Row: React.FC<RowProps> = (props: RowProps): React.ReactElement => {
   const { style, ...oProps } = props;
 
-  const context = useContext(ABContext);
+  const context: ContextArgs = React.useContext(ABContext);
   const styles = context.styles;
 
   const gap = props.gap || 0;
+  // @ts-ignore
   const elementStyle = StyleSheet.flatten([
     styles[`${STYLE_GROUP_NAME}-row`],
     {
@@ -29,10 +35,6 @@ const Row = props => {
       </View>
     </RowContext.Provider>
   );
-};
-
-Row.propTypes = {
-  gap: PropTypes.number,
 };
 
 Row.defaultProps = {

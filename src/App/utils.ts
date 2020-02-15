@@ -1,30 +1,31 @@
-import { createContext } from 'react';
-import { UIManager } from 'react-native';
+import * as React from 'react';
 
-export const ABContext = createContext({});
+export interface MeasureResult {
+  originX: number;
+  originY: number;
+  width: number;
+  height: number;
+  pageX: number;
+  pageY: number;
+}
 
-export const measure = target => {
+export interface ContextArgs {
+  styles?: any;
+}
+
+export const ABContext: React.Context<ContextArgs> = React.createContext<ContextArgs>({});
+
+export const measure = (target: number): Promise<MeasureResult | Error | null> => {
   return new Promise((resolve, reject) => {
-    try {
-      UIManager.measure(
-        target,
-        (originX, originY, width, oHeight, pageX, pageY) =>
-          resolve({
-            originX,
-            originY,
-            width,
-            height: oHeight,
-            pageX,
-            pageY,
-          }),
-      );
-    } catch (e) {
-      reject(e);
+    if (target) {
+      resolve(null);
+    } else {
+      reject(null);
     }
   });
 };
 
-export const TEXT_STYLE_NAMES = [
+export const TEXT_STYLE_NAMES: string[] = [
   'color',
   'fontFamily',
   'fontSize',
@@ -46,7 +47,7 @@ export const TEXT_STYLE_NAMES = [
   'writingDirection',
 ];
 
-export const COVER_STYLE_NAMES = [
+export const COVER_STYLE_NAMES: string[] = [
   'borderWidth',
   'borderColor',
   'borderRadius',

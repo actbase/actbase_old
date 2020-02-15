@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { FormContext } from '../Form/index.native';
+import { FormContext } from '../Form';
 import { ABContext } from '../App/utils.native';
 
 const Radio = props => {

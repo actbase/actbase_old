@@ -1,39 +1,26 @@
-import * as React from 'react';
 import App from './App';
-import _Button from './Button/index';
 
-export const ActBase = App;
-
-export const Div: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>> = (props) =>
-  <div {...props} />;
-export const View: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>> = (props) =>
-  <div {...props} />;
-export const Header: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>> = (props) =>
-  <header {...props} />;
-export const Footer: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>> = (props) =>
-  <footer {...props} />;
-export const Section: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>> = (props) =>
-  <section {...props} />;
-export const Aside: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>> = (props) =>
-  <aside {...props} />;
-export const Article: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>> = (props) =>
-  <article {...props} />;
-export const Text: React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>> = (props) =>
-  <span {...props} />;
-
-// General
-export const Button = _Button;
-
-// Layout
-
-// Navigation
+export { default as Button } from './Button';
+export { default as ScrollView } from './ScrollView';
 
 // Data Entry
+export { default as Form } from './Form';
+export { default as Input } from './Input';
+export { default as Select } from './Select';
 
-// Data Display
+// Layout
+export { default as Row } from './Layout/Row';
+export { default as Col } from './Layout/Col';
 
-// Feedback
+// Web Migrated
+export { default as View } from './web/View';
+export { default as Div } from './web/Div';
+export { default as Header } from './web/Header';
+export { default as Footer } from './web/Footer';
+export { default as Section } from './web/Section';
+export { default as Aside } from './web/Aside';
+export { default as Article } from './web/Article';
 
-// Other
+export const ActBase = App;
 
 export default ActBase;

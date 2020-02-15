@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { ABContext } from '../App/utils.native';
-import { RowContext } from './Row.native';
+import { RowContext } from './Row';
 
 const STYLE_GROUP_NAME = 'ab-layout';
 
@@ -46,6 +46,7 @@ const Col = props => {
 };
 
 Col.propTypes = {
+  w: PropTypes.number,
   xs: PropTypes.number,
   sm: PropTypes.number,
   md: PropTypes.number,

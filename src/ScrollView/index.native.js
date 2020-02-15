@@ -1,13 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Dimensions,
-  findNodeHandle,
   Keyboard,
   Platform,
   ScrollView as RNScrollView,
 } from 'react-native';
-import {measure} from '../App/utils';
+import { measure } from '../App/utils';
 
 const { height } = Dimensions.get('screen');
 
@@ -25,7 +24,7 @@ const ScrollView = props => {
 
   const handleKDS = async e => {
     if (refObject?.scroll) {
-      const posScroll = await measure(findNodeHandle(refObject?.scroll));
+      const posScroll = await measure(refObject?.scroll);
       const bottom = height - (posScroll.pageY + posScroll.height);
       const toValue = e.endCoordinates.height - bottom;
       setFootDimen(toValue);
@@ -61,12 +60,12 @@ const ScrollView = props => {
     if (!focusItem || !footDimen) {
       return;
     }
-    measure(findNodeHandle(refObject?.scroll))
+    measure(refObject?.scroll)
       .then(async posScroll => {
         if (focusItem && refObject?.container) {
           const offsetY = (props?.offsetY || 0) + 50;
           const posContainer = await measure(refObject?.container);
-          const posFocus = await measure(findNodeHandle(focusItem));
+          const posFocus = await measure(focusItem);
           const offset = posScroll.pageY - posContainer.pageY;
           const y = posFocus.pageY - posScroll.pageY;
 
@@ -84,8 +83,7 @@ const ScrollView = props => {
           }
         }
       })
-      .catch(e => {
-      });
+      .catch(e => {});
   }, [focusItem, footDimen]);
 
   useEffect(() => {
@@ -130,11 +128,7 @@ const ScrollView = props => {
       keyboardShouldPersistTaps={keyboardShouldPersistTaps || 'handled'}
     >
       <Animated.View
-        ref={e => {
-          if (e) {
-            refObject.container = findNodeHandle(e.getNode());
-          }
-        }}
+        ref={e => (refObject.container = e?.getNode?.())}
         style={{ flexGrow: 1, marginBottom: keyboardHeight }}
       >
         {children}

@@ -1,0 +1,35 @@
+.ab-input-text {
+  border-radius: 4px;
+  padding: 0px 10px;
+  height: 38px;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  color: rgba(0, 0, 0, 0.65);
+  flex-direction: row;
+}
+
+.ab-input-text-focused {
+  border-color: #f00;
+}
+.ab-input-text-disabled {
+  background-color: #eee;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.ab-input-text-clear {
+  background-color: #ccc;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.ab-input-text-clear-line {
+  position: absolute;
+  width: 1.5px;
+  height: 8px;
+  background-color: #fff;
+}
