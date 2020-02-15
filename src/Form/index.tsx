@@ -25,7 +25,8 @@ export interface FieldItems {
     input: any;
     options: {
       name?: string;
-      focus?: boolean;
+      focus?: () => void;
+      blur?: () => void;
       setProps: (data: ResultProps) => void;
       getValue: () => any;
     };

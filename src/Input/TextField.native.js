@@ -1,34 +1,13 @@
-import React, {
-  createRef,
-  useRef,
-  useContext,
-  useState,
-  useCallback,
-} from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 
-import {
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { isEqual, omit, pick } from 'lodash';
 import { FormContext } from '../Form';
 import { ABContext, TEXT_STYLE_NAMES } from '../App/utils.native';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
-const marginStyle = [
-  'margin',
-  'marginHorizontal',
-  'marginVertical',
-  'marginTop',
-  'marginLeft',
-  'marginRight',
-  'marginBottom',
-];
+const marginStyle = ['margin', 'marginHorizontal', 'marginVertical', 'marginTop', 'marginLeft', 'marginRight', 'marginBottom'];
 
 const propTemplate = {
   email: {
@@ -108,6 +87,7 @@ const TextField = React.forwardRef((props, ref) => {
       setProps,
       getValue,
       focus: () => inputRef.current?.focus(),
+      blur: () => inputRef.current?.blur(),
     });
 
     if (typeof ref === 'function') {
@@ -131,9 +111,7 @@ const TextField = React.forwardRef((props, ref) => {
 
   let className = classes.concat(classes.map(v => v.substring(1)));
 
-  const elementStyle = StyleSheet.flatten(
-    className.map(v => styles[v]).concat([style]),
-  );
+  const elementStyle = StyleSheet.flatten(className.map(v => styles[v]).concat([style]));
 
   //clearButtonMode !== 'never'
 
@@ -153,10 +131,7 @@ const TextField = React.forwardRef((props, ref) => {
         <TextInput
           ref={handleRef}
           onChangeText={handleChangeText}
-          style={[
-            { flex: 1, height: elementStyle?.height },
-            pick(elementStyle, TEXT_STYLE_NAMES),
-          ]}
+          style={[{ flex: 1, height: elementStyle?.height }, pick(elementStyle, TEXT_STYLE_NAMES)]}
           onFocus={e => {
             setFocused(true);
             onFocus && onFocus(e);
@@ -173,11 +148,7 @@ const TextField = React.forwardRef((props, ref) => {
           {...oProps}
         />
         {!!text && focused && (
-          <TouchableOpacity
-            onPress={handleClear}
-            activeOpacity={0.2}
-            style={styles['ab-input-text-clear']}
-          >
+          <TouchableOpacity onPress={handleClear} activeOpacity={0.2} style={styles['ab-input-text-clear']}>
             <View
               style={[
                 styles['ab-input-text-clear-line'],
