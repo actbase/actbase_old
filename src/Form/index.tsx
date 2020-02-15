@@ -6,8 +6,8 @@ import { measure } from '../App/utils';
 export interface FormProps {
   style?: any;
   output: 'json' | 'FormData';
-  onSubmit: any;
-  onLayout: any;
+  onSubmit?: (data: any) => void;
+  onLayout?: (e: any) => void;
 }
 
 export interface ResultProps {
