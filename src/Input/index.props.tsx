@@ -1,0 +1,23 @@
+export interface InputProps {
+  type: string;
+  tpl?: string;
+  name?: string;
+  value?: any;
+  style?: any;
+  onChangeText?: any;
+  leftDeco?: any;
+  rightDeco?: any;
+  hintStyle?: any;
+
+  onFocus?: any;
+  onBlur?: any;
+  validateMode?: 'focus' | 'blur' | 'while-editing' | 'always' | 'submit' | 'never';
+  onValidate?: any;
+
+  readonly?: boolean;
+  disabled?: boolean;
+  multiline?: boolean;
+  clearButtonMode?: 'never' | 'while-editing' | 'unless-editing' | 'always';
+
+  hint?: string;
+}

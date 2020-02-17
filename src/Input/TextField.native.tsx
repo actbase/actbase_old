@@ -5,6 +5,7 @@ import { isEqual, omit, pick } from 'lodash';
 import { ChildExtraProps, FormContext } from '../Form';
 import { TEXT_STYLE_NAMES } from '../App/utils';
 import useStyles from '../App/styles';
+import { InputProps } from './index.props';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
@@ -23,31 +24,7 @@ const propTemplate: { [key: string]: any } = {
   },
 };
 
-export interface TextFieldProps {
-  type?: string;
-  tpl?: string;
-  name?: string;
-  value?: any;
-  style?: any;
-  onChangeText?: any;
-  leftDeco?: any;
-  rightDeco?: any;
-  hintStyle?: any;
-
-  onFocus?: any;
-  onBlur?: any;
-  validateMode?: 'focus' | 'blur' | 'while-editing' | 'always' | 'submit' | 'never';
-  onValidate?: any;
-
-  readonly?: boolean;
-  disabled?: boolean;
-  multiline?: boolean;
-  clearButtonMode?: 'never' | 'while-editing' | 'unless-editing' | 'always';
-
-  hint?: string;
-}
-
-const TextField = React.forwardRef((props: TextFieldProps, ref: any) => {
+const TextField = React.forwardRef((props: InputProps, ref: any) => {
   const formContext = useContext(FormContext);
 
   const inputRef = useRef<any>();
@@ -215,6 +192,7 @@ const TextField = React.forwardRef((props: TextFieldProps, ref: any) => {
 
 TextField.defaultProps = {
   clearButtonMode: 'never',
+  validateMode: 'submit',
 };
 
 export default TextField;
