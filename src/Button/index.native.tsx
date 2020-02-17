@@ -1,38 +1,55 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
+import { TEXT_STYLE_NAMES } from '../App/utils';
 import { FormContext } from '../Form';
 import { isEqual, omit, pick } from 'lodash';
 import useStyles from '../App/styles';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
-const Button = React.memo(props => {
+export interface ButtonProps {
+  type: 'button' | 'submit';
+  tpl?: string;
+  disabled: boolean;
+  onPress?: () => any;
+  onClick?: () => any;
+  onPressIn?: (e: any) => any;
+  onPressOut?: (e: any) => any;
+  forceInset: any;
+  style?: any;
+  children?: any;
+}
+
+export interface ButtonExtraProps {
+  submitting?: boolean;
+}
+
+const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
   const { type, tpl, style, children, disabled, onPress, onPressIn, onPressOut, forceInset, ...oProps } = props;
 
   const styles = useStyles(STYLE_GROUP_NAME);
+  const nameRef = useRef<number>(0);
 
-  const fname = useRef(null);
-  const context = useContext(ABContext);
   const formContext = useContext(FormContext);
-  // const styles = context.styles;
 
-  const [extraProps, setExtraProps] = useState({});
+  const [extraProps, setExtraProps] = useState<ButtonExtraProps>({});
+  const setProps = useCallback(
+    (props: ButtonExtraProps) => {
+      if (!isEqual(props, extraProps) && type === 'submit') {
+        setExtraProps(p => ({ ...p, ...props }));
+      }
+    },
+    [extraProps],
+  );
 
   let suffix = '';
   if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
     suffix = `-tpl-${tpl}`;
   }
-
   const classes = [`${STYLE_GROUP_NAME}${suffix}`];
 
   const [press, setPress] = useState(false);
   if (press) classes.push(`${STYLE_GROUP_NAME}${suffix}-press`);
-
-  const [hover, setHover] = useState(false);
-  if (hover) classes.push(`${STYLE_GROUP_NAME}${suffix}-hover`);
-
   if (disabled) classes.push(`${STYLE_GROUP_NAME}${suffix}-disabled`);
 
   const handlePressIn = useCallback(e => {
@@ -45,53 +62,44 @@ const Button = React.memo(props => {
     setPress(false);
   }, []);
 
-  const setProps = props => {
-    if (!isEqual(props, extraProps) && type === 'submit') {
-      setExtraProps(p => ({ ...p, ...props }));
-    }
-  };
-
   const [process, setProcess] = useState(0);
-  const handleClick = useCallback(
-    e => {
-      if (process > 0) return;
-      setProcess(1);
-      try {
-        let isPromise = false;
-        if (onPress) {
-          const o = onPress && onPress();
-          if (o instanceof Promise) {
-            isPromise = true;
-            setProcess(2);
-            o.then(() => {
-              setProcess(0);
-            }).catch(e => {
-              setProcess(0);
-              console.warn(e);
-            });
-          }
-        } else if (formContext?.submit) {
-          const o = formContext?.submit && formContext?.submit();
-          if (o instanceof Promise) {
-            isPromise = true;
-            setProcess(2);
-            o.then(() => {
-              setProcess(0);
-            }).catch(e => {
-              setProcess(0);
-              console.warn(e);
-            });
-          }
+  const handleClick = useCallback(() => {
+    if (process > 0) return;
+    setProcess(1);
+    try {
+      let isPromise = false;
+      if (onPress) {
+        const o = onPress && onPress();
+        if (o instanceof Promise) {
+          isPromise = true;
+          setProcess(2);
+          o.then(() => {
+            setProcess(0);
+          }).catch(e => {
+            setProcess(0);
+            console.warn(e);
+          });
         }
-
-        if (!isPromise) setTimeout(() => setProcess(0), 200);
-      } catch (e) {
-        console.warn(e);
-        setProcess(0);
+      } else if (formContext?.submit) {
+        const o = formContext?.submit && formContext?.submit();
+        if (o instanceof Promise) {
+          isPromise = true;
+          setProcess(2);
+          o.then(() => {
+            setProcess(0);
+          }).catch(e => {
+            setProcess(0);
+            console.warn(e);
+          });
+        }
       }
-    },
-    [process],
-  );
+
+      if (!isPromise) setTimeout(() => setProcess(0), 200);
+    } catch (e) {
+      console.warn(e);
+      setProcess(0);
+    }
+  }, [process]);
 
   let className = classes.concat(classes.map(v => v.substring(1)));
 
@@ -104,7 +112,7 @@ const Button = React.memo(props => {
     contents = <Text style={pick(elementStyle, TEXT_STYLE_NAMES)}>{props.children}</Text>;
   }
 
-  let Element1 = View;
+  let Element1: any = View;
   let Element2 = View;
   let args = {};
   let coverStyle = elementStyle;
@@ -117,11 +125,11 @@ const Button = React.memo(props => {
     innerStyle = pick(elementStyle, ['height', 'minHeight', 'maxHeight', 'alignItems', 'justifyContent']);
   }
 
-  useEffect(() => () => formContext.unsubscribe?.(fname), []);
+  useEffect(() => () => formContext.unsubscribe?.(nameRef), []);
 
   return (
     <TouchableWithoutFeedback
-      ref={el => formContext.subscribe?.(fname, el, { setProps })}
+      ref={el => formContext.subscribe?.(nameRef, el, { setProps })}
       onPress={handleClick}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
@@ -133,15 +141,11 @@ const Button = React.memo(props => {
       </Element1>
     </TouchableWithoutFeedback>
   );
-});
-
-Button.propTypes = {
-  type: PropTypes.oneOf(['button', 'submit']),
-  ...View.propTypes,
 };
 
 Button.defaultProps = {
   type: 'submit',
+  disabled: false,
 };
 
 export default Button;

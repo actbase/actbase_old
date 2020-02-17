@@ -2,7 +2,6 @@ import React from 'react';
 import TextField from './TextField';
 import Radio from './Radio';
 import Hidden from './Hidden';
-import PropTypes from 'prop-types';
 
 const INPUT_TYPES = {
   checkbox: null,
@@ -19,8 +18,4 @@ const Input = React.forwardRef((props, ref) => {
   }
 });
 
-Input.propTypes = {
-  name: PropTypes.string,
-  disabled: PropTypes.bool,
-};
 export default Input;

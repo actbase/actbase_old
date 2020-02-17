@@ -9,7 +9,7 @@ export const STYLE_BUTTON_JSON = require('../Button/styles.json');
 export const STYLE_INPUT_TEXT_PREFIX: string = 'ab-input-text';
 export const STYLE_INPUT_TEXT_JSON = require('../Input/styles-text.json');
 
-export const STYLE_SELECT_PREFIX: string = 'ab-input-text';
+export const STYLE_SELECT_PREFIX: string = 'ab-select';
 export const STYLE_SELECT_JSON = require('../Select/styles.json');
 
 export const STYLE_NAMES: string[] = [STYLE_LAYOUT_PREFIX, STYLE_BUTTON_PREFIX, STYLE_INPUT_TEXT_PREFIX, STYLE_SELECT_PREFIX];

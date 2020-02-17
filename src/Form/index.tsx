@@ -10,6 +10,21 @@ export interface FormProps {
   onLayout?: (event: { nativeEvent: { layout: { x: number; y: number; width: number; height: number } } }) => void;
 }
 
+export interface FormContextOption {
+  name?: string;
+  setProps?: any;
+  getValue?: any;
+  hasError?: any;
+  focus?: any;
+  blur?: any;
+}
+
+export interface FormContextData {
+  subscribe?: (oRef: React.MutableRefObject<number>, input: any, options: FormContextOption) => void;
+  unsubscribe?: (oRef: React.MutableRefObject<number>) => void;
+  submit?: () => any;
+}
+
 export interface ResultProps {
   returnKeyType?: string;
   onSubmitEditing?: any;
@@ -34,7 +49,7 @@ export interface FieldItems {
   };
 }
 
-export const FormContext = React.createContext({});
+export const FormContext = React.createContext<FormContextData>({});
 
 const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
   const items = React.useRef<FieldItems>({});

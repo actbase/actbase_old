@@ -1,6 +1,5 @@
 import React from 'react';
 import { createGenerateId, createUseStyles, SheetsRegistry } from 'react-jss';
-import Button from '@material-ui/core/Button';
 import jss from 'jss';
 import { Row } from 'actbase';
 

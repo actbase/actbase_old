@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import View from '../web/View';
 
 const Select = React.memo(props => {
   return <View {...props} />;

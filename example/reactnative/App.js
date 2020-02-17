@@ -45,7 +45,12 @@ const App = () => {
             alert(JSON.stringify(data));
           }}>
           <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
-          <Input name={'id'} style={{marginBottom: 20}} value={'MOON'} />
+          <Input
+            name={'id'}
+            style={{marginBottom: 20}}
+            value={'MOON'}
+            hint={'아이디를 입력해주세요.'}
+          />
           <Input
             ref={inputRef}
             name={'passowrd'}

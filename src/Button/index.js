@@ -88,4 +88,4 @@ const Button = props => {
   );
 };
 
-export default withStyles(styles, { name: 'MuiButton' })(Button);
+export default Button;

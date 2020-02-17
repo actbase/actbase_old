@@ -1,9 +1,9 @@
 import React, { useCallback, useContext, useRef, useState } from 'react';
 
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
 import { isEqual, omit, pick } from 'lodash';
 import { FormContext } from '../Form';
-import { TEXT_STYLE_NAMES } from '../App/utils.native';
+import { TEXT_STYLE_NAMES } from '../App/utils';
 import useStyles from '../App/styles';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
@@ -86,6 +86,7 @@ const TextField = React.forwardRef((props, ref) => {
       name,
       setProps,
       getValue,
+      hasError: () => false,
       focus: () => inputRef.current?.focus(),
       blur: () => inputRef.current?.blur(),
     });
@@ -169,9 +170,11 @@ const TextField = React.forwardRef((props, ref) => {
         )}
         {rightDeco}
       </View>
-      {/*<View>*/}
-      {/*  <Text>아이디 혹은 비밀번호가 올바르지 않습니다.</Text>*/}
-      {/*</View>*/}
+      {!!props?.hint && (
+        <View style={{ paddingHorizontal: 10, paddingVertical: 5 }}>
+          <Text style={{ fontSize: 12, color: '#db2929' }}>{props?.hint}</Text>
+        </View>
+      )}
     </View>
   );
 });
