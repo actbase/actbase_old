@@ -3,8 +3,8 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { isEqual, omit, pick } from 'lodash';
 import { ChildExtraProps, FormContext } from '../Form';
-import { TEXT_STYLE_NAMES } from '../App/utils';
-import useStyles from '../App/styles';
+import { TEXT_STYLE_NAMES } from '../apps/utils';
+import useStyles from '../apps/styles';
 import { InputProps } from './index.props';
 
 const STYLE_GROUP_NAME = 'ab-input-text';

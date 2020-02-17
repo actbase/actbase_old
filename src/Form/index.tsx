@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { forIn, isEqual } from 'lodash';
 import View from '../web/View';
-import { measure } from '../App/utils';
+import { measure } from '../apps/utils';
 
 export interface FormProps {
   style?: any;

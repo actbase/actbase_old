@@ -1,9 +1,9 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import { TEXT_STYLE_NAMES } from '../App/utils';
+import { TEXT_STYLE_NAMES } from '../apps/utils';
 import { ChildExtraProps, FormContext } from '../Form';
 import { isEqual, omit, pick } from 'lodash';
-import useStyles from '../App/styles';
+import useStyles from '../apps/styles';
 
 const STYLE_GROUP_NAME = 'ab-button';
 

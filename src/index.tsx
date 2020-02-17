@@ -1,4 +1,4 @@
-import App from './App';
+import App from './apps';
 
 export { default as Button } from './Button';
 export { default as ScrollView } from './ScrollView';
