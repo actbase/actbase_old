@@ -49,6 +49,7 @@ export interface ChildExtraProps {
   returnKeyType?: string;
   onSubmitEditing?: any;
   submitting?: boolean;
+  submited?: boolean;
   hint?: string;
   error?: 'success' | 'warn' | 'error';
 }
@@ -157,11 +158,11 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
         });
       }
       await props?.onSubmit?.(result);
-
-      forIn(items?.current, v => {
-        v.options?.setProps?.({ submitting: false });
-      });
     }
+
+    forIn(items?.current, v => {
+      v.options?.setProps?.({ submitting: false, submited: true });
+    });
   }, []);
 
   const value = { subscribe, unsubscribe, submit };

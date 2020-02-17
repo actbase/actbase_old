@@ -7,10 +7,8 @@
  */
 
 import React, {createRef, useEffect} from 'react';
-import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
-import ActBase, {Button, Col, Form, Input, ScrollView} from 'actbase';
-import Row from 'actbase/Layout/Row';
-import {range} from 'lodash';
+import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import ActBase, {Button, Form, Input, ScrollView} from 'actbase';
 
 function sleep(time) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -45,32 +43,26 @@ const App = () => {
               value={'MOON'}
               clearButtonMode={'always'}
               hint={'아이디를 입력해주세요.'}
-              onValidate={(value, values) => ({
-                level: 'error',
-                message: '정말 이대로 가실예정?',
-              })}
+              onValidate={(value, values) => false}
             />
             <Input
               ref={inputRef}
               name={'passowrd'}
               style={{marginBottom: 20}}
-              value={text}
-              onChangeText={setText}
+              onValidate={(value, values) => {
+                return value
+                  ? false
+                  : {
+                      level: 'error',
+                      message: '정말 이대로 가실예정?',
+                    };
+              }}
             />
 
-            <Row gutter={[5, 15]} align={'top'}>
-              {range(0, 10).map(v => (
-                <Col key={`${v}`} xs={6}>
-                  <View style={{backgroundColor: '#F00'}}>
-                    <Text>aaa</Text>
-                  </View>
-                </Col>
-              ))}
-            </Row>
-
             <Button type={'submit'}>asdf</Button>
-
-            <Button tpl={'link'}>가나다라</Button>
+            <Button type={'button'} tpl={'link'}>
+              가나다라
+            </Button>
           </Form>
         </ScrollView>
       </SafeAreaView>

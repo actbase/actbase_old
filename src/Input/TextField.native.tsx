@@ -32,9 +32,11 @@ export interface TextFieldProps {
   onChangeText?: any;
   leftDeco?: any;
   rightDeco?: any;
+  hintStyle?: any;
 
   onFocus?: any;
   onBlur?: any;
+  validateMode?: 'focus' | 'blur' | 'while-editing' | 'always' | 'submit' | 'never';
   onValidate?: any;
 
   readonly?: boolean;
@@ -65,7 +67,23 @@ const TextField = React.forwardRef((props: TextFieldProps, ref: any) => {
     [extraProps],
   );
 
-  const { type, tpl, style, name, onChangeText, leftDeco, rightDeco, onBlur, onFocus, disabled, multiline, clearButtonMode, onValidate, ...oProps } = props;
+  const {
+    type,
+    tpl,
+    style,
+    name,
+    onChangeText,
+    leftDeco,
+    rightDeco,
+    onBlur,
+    onFocus,
+    disabled,
+    multiline,
+    clearButtonMode,
+    onValidate,
+    hintStyle,
+    ...oProps
+  } = props;
 
   const eProps: ChildExtraProps = {
     hint: extraProps.hint || props.hint,
@@ -78,6 +96,7 @@ const TextField = React.forwardRef((props: TextFieldProps, ref: any) => {
   }
 
   const classes = [`${STYLE_GROUP_NAME}${suffix}`];
+  const hitClasses = [`${STYLE_GROUP_NAME}${suffix}-hint`];
 
   const [focused, setFocused] = useState(false);
   if (focused) classes.push(`${STYLE_GROUP_NAME}${suffix}-focused`);
@@ -85,8 +104,8 @@ const TextField = React.forwardRef((props: TextFieldProps, ref: any) => {
   if (multiline) classes.push(`${STYLE_GROUP_NAME}${suffix}-multiline`);
 
   if (eProps.error) {
-    //ab-input-text-error
     classes.push(`${STYLE_GROUP_NAME}${suffix}-error`);
+    hitClasses.push(`${STYLE_GROUP_NAME}${suffix}-hint-error`);
   }
 
   const [text, setText] = useState(props?.value || '');
@@ -124,6 +143,8 @@ const TextField = React.forwardRef((props: TextFieldProps, ref: any) => {
 
   let className = classes.concat(classes.map(v => v.substring(1)));
   const elementStyle = StyleSheet.flatten(className.map(v => styles[v]).concat([style]));
+
+  const hintElStyle = StyleSheet.flatten(hitClasses.map(v => styles[v]).concat([hintStyle]));
 
   const clearMode1 = focused && clearButtonMode === 'while-editing';
   const clearMode2 = !focused && clearButtonMode === 'unless-editing';
@@ -184,8 +205,8 @@ const TextField = React.forwardRef((props: TextFieldProps, ref: any) => {
         {rightDeco}
       </View>
       {!!eProps?.hint && (
-        <View style={{ paddingHorizontal: 10, paddingVertical: 5 }}>
-          <Text style={{ fontSize: 12, color: '#db2929' }}>{eProps?.hint}</Text>
+        <View style={omit(hintElStyle, TEXT_STYLE_NAMES)}>
+          <Text style={pick(hintElStyle, TEXT_STYLE_NAMES)}>{eProps?.hint}</Text>
         </View>
       )}
     </View>

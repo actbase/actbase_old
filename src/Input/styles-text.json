@@ -21,9 +21,20 @@
     "backgroundColor": "#eee",
     "color": "rgba(0, 0, 0, 0.45)"
   },
+  "ab-input-text-hint": {
+    "color": "#333333",
+    "paddingLeft": 10,
+    "paddingRight": 10,
+    "paddingTop": 5,
+    "paddingBottom": 5,
+    "fontSize": 12
+  },
   "ab-input-text-error": {
     "borderColor": "#db2929",
     "color": "rgba(0, 0, 0, 0.45)"
+  },
+  "ab-input-text-hint-error": {
+    "color": "#db2929"
   },
   "ab-input-text-clear": {
     "backgroundColor": "#ccc",
