@@ -1,17 +1,24 @@
-import { assign } from 'lodash';
-import buttonStyle from '../Button/styles.json';
-import inputStyle from '../Input/styles.json';
-import selectStyle from '../Select/styles.json';
-import layoutStyle from '../Layout/styles.json';
+import * as React from 'react';
+import { StyleSheet } from 'react-native';
+import { enableStyles, styles } from './styles.data';
 
-export interface StyleType {
-  [key: string]: any;
-}
+const applyedStyles: { [key: string]: any } = {};
 
-const styles: StyleType = {};
-assign(styles, buttonStyle);
-assign(styles, inputStyle);
-assign(styles, selectStyle);
-assign(styles, layoutStyle);
+const applyStyle = (name: string): void => {
+  enableStyles.push(name);
+  if (!applyedStyles[name]) {
+    applyedStyles[name] = StyleSheet.create(styles[name]);
+  }
+};
 
-export default styles;
+const removeStyle = (name: string): void => {
+  enableStyles.splice(enableStyles.indexOf(name), 1);
+};
+
+const useStyles = (name: string): any => {
+  React.useEffect(() => () => removeStyle(name), []);
+  applyStyle(name);
+  return applyedStyles[name];
+};
+
+export default useStyles;

@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { ABContext, getWindowSize } from '../App/utils';
+import { getWindowSize } from '../App/utils';
 import { RowContext } from './Row';
 import View from '../web/View';
+import useStyles from '../App/styles';
 
 export interface ColProps {
   span: number;
@@ -19,9 +20,8 @@ const Col: React.FC<ColProps> = (props: ColProps): React.ReactElement => {
   const { xs, sm, md, lg, xlg, span, ...oProps } = props;
 
   const { width } = getWindowSize();
-  const context = useContext(ABContext);
   const rowContext = useContext(RowContext);
-  const styles = context.styles;
+  const styles = useStyles(STYLE_GROUP_NAME);
 
   let ratio: number = 12;
   if (width <= 576) {

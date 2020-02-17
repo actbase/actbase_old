@@ -13,7 +13,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.2",
     "@zeit/next-css": "^1.0.1",
-    "actbase": "0.0.43",
+    "actbase": "0.0.44",
     "antd": "^3.26.9",
     "css-to-react-native-transform": "^1.9.0",
     "immer": "^3.3.0",

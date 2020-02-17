@@ -4,16 +4,19 @@ import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableWithoutFeed
 import { ABContext, TEXT_STYLE_NAMES } from '../App/utils';
 import { FormContext } from '../Form';
 import { isEqual, omit, pick } from 'lodash';
+import useStyles from '../App/styles';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
 const Button = React.memo(props => {
   const { type, tpl, style, children, disabled, onPress, onPressIn, onPressOut, forceInset, ...oProps } = props;
 
+  const styles = useStyles(STYLE_GROUP_NAME);
+
   const fname = useRef(null);
   const context = useContext(ABContext);
   const formContext = useContext(FormContext);
-  const styles = context.styles;
+  // const styles = context.styles;
 
   const [extraProps, setExtraProps] = useState({});
 

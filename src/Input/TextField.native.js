@@ -3,7 +3,8 @@ import React, { useCallback, useContext, useRef, useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { isEqual, omit, pick } from 'lodash';
 import { FormContext } from '../Form';
-import { ABContext, TEXT_STYLE_NAMES } from '../App/utils.native';
+import { TEXT_STYLE_NAMES } from '../App/utils.native';
+import useStyles from '../App/styles';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
@@ -43,10 +44,9 @@ const TextField = React.forwardRef((props, ref) => {
 
   const fname = useRef();
   const inputRef = useRef();
-  const context = useContext(ABContext);
   const formContext = useContext(FormContext);
   const [text, setText] = useState(props?.value || '');
-  const styles = context.styles;
+  const styles = useStyles(STYLE_GROUP_NAME);
 
   const [extraProps, setExtraProps] = useState({});
 
