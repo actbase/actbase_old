@@ -14,14 +14,15 @@ module.exports = {
     '@babel/plugin-proposal-optional-chaining',
     [
       'babel-plugin-root-import',
-      {
-        paths: [
-          {
-            rootPathSuffix: './actbase',
-            rootPathPrefix: 'actbase',
-          }
-        ],
-      },
+      {},
+      // {
+      //   paths: [
+      //     {
+      //       rootPathSuffix: './actbase',
+      //       rootPathPrefix: 'actbase',
+      //     }
+      //   ],
+      // },
     ],
   ],
 };

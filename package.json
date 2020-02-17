@@ -1,6 +1,6 @@
 {
   "name": "actbase",
-  "version": "0.0.39",
+  "version": "0.0.43",
   "description": "React & React-Native Design Components",
   "main": "dist/index.js",
   "module": "dist/index.js",

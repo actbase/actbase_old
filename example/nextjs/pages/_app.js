@@ -1,5 +1,5 @@
 import React from 'react';
-import ActBase from "../actbase";
+import ActBase from 'actbase';
 
 const App = props => {
   const { Component, pageProps } = props;
@@ -17,7 +17,5 @@ App.getInitialProps = async ({ Component, ctx }) => {
   }
   return { pageProps };
 };
-
-
 
 export default ActBase(App, {});
