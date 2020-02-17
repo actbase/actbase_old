@@ -1,0 +1,39 @@
+{
+  "ab-input-text": {
+    "borderRadius": 4,
+    "paddingTop": 0,
+    "paddingRight": 10,
+    "paddingBottom": 0,
+    "paddingLeft": 10,
+    "height": 38,
+    "fontSize": 14,
+    "backgroundColor": "#fff",
+    "borderWidth": 1,
+    "borderColor": "#d9d9d9",
+    "borderStyle": "solid",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "flexDirection": "row"
+  },
+  "ab-input-text-focused": {
+    "borderColor": "#f00"
+  },
+  "ab-input-text-disabled": {
+    "backgroundColor": "#eee",
+    "color": "rgba(0, 0, 0, 0.45)"
+  },
+  "ab-input-text-clear": {
+    "backgroundColor": "#ccc",
+    "width": 14,
+    "height": 14,
+    "borderRadius": 7,
+    "alignItems": "center",
+    "justifyContent": "center",
+    "color": "#fff"
+  },
+  "ab-input-text-clear-line": {
+    "position": "absolute",
+    "width": 1.5,
+    "height": 8,
+    "backgroundColor": "#fff"
+  }
+}

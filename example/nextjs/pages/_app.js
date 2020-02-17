@@ -3,6 +3,12 @@ import ActBase from 'actbase';
 
 const App = props => {
   const { Component, pageProps } = props;
+  React.useEffect(() => {
+    const style = document.getElementById('server-side-styles');
+    if (style) {
+      style.parentNode.removeChild(style);
+    }
+  }, []);
   return (
     <>
       <Component {...pageProps} />
