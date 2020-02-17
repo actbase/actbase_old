@@ -1,16 +1,16 @@
 import { forIn, assign } from 'lodash';
 
 export const STYLE_LAYOUT_PREFIX: string = 'ab-layout';
-export const STYLE_LAYOUT_JSON = require('../Layout/styles.json');
+export const STYLE_LAYOUT_JSON = require('../layouts/styles.json');
 
 export const STYLE_BUTTON_PREFIX: string = 'ab-button';
-export const STYLE_BUTTON_JSON = require('../Button/styles.json');
+export const STYLE_BUTTON_JSON = require('../buttons/styles.json');
 
 export const STYLE_INPUT_TEXT_PREFIX: string = 'ab-input-text';
-export const STYLE_INPUT_TEXT_JSON = require('../Input/styles-text.json');
+export const STYLE_INPUT_TEXT_JSON = require('../inputs/styles-text.json');
 
 export const STYLE_SELECT_PREFIX: string = 'ab-select';
-export const STYLE_SELECT_JSON = require('../Select/styles.json');
+export const STYLE_SELECT_JSON = require('../select/styles.json');
 
 export const STYLE_NAMES: string[] = [STYLE_LAYOUT_PREFIX, STYLE_BUTTON_PREFIX, STYLE_INPUT_TEXT_PREFIX, STYLE_SELECT_PREFIX];
 

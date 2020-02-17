@@ -1,16 +1,16 @@
 import App from './apps';
 
-export { default as Button } from './Button';
-export { default as ScrollView } from './ScrollView';
+export { default as Button } from './buttons';
+export { default as ScrollView } from './scrollview';
 
 // Data Entry
-export { default as Form } from './Form';
-export { default as Input } from './Input';
-export { default as Select } from './Select';
+export { default as Form } from './forms';
+export { default as Input } from './inputs';
+export { default as Select } from './select';
 
 // Layout
-export { default as Row } from './Layout/Row';
-export { default as Col } from './Layout/Col';
+export { default as Row } from './layouts/Row';
+export { default as Col } from './layouts/Col';
 
 // Web Migrated
 export { default as View } from './web/View';
