@@ -15,10 +15,14 @@
     "flexDirection": "row"
   },
   "ab-input-text-focused": {
-    "borderColor": "#f00"
+    "borderColor": "#333"
   },
   "ab-input-text-disabled": {
     "backgroundColor": "#eee",
+    "color": "rgba(0, 0, 0, 0.45)"
+  },
+  "ab-input-text-error": {
+    "borderColor": "#db2929",
     "color": "rgba(0, 0, 0, 0.45)"
   },
   "ab-input-text-clear": {

@@ -1,8 +1,8 @@
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import { StyleSheet, TextInput, TouchableOpacity, View, Text } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { isEqual, omit, pick } from 'lodash';
-import { FormContext } from '../Form';
+import { ChildExtraProps, FormContext } from '../Form';
 import { TEXT_STYLE_NAMES } from '../App/utils';
 import useStyles from '../App/styles';
 
@@ -10,7 +10,7 @@ const STYLE_GROUP_NAME = 'ab-input-text';
 
 const marginStyle = ['margin', 'marginHorizontal', 'marginVertical', 'marginTop', 'marginLeft', 'marginRight', 'marginBottom'];
 
-const propTemplate = {
+const propTemplate: { [key: string]: any } = {
   email: {
     keyboardType: 'email-address',
     autoCorrect: false,
@@ -23,32 +23,54 @@ const propTemplate = {
   },
 };
 
-const TextField = React.forwardRef((props, ref) => {
-  const {
-    type,
-    tpl,
-    style,
-    name,
-    onChangeText,
-    leftDeco,
-    rightDeco,
-    focusStyle,
-    onBlur,
-    onFocus,
-    disabled,
-    multiline,
-    clearButtonMode,
-    readonly,
-    ...oProps
-  } = props;
+export interface TextFieldProps {
+  type?: string;
+  tpl?: string;
+  name?: string;
+  value?: any;
+  style?: any;
+  onChangeText?: any;
+  leftDeco?: any;
+  rightDeco?: any;
 
-  const fname = useRef();
-  const inputRef = useRef();
+  onFocus?: any;
+  onBlur?: any;
+  onValidate?: any;
+
+  readonly?: boolean;
+  disabled?: boolean;
+  multiline?: boolean;
+  clearButtonMode?: 'never' | 'while-editing' | 'unless-editing' | 'always';
+
+  hint?: string;
+}
+
+const TextField = React.forwardRef((props: TextFieldProps, ref: any) => {
   const formContext = useContext(FormContext);
-  const [text, setText] = useState(props?.value || '');
+
+  const inputRef = useRef<any>();
+
   const styles = useStyles(STYLE_GROUP_NAME);
 
-  const [extraProps, setExtraProps] = useState({});
+  const nameRef = useRef<number>(0);
+  useEffect(() => () => formContext.unsubscribe?.(nameRef), []);
+
+  const [extraProps, setExtraProps] = useState<ChildExtraProps>({});
+  const setProps = useCallback(
+    (props: ChildExtraProps) => {
+      if (!isEqual(props, extraProps)) {
+        setExtraProps(p => ({ ...p, ...props }));
+      }
+    },
+    [extraProps],
+  );
+
+  const { type, tpl, style, name, onChangeText, leftDeco, rightDeco, onBlur, onFocus, disabled, multiline, clearButtonMode, onValidate, ...oProps } = props;
+
+  const eProps: ChildExtraProps = {
+    hint: extraProps.hint || props.hint,
+    error: extraProps.error,
+  };
 
   let suffix = '';
   if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
@@ -62,31 +84,28 @@ const TextField = React.forwardRef((props, ref) => {
   if (disabled) classes.push(`${STYLE_GROUP_NAME}${suffix}-disabled`);
   if (multiline) classes.push(`${STYLE_GROUP_NAME}${suffix}-multiline`);
 
-  const handleChangeText = text => {
+  if (eProps.error) {
+    //ab-input-text-error
+    classes.push(`${STYLE_GROUP_NAME}${suffix}-error`);
+  }
+
+  const [text, setText] = useState(props?.value || '');
+  const handleChangeText = useCallback((text: string) => {
     onChangeText && onChangeText(text);
     setText?.(text);
-  };
+  }, []);
 
-  const setProps = useCallback(
-    props => {
-      if (!isEqual(props, extraProps)) {
-        setExtraProps(p => ({ ...p, ...props }));
-      }
-    },
-    [extraProps],
-  );
-
-  const getValue = () => {
+  const getValue = useCallback(() => {
     return text;
-  };
+  }, [text]);
 
-  const handleRef = el => {
+  const handleRef = (el: any) => {
     inputRef.current = el;
-    formContext.subscribe?.(fname, el, {
+    formContext.subscribe?.(nameRef, el, {
       name,
       setProps,
       getValue,
-      hasError: () => false,
+      onValidate: onValidate || (() => true),
       focus: () => inputRef.current?.focus(),
       blur: () => inputRef.current?.blur(),
     });
@@ -98,23 +117,17 @@ const TextField = React.forwardRef((props, ref) => {
     }
   };
 
-  const handleClear = props => {
+  const handleClear = () => {
     inputRef.current?.clear();
     setText('');
   };
 
-  const containerStyle = [],
-    inputStyle = [props.inputStyle];
-  if (focused) {
-    containerStyle.push(focusStyle);
-    inputStyle.push(pick(StyleSheet.flatten(focusStyle), TEXT_STYLE_NAMES));
-  }
-
   let className = classes.concat(classes.map(v => v.substring(1)));
-
   const elementStyle = StyleSheet.flatten(className.map(v => styles[v]).concat([style]));
 
-  //clearButtonMode !== 'never'
+  const clearMode1 = focused && clearButtonMode === 'while-editing';
+  const clearMode2 = !focused && clearButtonMode === 'unless-editing';
+  const clearButtonEnabled = clearButtonMode !== 'never' && (clearButtonMode === 'always' || clearMode1 || clearMode2);
 
   return (
     <View style={pick(elementStyle, marginStyle)}>
@@ -141,14 +154,14 @@ const TextField = React.forwardRef((props, ref) => {
             setFocused(false);
             onBlur && onBlur(e);
           }}
-          editable={!disabled}
+          editable={!disabled || !props.readonly || !extraProps.submitting}
           multiline={multiline}
           clearButtonMode={'never'}
-          {...propTemplate[type]}
+          {...(!!type ? propTemplate[type] : {})}
           {...extraProps}
           {...oProps}
         />
-        {!!text && focused && (
+        {clearButtonEnabled && (
           <TouchableOpacity onPress={handleClear} activeOpacity={0.2} style={styles['ab-input-text-clear']}>
             <View
               style={[
@@ -170,13 +183,17 @@ const TextField = React.forwardRef((props, ref) => {
         )}
         {rightDeco}
       </View>
-      {!!props?.hint && (
+      {!!eProps?.hint && (
         <View style={{ paddingHorizontal: 10, paddingVertical: 5 }}>
-          <Text style={{ fontSize: 12, color: '#db2929' }}>{props?.hint}</Text>
+          <Text style={{ fontSize: 12, color: '#db2929' }}>{eProps?.hint}</Text>
         </View>
       )}
     </View>
   );
 });
+
+TextField.defaultProps = {
+  clearButtonMode: 'never',
+};
 
 export default TextField;

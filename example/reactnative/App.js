@@ -7,15 +7,8 @@
  */
 
 import React, {createRef, useEffect} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-import ActBase, {Form, Input, Col, Button} from 'actbase';
+import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import ActBase, {Button, Col, Form, Input, ScrollView} from 'actbase';
 import Row from 'actbase/Layout/Row';
 import {range} from 'lodash';
 
@@ -37,42 +30,49 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <Form
-          style={{padding: 20}}
-          onSubmit={async data => {
-            await sleep(3000);
-            alert(JSON.stringify(data));
-          }}>
-          <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
-          <Input
-            name={'id'}
-            style={{marginBottom: 20}}
-            value={'MOON'}
-            hint={'아이디를 입력해주세요.'}
-          />
-          <Input
-            ref={inputRef}
-            name={'passowrd'}
-            style={{marginBottom: 20}}
-            value={text}
-            onChangeText={setText}
-          />
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView style={{flex: 1}}>
+          <Form
+            style={{padding: 20}}
+            onSubmit={async data => {
+              await sleep(3000);
+              alert(JSON.stringify(data));
+            }}>
+            <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
+            <Input
+              name={'id'}
+              style={{marginBottom: 20}}
+              value={'MOON'}
+              clearButtonMode={'always'}
+              hint={'아이디를 입력해주세요.'}
+              onValidate={(value, values) => ({
+                level: 'error',
+                message: '정말 이대로 가실예정?',
+              })}
+            />
+            <Input
+              ref={inputRef}
+              name={'passowrd'}
+              style={{marginBottom: 20}}
+              value={text}
+              onChangeText={setText}
+            />
 
-          <Row gutter={[5, 15]} align={'top'}>
-            {range(0, 10).map(v => (
-              <Col key={`${v}`} xs={6}>
-                <View style={{backgroundColor: '#F00'}}>
-                  <Text>aaa</Text>
-                </View>
-              </Col>
-            ))}
-          </Row>
+            <Row gutter={[5, 15]} align={'top'}>
+              {range(0, 10).map(v => (
+                <Col key={`${v}`} xs={6}>
+                  <View style={{backgroundColor: '#F00'}}>
+                    <Text>aaa</Text>
+                  </View>
+                </Col>
+              ))}
+            </Row>
 
-          <Button type={'submit'}>asdf</Button>
+            <Button type={'submit'}>asdf</Button>
 
-          <Button tpl={'link'}>가나다라</Button>
-        </Form>
+            <Button tpl={'link'}>가나다라</Button>
+          </Form>
+        </ScrollView>
       </SafeAreaView>
     </>
   );

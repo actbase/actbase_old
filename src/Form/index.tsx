@@ -6,53 +6,62 @@ import { measure } from '../App/utils';
 export interface FormProps {
   style?: any;
   output: 'json' | 'FormData';
-  onSubmit?: (data: FormData | ResultData) => void;
+  onSubmit?: (data: FormData | FormJson) => void;
+  onError?: (data: any) => void;
   onLayout?: (event: { nativeEvent: { layout: { x: number; y: number; width: number; height: number } } }) => void;
 }
 
-export interface FormContextOption {
-  name?: string;
-  setProps?: any;
-  getValue?: any;
-  hasError?: any;
-  focus?: any;
-  blur?: any;
-}
-
-export interface FormContextData {
-  subscribe?: (oRef: React.MutableRefObject<number>, input: any, options: FormContextOption) => void;
+export interface FormContextArgs {
+  subscribe?: (oRef: React.MutableRefObject<number>, input: any, options: ChildOption) => void;
   unsubscribe?: (oRef: React.MutableRefObject<number>) => void;
   submit?: () => any;
 }
 
-export interface ResultProps {
-  returnKeyType?: string;
-  onSubmitEditing?: any;
-  submitting?: boolean;
-}
-
-export interface ResultData {
+export interface FormJson {
   [key: string]: any;
 }
 
-export interface FieldItems {
+export interface Children {
   [key: string]: {
     input: any;
     options: {
       name?: string;
       focus?: () => void;
       blur?: () => void;
-      setProps: (data: ResultProps) => void;
+      setProps: (data: ChildExtraProps) => void;
       getValue: () => any;
+      onValidate: (value: any, values: any) => FieldError;
     };
     area: number;
   };
 }
 
-export const FormContext = React.createContext<FormContextData>({});
+export interface ChildOption {
+  name?: string;
+  setProps?: any;
+  getValue?: any;
+  onValidate?: any;
+  focus?: any;
+  blur?: any;
+}
+
+export interface ChildExtraProps {
+  returnKeyType?: string;
+  onSubmitEditing?: any;
+  submitting?: boolean;
+  hint?: string;
+  error?: 'success' | 'warn' | 'error';
+}
+
+export interface FieldError {
+  level?: 'success' | 'warn' | 'error';
+  message?: string;
+}
+
+export const FormContext = React.createContext<FormContextArgs>({});
 
 const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
-  const items = React.useRef<FieldItems>({});
+  const items = React.useRef<Children>({});
   const index = React.useRef<number>(0);
   const subscribe = React.useCallback((oRef, input, options) => {
     let name = oRef.current;
@@ -93,7 +102,7 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
       ?.sort((a, b) => (a.area < b.area ? 1 : a.area > b.area ? -1 : 0));
 
     elements?.forEach((v: any, index: number) => {
-      const args: ResultProps = {};
+      const args: ChildExtraProps = {};
       if (elements.length - 1 <= index) {
         args.returnKeyType = 'done';
         args.onSubmitEditing = submit;
@@ -106,12 +115,10 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
   }, []);
 
   const submit = React.useCallback(async () => {
-    const elements = Object.values(items?.current).filter(v => {
-      v.options?.setProps?.({ submitting: true });
-      return !!v.options?.name;
-    });
+    const elements = Object.values(items?.current).filter(v => !!v.options?.name);
 
-    const params: ResultData = {};
+    let formErrors: FieldError[] = [];
+    const params: FormJson = {};
     elements.forEach(v => {
       const opt = v.options;
       if (opt?.name) {
@@ -123,28 +130,38 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
           const values = [...params[opt.name], opt.getValue()];
           params[opt.name] = values;
         }
+        const error: FieldError = opt.onValidate?.(opt.getValue(), params[opt.name]);
+        if (error && (!error.level || error.level === 'error')) {
+          opt.setProps({ hint: error.message, error: error.level });
+          formErrors.push(error);
+        }
       }
     });
 
-    let result: ResultData | FormData = params;
-    if (props.output === 'FormData') {
-      result = new FormData();
-      forIn(params, (value, name) => {
-        if (value?.push) {
-          value?.forEach((v: any) => result.append(name, `${v}`));
-        } else {
-          result.append(name, `${value}`);
-        }
+    if (formErrors.length > 0) {
+      await props?.onError?.(formErrors);
+    } else {
+      forIn(items?.current, v => {
+        v.options?.setProps?.({ submitting: true });
+      });
+
+      let result: FormJson | FormData = params;
+      if (props.output === 'FormData') {
+        result = new FormData();
+        forIn(params, (value, name) => {
+          if (value?.push) {
+            value?.forEach((v: any) => result.append(name, `${v}`));
+          } else {
+            result.append(name, `${value}`);
+          }
+        });
+      }
+      await props?.onSubmit?.(result);
+
+      forIn(items?.current, v => {
+        v.options?.setProps?.({ submitting: false });
       });
     }
-
-    const o = await props?.onSubmit?.(result);
-
-    forIn(items?.current, v => {
-      v.options?.setProps?.({ submitting: false });
-    });
-
-    return o;
   }, []);
 
   const value = { subscribe, unsubscribe, submit };

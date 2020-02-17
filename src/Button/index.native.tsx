@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { TEXT_STYLE_NAMES } from '../App/utils';
-import { FormContext } from '../Form';
+import { ChildExtraProps, FormContext } from '../Form';
 import { isEqual, omit, pick } from 'lodash';
 import useStyles from '../App/styles';
 
@@ -20,32 +20,30 @@ export interface ButtonProps {
   children?: any;
 }
 
-export interface ButtonExtraProps {
-  submitting?: boolean;
-}
-
-const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
-  const { type, tpl, style, children, disabled, onPress, onPressIn, onPressOut, forceInset, ...oProps } = props;
-
-  const styles = useStyles(STYLE_GROUP_NAME);
-  const nameRef = useRef<number>(0);
-
+const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
   const formContext = useContext(FormContext);
 
-  const [extraProps, setExtraProps] = useState<ButtonExtraProps>({});
-  const setProps = useCallback(
-    (props: ButtonExtraProps) => {
-      if (!isEqual(props, extraProps) && type === 'submit') {
-        setExtraProps(p => ({ ...p, ...props }));
-      }
-    },
-    [extraProps],
-  );
+  const styles = useStyles(STYLE_GROUP_NAME);
+
+  const nameRef = useRef<number>(0);
+  useEffect(() => () => formContext.unsubscribe?.(nameRef), []);
+
+  const [extraProps, setExtraProps] = useState<ChildExtraProps>({});
+  const setProps = (props: ChildExtraProps) => {
+    if (!isEqual(props, extraProps)) {
+      setExtraProps(props);
+    }
+  };
+
+  const { type, tpl, style, children, disabled, onPressIn, onPressOut, forceInset, ...oProps } = iProps;
+
+  const props = { ...oProps, ...extraProps };
 
   let suffix = '';
   if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
     suffix = `-tpl-${tpl}`;
   }
+
   const classes = [`${STYLE_GROUP_NAME}${suffix}`];
 
   const [press, setPress] = useState(false);
@@ -66,6 +64,8 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
   const handleClick = useCallback(() => {
     if (process > 0) return;
     setProcess(1);
+
+    const onPress = props.onPress || props.onClick;
     try {
       let isPromise = false;
       if (onPress) {
@@ -106,10 +106,10 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
   const elementStyle = StyleSheet.flatten(className.map(v => styles[v]).concat([style]));
 
   let contents = children;
-  if (process === 2 || (extraProps?.submitting && !onPress)) {
+  if (process === 2 || props?.submitting) {
     contents = <ActivityIndicator />;
   } else if (typeof contents === 'string') {
-    contents = <Text style={pick(elementStyle, TEXT_STYLE_NAMES)}>{props.children}</Text>;
+    contents = <Text style={pick(elementStyle, TEXT_STYLE_NAMES)}>{children}</Text>;
   }
 
   let Element1: any = View;
@@ -124,8 +124,6 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
     coverStyle = omit(elementStyle, ['height', 'minHeight', 'maxHeight', 'borderRadius']);
     innerStyle = pick(elementStyle, ['height', 'minHeight', 'maxHeight', 'alignItems', 'justifyContent']);
   }
-
-  useEffect(() => () => formContext.unsubscribe?.(nameRef), []);
 
   return (
     <TouchableWithoutFeedback
