@@ -14,6 +14,17 @@ function sleep(time) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
 
+const validators = {
+  required: value => {
+    return value
+      ? null
+      : {
+          level: 'error',
+          message: '필수 항목입니다.',
+        };
+  },
+};
+
 const App = () => {
   const [text, setText] = React.useState('ㅁㄴㅇㄹㄴㅇㄹa');
 
@@ -42,21 +53,15 @@ const App = () => {
               style={{marginBottom: 20}}
               value={'MOON'}
               clearButtonMode={'always'}
-              hint={'아이디를 입력해주세요.'}
+              hint={'기본 디스크립션입니다'}
               onValidate={(value, values) => false}
             />
             <Input
               ref={inputRef}
               name={'passowrd'}
               style={{marginBottom: 20}}
-              onValidate={(value, values) => {
-                return value
-                  ? false
-                  : {
-                      level: 'error',
-                      message: '정말 이대로 가실예정?',
-                    };
-              }}
+              validators={validators.required}
+              validateMode={'submit'}
             />
 
             <Button type={'submit'}>asdf</Button>

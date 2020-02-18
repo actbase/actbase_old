@@ -1,11 +1,11 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { isEqual, omit, pick } from 'lodash';
+import { isEqual, isArray, omit, pick } from 'lodash';
 import { ChildExtraProps, FormContext } from '../forms';
 import { TEXT_STYLE_NAMES } from '../apps/utils';
 import useStyles from '../apps/styles';
-import { InputProps } from './index.props';
+import { InputProps, ValidateResult, Validator } from './index.props';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
@@ -31,9 +31,6 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
 
   const styles = useStyles(STYLE_GROUP_NAME);
 
-  const nameRef = useRef<number>(0);
-  useEffect(() => () => formContext.unsubscribe?.(nameRef), []);
-
   const [extraProps, setExtraProps] = useState<ChildExtraProps>({});
   const setProps = useCallback(
     (props: ChildExtraProps) => {
@@ -57,7 +54,8 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
     disabled,
     multiline,
     clearButtonMode,
-    onValidate,
+    validateMode,
+    validators,
     hintStyle,
     ...oProps
   } = props;
@@ -65,6 +63,7 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
   const eProps: ChildExtraProps = {
     hint: extraProps.hint || props.hint,
     error: extraProps.error,
+    submited: extraProps.submited || false,
   };
 
   let suffix = '';
@@ -80,20 +79,76 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
   if (disabled) classes.push(`${STYLE_GROUP_NAME}${suffix}-disabled`);
   if (multiline) classes.push(`${STYLE_GROUP_NAME}${suffix}-multiline`);
 
-  if (eProps.error) {
+  const [error, setError] = useState<ValidateResult | null>(null);
+
+  const onValidate = (value: any) => {
+    if (!validators) return null;
+    const _validators: Validator[] = isArray(validators) ? validators : [validators];
+
+    let currentError: ValidateResult | null = null;
+    for (const validator of _validators) {
+      const err = validator(value);
+      if (err) {
+        currentError = err;
+        break;
+      }
+    }
+
+    setError(currentError);
+    return currentError;
+  };
+
+  if (error) {
     classes.push(`${STYLE_GROUP_NAME}${suffix}-error`);
     hitClasses.push(`${STYLE_GROUP_NAME}${suffix}-hint-error`);
   }
 
   const [text, setText] = useState(props?.value || '');
-  const handleChangeText = useCallback((text: string) => {
-    onChangeText && onChangeText(text);
-    setText?.(text);
-  }, []);
+  const handleChangeText = useCallback(
+    (text: string) => {
+      onChangeText && onChangeText(text);
+      setText?.(text);
+
+      const validateEnabled =
+        validateMode === 'always' || validateMode === 'while-editing' || validateMode === 'focus' || (validateMode == 'submit' && extraProps.submited);
+      if (validateEnabled) onValidate(text);
+    },
+    [extraProps, validateMode],
+  );
+
+  const handleFocus = useCallback(
+    (e: any) => {
+      setFocused(true);
+      onFocus && onFocus(e);
+
+      const validateEnabled = validateMode === 'focus';
+      if (validateEnabled) onValidate(text);
+    },
+    [text, validateMode],
+  );
+
+  const handleBlur = useCallback(
+    (e: any) => {
+      setFocused(false);
+      onBlur && onBlur(e);
+
+      const validateEnabled = validateMode === 'blur';
+      if (validateEnabled) onValidate(text);
+    },
+    [text, validateMode],
+  );
 
   const getValue = useCallback(() => {
     return text;
   }, [text]);
+
+  const nameRef = useRef<number>(0);
+  useEffect(() => {
+    if (props.validateMode === 'always') {
+      onValidate(text);
+    }
+    return () => formContext.unsubscribe?.(nameRef);
+  }, []);
 
   const handleRef = (el: any) => {
     inputRef.current = el;
@@ -101,7 +156,7 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
       name,
       setProps,
       getValue,
-      onValidate: onValidate || (() => true),
+      onValidate,
       focus: () => inputRef.current?.focus(),
       blur: () => inputRef.current?.blur(),
     });
@@ -144,14 +199,8 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
           ref={handleRef}
           onChangeText={handleChangeText}
           style={[{ flex: 1, height: elementStyle?.height }, pick(elementStyle, TEXT_STYLE_NAMES)]}
-          onFocus={e => {
-            setFocused(true);
-            onFocus && onFocus(e);
-          }}
-          onBlur={e => {
-            setFocused(false);
-            onBlur && onBlur(e);
-          }}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           editable={!disabled || !props.readonly || !extraProps.submitting}
           multiline={multiline}
           clearButtonMode={'never'}
@@ -181,9 +230,9 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
         )}
         {rightDeco}
       </View>
-      {!!eProps?.hint && (
+      {(!!error || !!eProps?.hint) && (
         <View style={omit(hintElStyle, TEXT_STYLE_NAMES)}>
-          <Text style={pick(hintElStyle, TEXT_STYLE_NAMES)}>{eProps?.hint}</Text>
+          <Text style={pick(hintElStyle, TEXT_STYLE_NAMES)}>{error?.message || eProps?.hint}</Text>
         </View>
       )}
     </View>

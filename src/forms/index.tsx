@@ -133,7 +133,6 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
         }
         const error: FieldError = opt.onValidate?.(opt.getValue(), params[opt.name]);
         if (error && (!error.level || error.level === 'error')) {
-          opt.setProps({ hint: error.message, error: error.level });
           formErrors.push(error);
         }
       }

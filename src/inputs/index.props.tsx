@@ -12,7 +12,7 @@ export interface InputProps {
   onFocus?: any;
   onBlur?: any;
   validateMode?: 'focus' | 'blur' | 'while-editing' | 'always' | 'submit' | 'never';
-  onValidate?: any;
+  validators?: Validator | Validator[];
 
   readonly?: boolean;
   disabled?: boolean;
@@ -20,4 +20,13 @@ export interface InputProps {
   clearButtonMode?: 'never' | 'while-editing' | 'unless-editing' | 'always';
 
   hint?: string;
+}
+
+export interface Validator {
+  (value: any, values?: any): ValidateResult;
+}
+
+export interface ValidateResult {
+  level?: string;
+  message?: string;
 }
