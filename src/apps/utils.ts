@@ -1,5 +1,11 @@
 import * as React from 'react';
 
+export interface AbsoluteComponent {
+  child: any;
+  x: number;
+  y: number;
+}
+
 export interface MeasureResult {
   originX: number;
   originY: number;
@@ -17,6 +23,7 @@ export interface ScaledSize {
 }
 
 export interface ContextArgs {
+  addComponent?: (child: AbsoluteComponent) => void;
   styles?: any;
 }
 

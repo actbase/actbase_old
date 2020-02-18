@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { Dimensions, findNodeHandle, ScaledSize, UIManager } from 'react-native';
 
+export interface AbsoluteComponent {
+  child: any;
+  x: number;
+  y: number;
+}
+
 export interface MeasureResult {
   originX: number;
   originY: number;

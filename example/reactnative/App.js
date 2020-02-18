@@ -8,7 +8,15 @@
 
 import React, {createRef, useEffect} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
-import ActBase, {Button, Form, Input, ScrollView} from 'actbase';
+import ActBase, {
+  Button,
+  Form,
+  View,
+  Input,
+  ScrollView,
+  Select,
+  Option,
+} from 'actbase';
 
 function sleep(time) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -63,6 +71,14 @@ const App = () => {
               validators={validators.required}
               validateMode={'submit'}
             />
+
+            <View style={{width: 200}}>
+              <Select value={'1'}>
+                <Option value={'1'}>가나다</Option>
+                <Option value={'2'}>123123123</Option>
+                <Option value={'3'}>abcdefg</Option>
+              </Select>
+            </View>
 
             <Button type={'submit'}>asdf</Button>
             <Button type={'button'} tpl={'link'}>

@@ -7,6 +7,7 @@ export { default as ScrollView } from './scrollview';
 export { default as Form } from './forms';
 export { default as Input } from './inputs';
 export { default as Select } from './select';
+export { default as Option } from './select/Option';
 
 // Layout
 export { default as Row } from './layouts/Row';
