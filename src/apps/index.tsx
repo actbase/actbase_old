@@ -22,7 +22,7 @@ const ABApp = (RootComponent: React.ComponentType, overrideStyle: object): React
       });
     };
 
-    const value: ContextArgs = { addComponent };
+    const value: ContextArgs = { addComponent, popComponent };
     return (
       <ABContext.Provider value={value}>
         <>

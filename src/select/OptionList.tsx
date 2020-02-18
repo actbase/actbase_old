@@ -11,12 +11,13 @@ export interface OptionProps {
 export interface OptionListProps {
   options: OptionProps[];
   offsets: MeasureResult;
+  onSelected: (selected: OptionProps) => void;
 }
 
 const OptionList: React.FC<OptionListProps> = (props: OptionListProps) => {
   const anim = React.useRef(new Animated.Value(0));
 
-  const { offsets } = props;
+  const { offsets, onSelected } = props;
 
   React.useEffect(() => {
     Animated.timing(anim.current, {
@@ -35,7 +36,7 @@ const OptionList: React.FC<OptionListProps> = (props: OptionListProps) => {
       style={{ width: offsets.width, minHeight: offsets.height, maxHeight, backgroundColor: '#fff', borderWidth: 1, borderRadius: 4, borderColor: '#ddd' }}
     >
       {props.options.map(option => (
-        <TouchableOpacity style={{ height: 40, justifyContent: 'center', paddingHorizontal: 10 }}>
+        <TouchableOpacity onPress={() => onSelected?.(option)} style={{ height: 40, justifyContent: 'center', paddingHorizontal: 10 }}>
           <Text>{option.text}</Text>
         </TouchableOpacity>
       ))}

@@ -24,6 +24,7 @@ export interface ScaledSize {
 
 export interface ContextArgs {
   addComponent?: (child: AbsoluteComponent) => void;
+  popComponent?: () => void;
   styles?: any;
 }
 

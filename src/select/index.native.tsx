@@ -57,7 +57,10 @@ const Select = React.memo((props: SelectProps) => {
     const offsets: MeasureResult = await measure(inputRef.current);
 
     const child: AbsoluteComponent = {
-      child: <OptionList options={options} offsets={offsets} />,
+      child: <OptionList options={options} offsets={offsets} onSelected={item => {
+        console.log(item);
+        abContext.popComponent?.();
+      }} />,
       x: offsets.pageX,
       y: offsets.pageY,
     };
