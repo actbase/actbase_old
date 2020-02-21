@@ -1,6 +1,6 @@
 {
   "name": "actbase",
-  "version": "0.0.47",
+  "version": "0.0.48",
   "description": "React & React-Native Design Components",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -48,6 +48,7 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-native": "0.61.12",
     "babel-eslint": "^10.0.3",
+    "babel-plugin-inline-import-data-uri": "^1.0.1",
     "copyfiles": "^2.2.0",
     "cross-env": "^6.0.3",
     "esifycss": "^1.4.12",

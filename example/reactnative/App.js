@@ -62,13 +62,13 @@ const App = () => {
               value={'MOON'}
               clearButtonMode={'always'}
               hint={'기본 디스크립션입니다'}
-              onValidate={(value, values) => false}
+              // onValidate={(value, values) => false}
             />
             <Input
               ref={inputRef}
               name={'passowrd'}
               style={{marginBottom: 20}}
-              validators={validators.required}
+              // validators={validators.required}
               validateMode={'submit'}
             />
 

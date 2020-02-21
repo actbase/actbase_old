@@ -1,5 +1,5 @@
 import React, { useContext, useRef } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { isArray } from 'lodash';
 import { Validator } from '../inputs/index.props';
 import useStyles from '../apps/styles';
@@ -57,19 +57,28 @@ const Select = React.memo((props: SelectProps) => {
     const offsets: MeasureResult = await measure(inputRef.current);
 
     const child: AbsoluteComponent = {
-      child: <OptionList options={options} offsets={offsets} onSelected={item => {
-        console.log(item);
-        abContext.popComponent?.();
-      }} />,
+      child: (
+        <OptionList
+          options={options}
+          offsets={offsets}
+          onSelected={item => {
+            console.log(item);
+            abContext.popComponent?.();
+          }}
+        />
+      ),
       x: offsets.pageX,
-      y: offsets.pageY,
+      y: offsets.pageY + 38 + 5,
     };
     abContext.addComponent(child);
   };
 
+  console.log(styles[`${STYLE_GROUP_NAME}${suffix}-arrow`]);
+
   return (
     <TouchableOpacity ref={e => (inputRef.current = e)} activeOpacity={1} onPress={handlePress} style={elementStyle}>
-      <Text>aaa</Text>
+      <Text style={{ flex: 1 }}>aaa</Text>
+      <Image source={require('../../assets/arrow_down.png')} style={{ width: 20, height: 20 }} />
     </TouchableOpacity>
   );
 });

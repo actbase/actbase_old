@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { ABContext, AbsoluteComponent, ContextArgs } from './utils';
-import { setOverride } from './styles.data';
+import { setOverrideStyle } from './styles.data';
 import { TouchableOpacity, View } from 'react-native';
 
 const ABApp = (RootComponent: React.ComponentType, overrideStyle: object): React.FC => {
-  setOverride(overrideStyle);
+  setOverrideStyle(overrideStyle);
 
   const HoC = (props: any): React.ReactElement => {
     const [components, setComponents] = React.useState<AbsoluteComponent[]>([]);
