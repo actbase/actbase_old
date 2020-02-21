@@ -1,10 +1,9 @@
 import React, { useContext, useRef } from 'react';
 import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { isArray } from 'lodash';
+import isArray from 'lodash/isArray';
 import { Validator } from '../inputs/index.props';
 import useStyles from '../apps/styles';
 import { ABContext, measure, MeasureResult } from '../apps/utils';
-import OptionList, { OptionProps } from './OptionList';
 
 export interface SelectProps {
   name?: string;
@@ -25,6 +24,12 @@ export interface SelectProps {
   children?: React.ReactElement<OptionProps> | React.ReactElement<OptionProps>[];
 }
 
+export interface OptionProps {
+  value?: any;
+  children?: any;
+  text?: string;
+}
+
 const STYLE_GROUP_NAME = 'ab-select';
 
 const Select = React.memo((props: SelectProps) => {
@@ -36,7 +41,8 @@ const Select = React.memo((props: SelectProps) => {
   const optionListView = useRef<React.ReactNode>();
 
   const children = isArray(props.children) ? props.children : [props.children];
-  const options: OptionProps[] = props.options || children.map(element => ({ value: element?.props.value, text: element?.props.children }));
+  const options: OptionProps[] =
+    props.options || children.map(element => ({ value: element?.props.value, text: element?.props.children }));
 
   const inputRef = useRef<any>();
   const { tpl, style } = props;
@@ -52,8 +58,14 @@ const Select = React.memo((props: SelectProps) => {
   const elementStyle = StyleSheet.flatten(className.map(v => styles[v]).concat([style]));
 
   const handleRelease = (option?: any) => {
+    Animated.timing(anim.current, {
+      toValue: 0,
+      duration: 200,
+    }).start(() => {
+      abContext.detach?.(optionListView.current);
+    });
+
     console.log(option);
-    abContext.detach?.(optionListView.current);
   };
 
   const handlePress = async () => {
@@ -61,9 +73,9 @@ const Select = React.memo((props: SelectProps) => {
 
     const offsets: MeasureResult = await measure(inputRef.current);
 
-    const maxHeight = anim.current.interpolate({
+    const translateY = anim.current.interpolate({
       inputRange: [0, 1],
-      outputRange: [offsets.height, 200],
+      outputRange: [-20, 0],
     });
 
     optionListView.current = (
@@ -71,10 +83,24 @@ const Select = React.memo((props: SelectProps) => {
         <TouchableOpacity style={{ flex: 1 }} onPress={handleRelease} />
         <View style={{ position: 'absolute', top: offsets.pageY + 38 + 5, left: offsets.pageX }}>
           <Animated.ScrollView
-            style={{ width: offsets.width, minHeight: offsets.height, maxHeight, backgroundColor: '#fff', borderWidth: 1, borderRadius: 4, borderColor: '#ddd' }}
+            style={{
+              width: offsets.width,
+              minHeight: offsets.height,
+              opacity: anim.current,
+              maxHeight: 200,
+              backgroundColor: '#fff',
+              borderWidth: 1,
+              borderRadius: 4,
+              borderColor: '#ddd',
+              transform: [{ translateY }],
+            }}
           >
-            {options.map(option => (
-              <TouchableOpacity onPress={() => handleRelease(option)} style={{ height: 40, justifyContent: 'center', paddingHorizontal: 10 }}>
+            {options.map((option, index) => (
+              <TouchableOpacity
+                key={`${index}`}
+                onPress={() => handleRelease(option)}
+                style={{ height: 40, justifyContent: 'center', paddingHorizontal: 10 }}
+              >
                 <Text>{option.text}</Text>
               </TouchableOpacity>
             ))}
@@ -84,6 +110,10 @@ const Select = React.memo((props: SelectProps) => {
     );
 
     abContext.attach(optionListView.current);
+    Animated.timing(anim.current, {
+      toValue: 1,
+      duration: 300,
+    }).start();
 
     console.log(offsets);
     //

@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { ABContext, TEXT_STYLE_NAMES } from '../apps/utils';
-import { omit, pick } from 'lodash';
-import withStyles from 'react-jss';
+import pick from 'lodash/pick';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
@@ -80,7 +79,13 @@ const Button = props => {
   let innerStyle = {};
 
   return (
-    <button onPress={handleClick} onPressIn={handlePressIn} onPressOut={handlePressOut} disabled={process > 0 || disabled} {...oProps}>
+    <button
+      onPress={handleClick}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      disabled={process > 0 || disabled}
+      {...oProps}
+    >
       <Element1 style={coverStyle} {...args}>
         <Element2 style={innerStyle} children={contents} />
       </Element1>

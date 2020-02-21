@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { forIn, isEqual } from 'lodash';
+import forIn from 'lodash/forIn';
+import isEqual from 'lodash/isEqual';
 import View from '../web/View';
 import { measure } from '../apps/utils';
 
