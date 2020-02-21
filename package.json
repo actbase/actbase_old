@@ -2,16 +2,16 @@
   "name": "actbase",
   "version": "0.0.48",
   "description": "React & React-Native Design Components",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "author": {
     "name": "Trabricks LLC",
     "email": "apps@trabricks.com"
   },
   "scripts": {
-    "build": "rm -rf ./dist && tsc -p src/tsconfig.json && copyfiles -u 1 ./src/**/*.json ./src/**/**/*.json ./dist/ && babel dist --out-dir dist",
-    "example": "npm run build && rm -rf ./example/reactnative/actbase && cp -r ./dist ./example/reactnative/actbase",
+    "build": "rm -rf ./lib && tsc -p src/tsconfig.json && copyfiles -u 1 ./src/**/*.json ./src/**/**/*.json ./lib/ && babel dist --out-dir lib",
+    "example": "npm run build && rm -rf ./example/reactnative/actbase && cp -r ./lib ./example/reactnative/actbase",
     "prepublish": "npm run build"
   },
   "license": "MIT",
