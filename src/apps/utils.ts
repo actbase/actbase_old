@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ReactNode } from 'react';
 
 export interface AbsoluteComponent {
   child: any;
@@ -23,6 +24,10 @@ export interface ScaledSize {
 }
 
 export interface ContextArgs {
+  attach?: (node: ReactNode) => void;
+  detach?: (node: ReactNode) => void;
+  pop?: () => void;
+
   addComponent?: (child: AbsoluteComponent) => void;
   popComponent?: () => void;
   styles?: any;

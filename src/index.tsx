@@ -13,6 +13,8 @@ export { default as Option } from './select/Option';
 export { default as Row } from './layouts/Row';
 export { default as Col } from './layouts/Col';
 
+export { default as Modal } from './modal/Modal';
+
 // Web Migrated
 export { default as View } from './web/View';
 export { default as Div } from './web/Div';
