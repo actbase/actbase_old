@@ -29,10 +29,8 @@
     "url": "git://github.com/actbase/actbase.git"
   },
   "dependencies": {
-    "immer": "^5.3.6",
     "jss": "^10.0.4",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
     "prop-types": "^15.7.2"
   },
   "devDependencies": {
