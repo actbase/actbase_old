@@ -1,5 +1,5 @@
-import React, { useContext, useRef } from 'react';
-import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useRef, useState } from 'react';
+import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import isArray from 'lodash/isArray';
 import { Validator } from '../inputs/index.props';
 import useStyles from '../apps/styles';
@@ -26,8 +26,8 @@ export interface SelectProps {
 
 export interface OptionProps {
   value?: any;
-  children?: any;
-  text?: string;
+  children?: React.ReactNode;
+  view?: React.ReactNode;
 }
 
 const STYLE_GROUP_NAME = 'ab-select';
@@ -36,13 +36,14 @@ const Select = React.memo((props: SelectProps) => {
   // const formContext = useContext(FormContext);
   const styles = useStyles(STYLE_GROUP_NAME);
   const abContext = useContext(ABContext);
+  const [selected, setSelected] = useState<OptionProps | null>(null);
 
   const anim = React.useRef(new Animated.Value(0));
   const optionListView = useRef<React.ReactNode>();
 
   const children = isArray(props.children) ? props.children : [props.children];
   const options: OptionProps[] =
-    props.options || children.map(element => ({ value: element?.props.value, text: element?.props.children }));
+    props.options || children.map(element => ({ value: element?.props.value, view: element?.props.children }));
 
   const inputRef = useRef<any>();
   const { tpl, style } = props;
@@ -65,14 +66,15 @@ const Select = React.memo((props: SelectProps) => {
       abContext.detach?.(optionListView.current);
     });
 
-    console.log(option);
+    if (option) {
+      setSelected(option);
+    }
   };
 
   const handlePress = async () => {
     if (!abContext || !abContext.attach) return;
 
     const offsets: MeasureResult = await measure(inputRef.current);
-
     const translateY = anim.current.interpolate({
       inputRange: [0, 1],
       outputRange: [-20, 0],
@@ -101,7 +103,7 @@ const Select = React.memo((props: SelectProps) => {
                 onPress={() => handleRelease(option)}
                 style={{ height: 40, justifyContent: 'center', paddingHorizontal: 10 }}
               >
-                <Text>{option.text}</Text>
+                {typeof option.view === 'string' ? <Text>{option.view}</Text> : option.view}
               </TouchableOpacity>
             ))}
           </Animated.ScrollView>
@@ -114,26 +116,30 @@ const Select = React.memo((props: SelectProps) => {
       toValue: 1,
       duration: 300,
     }).start();
-
-    console.log(offsets);
-    //
-    // const child: AbsoluteComponent = {
-    //   child: (
-    //
-    //   ),
-    //   x: offsets.pageX,
-    //   y: offsets.pageY + 38 + 5,
-    // };
-    // console.log(child);
-    // abContext.addComponent(child);
   };
 
   console.log(styles[`${STYLE_GROUP_NAME}${suffix}-arrow`]);
 
+  const rotateZ = anim.current.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '-180deg'],
+  });
+
   return (
     <TouchableOpacity ref={e => (inputRef.current = e)} activeOpacity={1} onPress={handlePress} style={elementStyle}>
-      <Text style={{ flex: 1 }}>aaa</Text>
-      <Image source={require('../../assets/arrow_down.png')} style={{ width: 20, height: 20 }} />
+      <View style={{ flex: 1 }}>
+        {!selected ? (
+          <Text>입력하세여</Text>
+        ) : typeof selected.view === 'string' ? (
+          <Text>{selected.view}</Text>
+        ) : (
+          selected.view
+        )}
+      </View>
+      <Animated.Image
+        source={require('../../assets/arrow_down.png')}
+        style={{ width: 20, height: 20, transform: [{ rotateZ }] }}
+      />
     </TouchableOpacity>
   );
 });

@@ -4,9 +4,10 @@ export { default as Button } from './buttons';
 export { default as ScrollView } from './scrollview';
 
 // Data Entry
-export { default as Form } from './forms';
+export { default as Form } from './form/Form';
 export { default as Input } from './inputs';
-export { default as Select } from './select';
+export { default as TextInput } from './textinput/TextInput';
+export { default as Select } from './select/Select';
 export { default as Option } from './select/Option';
 
 // Layout

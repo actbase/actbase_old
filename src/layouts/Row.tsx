@@ -33,7 +33,29 @@ const Row: React.FC<RowProps> = (props: RowProps): React.ReactElement => {
     marginRight: -(gutter[0] / 2),
     marginTop: -(gutter[1] / 2),
     marginBottom: -(gutter[1] / 2),
+    alignItems: styles.alignItems,
+    justifyContent: styles.justifyContent,
   };
+
+  if (props.align === 'top') {
+    extStyle.alignItems = 'flex-start';
+  } else if (props.align === 'middle') {
+    extStyle.alignItems = 'center';
+  } else if (props.align === 'bottom') {
+    extStyle.alignItems = 'flex-end';
+  } else if (props.align === 'stretch') {
+    extStyle.alignItems = 'stretch';
+  }
+
+  if (props.justify === 'start') {
+    extStyle.justifyContent = 'flex-start';
+  } else if (props.justify === 'center') {
+    extStyle.justifyContent = 'center';
+  } else if (props.justify === 'end') {
+    extStyle.justifyContent = 'flex-end';
+  } else if (props.justify) {
+    extStyle.justifyContent = props.justify;
+  }
 
   return (
     <RowContext.Provider value={{ gutter: gutter }}>

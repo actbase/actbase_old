@@ -17,6 +17,9 @@ import ActBase, {
   Select,
   Option,
 } from 'actbase';
+import Row from "./actbase/layouts/Row";
+import Col from "./actbase/layouts/Col";
+import Text from "./actbase/web/Text";
 
 function sleep(time) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -71,6 +74,15 @@ const App = () => {
               // validators={validators.required}
               validateMode={'submit'}
             />
+
+            <Row>
+              <Col span={'auto'} style={{ backgroundColor: '#F00'}}>
+                <Text>aaa</Text>
+              </Col>
+              <Col style={{ backgroundColor: '#0F0'}}>
+                <Text>aaa</Text>
+              </Col>
+            </Row>
 
             <View style={{width: 200}}>
               <Select value={'1'}>

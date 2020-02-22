@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { TEXT_STYLE_NAMES } from '../apps/utils';
-import { ChildExtraProps, FormContext } from '../forms';
+import { ChildExtraProps, FormContext } from '../form/Form';
 import { isEqual, omit, pick } from 'lodash';
 import useStyles from '../apps/styles';
 

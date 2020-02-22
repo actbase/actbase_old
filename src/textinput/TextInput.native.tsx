@@ -2,10 +2,10 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { isEqual, isArray, omit, pick } from 'lodash';
-import { ChildExtraProps, FormContext } from '../forms';
+import { ChildExtraProps, FormContext } from '../form/Form';
 import { TEXT_STYLE_NAMES } from '../apps/utils';
 import useStyles from '../apps/styles';
-import { InputProps, ValidateResult, Validator } from './index.props';
+import { InputProps, ValidateResult, Validator } from '../inputs/index.props';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 

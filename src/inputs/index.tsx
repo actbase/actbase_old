@@ -1,5 +1,5 @@
 import React from 'react';
-import TextField from './TextField';
+import TextField from '../textinput/TextInput';
 import Hidden from './Hidden';
 import { InputProps } from './index.props';
 

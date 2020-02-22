@@ -3,8 +3,5 @@
     "display": "flex",
     "flexDirection": "row",
     "flexWrap": "wrap"
-  },
-  "ab-layout-col": {
-    "flexGrow": 1
   }
 }
