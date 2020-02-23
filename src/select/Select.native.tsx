@@ -1,25 +1,15 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import isArray from 'lodash/isArray';
-import { Validator } from '../inputs/index.props';
+import { InputProps, ValidateResult, Validator } from '../inputs/index.props';
 import useStyles from '../apps/styles';
-import { ABContext, measure, MeasureResult } from '../apps/utils';
+import { ABContext, MARGIN_STYLES, measure, MeasureResult, TEXT_STYLE_NAMES } from '../apps/utils';
+import { ChildExtraProps, FormContext } from '../form/Form';
+import isEqual from 'lodash/isEqual';
+import pick from 'lodash/pick';
+import omit from 'lodash/omit';
 
-export interface SelectProps {
-  name?: string;
-  tpl?: string;
-  value?: any;
-  style?: any;
-
-  hintStyle?: any;
-
-  validateMode?: 'focus' | 'blur' | 'while-editing' | 'always' | 'submit' | 'never';
-  validators?: Validator | Validator[];
-
-  readonly?: boolean;
-  disabled?: boolean;
-
-  hint?: string;
+export interface SelectProps extends InputProps {
   options?: OptionProps[];
   children?: React.ReactElement<OptionProps> | React.ReactElement<OptionProps>[];
 }
@@ -33,10 +23,9 @@ export interface OptionProps {
 const STYLE_GROUP_NAME = 'ab-select';
 
 const Select = React.memo((props: SelectProps) => {
-  // const formContext = useContext(FormContext);
+  const formContext = useContext(FormContext);
   const styles = useStyles(STYLE_GROUP_NAME);
   const abContext = useContext(ABContext);
-  const [selected, setSelected] = useState<OptionProps | null>(null);
 
   const anim = React.useRef(new Animated.Value(0));
   const optionListView = useRef<React.ReactNode>();
@@ -46,7 +35,18 @@ const Select = React.memo((props: SelectProps) => {
     props.options || children.map(element => ({ value: element?.props.value, view: element?.props.children }));
 
   const inputRef = useRef<any>();
-  const { tpl, style } = props;
+  const { name, tpl, style, placeholder, value, validators, hintStyle } = props;
+  const [selected, setSelected] = useState<OptionProps | null | undefined>(options?.find(v => v?.value === value));
+
+  const [extraProps, setExtraProps] = useState<ChildExtraProps>({});
+  const setProps = useCallback(
+    (props: ChildExtraProps) => {
+      if (!isEqual(props, extraProps)) {
+        setExtraProps(p => ({ ...p, ...props }));
+      }
+    },
+    [extraProps],
+  );
 
   let suffix = '';
   if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
@@ -54,6 +54,7 @@ const Select = React.memo((props: SelectProps) => {
   }
 
   const classes = [`${STYLE_GROUP_NAME}${suffix}`];
+  const hitClasses = [`${STYLE_GROUP_NAME}${suffix}-hint`];
 
   let className = classes.concat(classes.map(v => v.substring(1)));
   const elementStyle = StyleSheet.flatten(className.map(v => styles[v]).concat([style]));
@@ -61,12 +62,12 @@ const Select = React.memo((props: SelectProps) => {
   const handleRelease = (option?: any) => {
     Animated.timing(anim.current, {
       toValue: 0,
-      duration: 200,
+      duration: 150,
     }).start(() => {
       abContext.detach?.(optionListView.current);
     });
 
-    if (option) {
+    if (option?.value) {
       setSelected(option);
     }
   };
@@ -114,33 +115,93 @@ const Select = React.memo((props: SelectProps) => {
     abContext.attach(optionListView.current);
     Animated.timing(anim.current, {
       toValue: 1,
-      duration: 300,
+      duration: 200,
     }).start();
   };
 
-  console.log(styles[`${STYLE_GROUP_NAME}${suffix}-arrow`]);
+  const [error, setError] = useState<ValidateResult | null>(null);
+
+  const onValidate = (value: any) => {
+    if (!validators) return null;
+    const _validators: Validator[] = isArray(validators) ? validators : [validators];
+
+    let currentError: ValidateResult | null = null;
+    for (const validator of _validators) {
+      const err = validator(value);
+      if (err) {
+        currentError = err;
+        break;
+      }
+    }
+
+    setError(currentError);
+    return currentError;
+  };
 
   const rotateZ = anim.current.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '-180deg'],
   });
 
+  const getValue = useCallback(() => {
+    return selected?.value;
+  }, [selected]);
+
+  const nameRef = useRef<number>(0);
+  useEffect(() => {
+    if (props.validateMode === 'always') {
+      onValidate(selected?.value);
+    }
+    return () => formContext.unsubscribe?.(nameRef);
+  }, []);
+
+  const handleRef = (el: any) => {
+    inputRef.current = el;
+    formContext.subscribe?.(nameRef, el, {
+      name,
+      setProps,
+      getValue,
+      onValidate,
+      focus: () => inputRef.current?.focus(),
+      blur: () => inputRef.current?.blur(),
+    });
+  };
+
+  const hintElStyle = StyleSheet.flatten(hitClasses.map(v => styles[v]).concat([hintStyle]));
+  const eProps: ChildExtraProps = {
+    hint: extraProps.hint || props.hint,
+    error: extraProps.error,
+    submited: extraProps.submited || false,
+  };
+
   return (
-    <TouchableOpacity ref={e => (inputRef.current = e)} activeOpacity={1} onPress={handlePress} style={elementStyle}>
-      <View style={{ flex: 1 }}>
-        {!selected ? (
-          <Text>입력하세여</Text>
-        ) : typeof selected.view === 'string' ? (
-          <Text>{selected.view}</Text>
-        ) : (
-          selected.view
-        )}
-      </View>
-      <Animated.Image
-        source={require('../../assets/arrow_down.png')}
-        style={{ width: 20, height: 20, transform: [{ rotateZ }] }}
-      />
-    </TouchableOpacity>
+    <View style={pick(elementStyle, MARGIN_STYLES)}>
+      <TouchableOpacity
+        ref={handleRef}
+        activeOpacity={1}
+        onPress={handlePress}
+        style={omit(elementStyle, MARGIN_STYLES)}
+      >
+        <View style={{ flex: 1 }}>
+          {!selected?.value ? (
+            <Text>{placeholder}</Text>
+          ) : typeof selected.view === 'string' ? (
+            <Text>{selected.view}</Text>
+          ) : (
+            selected.view
+          )}
+        </View>
+        <Animated.Image
+          source={require('../../assets/arrow_down.png')}
+          style={{ width: 20, height: 20, transform: [{ rotateZ }] }}
+        />
+      </TouchableOpacity>
+      {(!!error || !!eProps?.hint) && (
+        <View style={omit(hintElStyle, TEXT_STYLE_NAMES)}>
+          <Text style={pick(hintElStyle, TEXT_STYLE_NAMES)}>{error?.message || eProps?.hint}</Text>
+        </View>
+      )}
+    </View>
   );
 });
 

@@ -19,6 +19,8 @@ export interface InputProps {
   multiline?: boolean;
   clearButtonMode?: 'never' | 'while-editing' | 'unless-editing' | 'always';
 
+  placeholder?: string;
+
   hint?: string;
 }
 

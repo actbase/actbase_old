@@ -1,15 +1,17 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { isEqual, isArray, omit, pick } from 'lodash';
+import isEqual from 'lodash/isEqual';
+import isArray from 'lodash/isArray';
+import omit from 'lodash/omit';
+import pick from 'lodash/pick';
+
 import { ChildExtraProps, FormContext } from '../form/Form';
-import { TEXT_STYLE_NAMES } from '../apps/utils';
+import { MARGIN_STYLES, TEXT_STYLE_NAMES } from '../apps/utils';
 import useStyles from '../apps/styles';
 import { InputProps, ValidateResult, Validator } from '../inputs/index.props';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
-
-const marginStyle = ['margin', 'marginHorizontal', 'marginVertical', 'marginTop', 'marginLeft', 'marginRight', 'marginBottom'];
 
 const propTemplate: { [key: string]: any } = {
   email: {
@@ -110,7 +112,10 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
       setText?.(text);
 
       const validateEnabled =
-        validateMode === 'always' || validateMode === 'while-editing' || validateMode === 'focus' || (validateMode == 'submit' && extraProps.submited);
+        validateMode === 'always' ||
+        validateMode === 'while-editing' ||
+        validateMode === 'focus' ||
+        (validateMode == 'submit' && extraProps.submited);
       if (validateEnabled) onValidate(text);
     },
     [extraProps, validateMode],
@@ -183,10 +188,10 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
   const clearButtonEnabled = clearButtonMode !== 'never' && (clearButtonMode === 'always' || clearMode1 || clearMode2);
 
   return (
-    <View style={pick(elementStyle, marginStyle)}>
+    <View style={pick(elementStyle, MARGIN_STYLES)}>
       <View
         style={[
-          omit(elementStyle, marginStyle),
+          omit(elementStyle, MARGIN_STYLES),
           {
             alignItems: 'center',
             height: 'auto',

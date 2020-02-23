@@ -84,6 +84,16 @@ export const COVER_STYLE_NAMES: string[] = [
   'backgroundColor',
 ];
 
+export const MARGIN_STYLES: string[] = [
+  'margin',
+  'marginHorizontal',
+  'marginVertical',
+  'marginTop',
+  'marginLeft',
+  'marginRight',
+  'marginBottom',
+];
+
 export default {
   ABContext,
   getWindowSize,

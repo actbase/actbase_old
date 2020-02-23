@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useCallback, useRef } from 'react';
 
 import { ABContext, ContextArgs } from './utils';
-import { setOverrideStyle } from './styles.data';
+import { OverrideData, setOverride } from './styles.data';
 import View from '../web/View';
 
-const ABApp = (RootComponent: React.ComponentType, overrideStyle: object): React.FC => {
-  setOverrideStyle(overrideStyle);
+const ABApp = (RootComponent: React.ComponentType, override: OverrideData): React.FC => {
+  setOverride(override);
 
   const HoC = (props: any): React.ReactElement => {
     const nodes = useRef<React.ReactNode[]>([]);

@@ -1,4 +1,4 @@
-import { forIn, assign } from 'lodash';
+import { assign, forIn } from 'lodash';
 
 export const STYLE_LAYOUT_PREFIX: string = 'ab-layout';
 export const STYLE_LAYOUT_JSON = require('../layouts/styles.json');
@@ -28,17 +28,31 @@ export const styles = {
   [STYLE_SELECT_PREFIX]: STYLE_SELECT_JSON,
 };
 
+export const ASSETS_NAMES: string[] = [STYLE_SELECT_PREFIX];
+
 export const assets = {
   [STYLE_SELECT_PREFIX]: STYLE_SELECT_ASSETS,
 };
 
 export const enableStyles: string[] = [];
 
-export const setOverrideStyle = (overrideStyle: any) => {
-  forIn(overrideStyle, (value, key) => {
+export interface OverrideData {
+  styles?: { [key: string]: any };
+  assets?: { [key: string]: any };
+}
+
+export const setOverride = (override: OverrideData) => {
+  forIn(override.styles, (value, key) => {
     const styleName = STYLE_NAMES.find(v => key.startsWith(v));
     if (styleName && styles[styleName]) {
       styles[styleName][key] = assign(styles[styleName][key], value);
+    }
+  });
+
+  forIn(override.assets, (value, key) => {
+    const assetsName = ASSETS_NAMES.find(v => key.startsWith(v));
+    if (assetsName && assets[assetsName]) {
+      assets[assetsName][key] = assign(assets[assetsName][key], value);
     }
   });
 };
