@@ -17,10 +17,10 @@ import ActBase, {
   Select,
   Option,
 } from 'actbase';
-import Row from "./actbase/layouts/Row";
-import Col from "./actbase/layouts/Col";
-import Text from "./actbase/web/Text";
-import Modal from "./actbase/modal/Modal";
+import Row from './actbase/layouts/Row';
+import Col from './actbase/layouts/Col';
+import Text from './actbase/web/Text';
+import Modal from './actbase/modal/Modal';
 
 function sleep(time) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -31,9 +31,9 @@ const validators = {
     return value
       ? null
       : {
-        level: 'error',
-        message: '필수 항목입니다.',
-      };
+          level: 'error',
+          message: '필수 항목입니다.',
+        };
   },
 };
 
@@ -51,10 +51,20 @@ const App = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content"/>
-      <Modal isVisible={isVisible}>
-        <View style={{ backgroundColor: '#FFF', margin: 20 }}>
-
+      <StatusBar barStyle="dark-content" />
+      <Modal isVisible={isVisible} onBackdropPress={() => setVisible(false)}>
+        <View
+          style={{
+            backgroundColor: '#FFF',
+            margin: 20,
+            width: 200,
+            height: 200,
+          }}>
+          <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>
+            <Option value={'1'}>가나다</Option>
+            <Option value={'2'}>123123123</Option>
+            <Option value={'3'}>abcdefg</Option>
+          </Select>
         </View>
       </Modal>
       <SafeAreaView style={{flex: 1}}>
@@ -65,7 +75,7 @@ const App = () => {
               await sleep(3000);
               alert(JSON.stringify(data));
             }}>
-            <Input type={'hidden'} name={'aaa'} value={'bbbb'}/>
+            <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
             <Input
               name={'id'}
               style={{marginBottom: 20}}
@@ -92,7 +102,7 @@ const App = () => {
             </Row>
 
             <View style={{width: 200}}>
-              <Select name={"select"} value={'1'} placeholder={"입력하세여.."}>
+              <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>
                 <Option value={'1'}>가나다</Option>
                 <Option value={'2'}>123123123</Option>
                 <Option value={'3'}>abcdefg</Option>
@@ -100,7 +110,10 @@ const App = () => {
             </View>
 
             <Button type={'submit'}>asdf</Button>
-            <Button type={'button'} tpl={'link'} onPress={() => setVisible(true)}>
+            <Button
+              type={'button'}
+              tpl={'link'}
+              onPress={() => setVisible(true)}>
               가나다라
             </Button>
           </Form>

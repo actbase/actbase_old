@@ -1,4 +1,6 @@
-export interface InputProps {
+import { TextInputProps } from 'react-native';
+
+export interface InputProps extends TextInputProps {
   type: string;
   tpl?: string;
   name?: string;

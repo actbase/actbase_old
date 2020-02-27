@@ -100,7 +100,7 @@ const Select = React.memo((props: SelectProps) => {
           >
             {options.map((option, index) => (
               <TouchableOpacity
-                key={`${index}`}
+                key={`${option.value}${index}`}
                 onPress={() => handleRelease(option)}
                 style={{ height: 40, justifyContent: 'center', paddingHorizontal: 10 }}
               >

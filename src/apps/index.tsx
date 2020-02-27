@@ -35,8 +35,10 @@ const ABApp = (RootComponent: React.ComponentType, override: OverrideData): Reac
       <ABContext.Provider value={value}>
         <>
           <RootComponent {...props} />
-          {nodes?.current?.map(node => (
-            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>{node}</View>
+          {nodes?.current?.map((node, index) => (
+            <View key={`${index}`} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+              {node}
+            </View>
           ))}
         </>
       </ABContext.Provider>
