@@ -67,11 +67,13 @@ const Modal = React.memo((props: ModalProps) => {
       Animated.timing(anim.current, {
         toValue: 1,
         duration: 200,
+        useNativeDriver: true,
       }).start();
     } else if (!isVisible && viewRef.current) {
       Animated.timing(anim.current, {
         toValue: 0,
         duration: 150,
+        useNativeDriver: true,
       }).start(() => {
         abContext.detach?.(viewRef.current);
       });

@@ -107,7 +107,7 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
 
   let contents = children;
   if (process === 2 || props?.submitting) {
-    contents = <ActivityIndicator />;
+    contents = <ActivityIndicator color={elementStyle?.color || '#333'} />;
   } else if (typeof contents === 'string') {
     contents = <Text style={pick(elementStyle, TEXT_STYLE_NAMES)}>{children}</Text>;
   }

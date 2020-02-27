@@ -76,6 +76,7 @@ const App = () => {
               alert(JSON.stringify(data));
             }}>
             <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
+
             <Input
               name={'id'}
               style={{marginBottom: 20}}
@@ -84,6 +85,7 @@ const App = () => {
               hint={'기본 디스크립션입니다'}
               // onValidate={(value, values) => false}
             />
+
             <Input
               ref={inputRef}
               name={'passowrd'}
@@ -92,16 +94,7 @@ const App = () => {
               validateMode={'submit'}
             />
 
-            <Row>
-              <Col span={'auto'} style={{backgroundColor: '#F00'}}>
-                <Text>aaa</Text>
-              </Col>
-              <Col style={{backgroundColor: '#0F0'}}>
-                <Text>aaa</Text>
-              </Col>
-            </Row>
-
-            <View style={{width: 200}}>
+            <View style={{width: 200, marginBottom: 50}}>
               <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>
                 <Option value={'1'}>가나다</Option>
                 <Option value={'2'}>123123123</Option>
@@ -110,11 +103,12 @@ const App = () => {
             </View>
 
             <Button type={'submit'}>asdf</Button>
+
             <Button
               type={'button'}
               tpl={'link'}
               onPress={() => setVisible(true)}>
-              가나다라
+              모달띠우기
             </Button>
           </Form>
         </ScrollView>
