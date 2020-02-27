@@ -32,12 +32,11 @@ const Modal = React.memo((props: ModalProps) => {
       viewRef.current = (
         <Animated.ScrollView
           style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', opacity }}
-          contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}
+          contentContainerStyle={{ flexGrow: 1 }}
         >
           <Animated.View
             style={{
               flexGrow: 1,
-              alignSelf: 'center',
               alignItems: 'center',
               justifyContent: 'center',
               transform: [{ translateY }],

@@ -33,16 +33,6 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
 
   const styles = useStyles(STYLE_GROUP_NAME);
 
-  const [extraProps, setExtraProps] = useState<ChildExtraProps>({});
-  const setProps = useCallback(
-    (props: ChildExtraProps) => {
-      if (!isEqual(props, extraProps)) {
-        setExtraProps(p => ({ ...p, ...props }));
-      }
-    },
-    [extraProps],
-  );
-
   const {
     type,
     tpl,
@@ -61,6 +51,20 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
     hintStyle,
     ...oProps
   } = props;
+
+  const [extraProps, setExtraProps] = useState<ChildExtraProps>({});
+  const setProps = useCallback(
+    (props: ChildExtraProps) => {
+      if (!isEqual(props, extraProps)) {
+        setExtraProps(p => {
+          const o = { ...p, ...props };
+          if (multiline) o.onSubmitEditing = null;
+          return o;
+        });
+      }
+    },
+    [extraProps],
+  );
 
   const eProps: ChildExtraProps = {
     hint: extraProps.hint || props.hint,
