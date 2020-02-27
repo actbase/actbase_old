@@ -1,12 +1,15 @@
-import App from './apps';
+import Provider from './apps/Provider';
 
+export { default as Provider } from './apps/Provider';
 export { default as Button } from './buttons';
 export { default as ScrollView } from './scrollview';
 
 // Data Entry
 export { default as Form } from './form/Form';
-export { default as Input } from './inputs';
+export { default as Input } from './inputs/Input';
 export { default as TextInput } from './textinput/TextInput';
+export { default as Checkbox } from './checkbox/Checkbox';
+export { default as Radio } from './radio/Radio';
 export { default as Select } from './select/Select';
 export { default as Option } from './select/Option';
 
@@ -25,6 +28,6 @@ export { default as Section } from './web/Section';
 export { default as Aside } from './web/Aside';
 export { default as Article } from './web/Article';
 
-export const ActBase = App;
+export const ActBase = Provider;
 
 export default ActBase;

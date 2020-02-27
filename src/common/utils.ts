@@ -24,9 +24,10 @@ export interface ScaledSize {
 }
 
 export interface ContextArgs {
-  attach?: (node: ReactNode) => void;
+  attach?: (node: ReactNode) => number;
   detach?: (node: ReactNode) => void;
   pop?: () => void;
+  replace?: (node: ReactNode, index: number) => void;
 
   addComponent?: (child: AbsoluteComponent) => void;
   popComponent?: () => void;

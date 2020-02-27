@@ -7,9 +7,9 @@ import omit from 'lodash/omit';
 import pick from 'lodash/pick';
 
 import { ChildExtraProps, FormContext } from '../form/Form';
-import { MARGIN_STYLES, TEXT_STYLE_NAMES } from '../apps/utils';
+import { MARGIN_STYLES, TEXT_STYLE_NAMES } from '../common/utils';
 import useStyles from '../apps/styles';
-import { InputProps, ValidateResult, Validator } from '../inputs/index.props';
+import { InputProps, ValidateResult, Validator } from '../inputs/types';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
@@ -28,7 +28,6 @@ const propTemplate: { [key: string]: any } = {
 
 const TextField = React.forwardRef((props: InputProps, ref: any) => {
   const formContext = useContext(FormContext);
-
   const inputRef = useRef<any>();
 
   const styles = useStyles(STYLE_GROUP_NAME);
@@ -197,6 +196,7 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
         style={[
           omit(elementStyle, MARGIN_STYLES),
           {
+            flexDirection: 'row',
             alignItems: 'center',
             height: 'auto',
             minHeight: elementStyle?.height,

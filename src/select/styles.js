@@ -22,3 +22,4 @@ export const styles = {
 export const assets = {
   'ab-select-arrow-image': arrowDown,
 };
+

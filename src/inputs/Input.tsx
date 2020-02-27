@@ -1,7 +1,7 @@
 import React from 'react';
-import TextField from '../textinput/TextInput';
+import TextInput from '../textinput/TextInput';
 import Hidden from './Hidden';
-import { InputProps } from './index.props';
+import { InputProps } from './types';
 
 const INPUT_TYPES: { [key: string]: any } = {
   hidden: Hidden,
@@ -12,7 +12,7 @@ const Input = React.forwardRef((props: InputProps, ref: any) => {
     const Element = INPUT_TYPES[props?.type];
     return <Element ref={ref} {...props} />;
   } else {
-    return <TextField ref={ref} {...props} />;
+    return <TextInput ref={ref} {...props} />;
   }
 });
 

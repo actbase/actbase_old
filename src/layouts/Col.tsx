@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { getWindowSize } from '../apps/utils';
+import { getWindowSize } from '../common/utils';
 import { RowContext } from './Row';
 import View from '../web/View';
 import useStyles from '../apps/styles';

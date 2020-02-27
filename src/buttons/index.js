@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { ABContext, TEXT_STYLE_NAMES } from '../apps/utils';
+import { ABContext, TEXT_STYLE_NAMES } from '../common/utils';
 import pick from 'lodash/pick';
 
 const STYLE_GROUP_NAME = 'ab-button';

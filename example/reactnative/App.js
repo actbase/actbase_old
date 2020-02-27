@@ -6,19 +6,17 @@
  * @flow
  */
 
-import React, {createRef, useEffect} from 'react';
+import React, {createRef} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import ActBase, {
   Button,
   Form,
-  View,
   Input,
+  Option,
   ScrollView,
   Select,
-  Option,
+  View,
 } from 'actbase';
-import Row from './actbase/layouts/Row';
-import Col from './actbase/layouts/Col';
 import Text from './actbase/web/Text';
 import Modal from './actbase/modal/Modal';
 
@@ -37,20 +35,18 @@ const validators = {
   },
 };
 
+const styles = StyleSheet.create({
+  'ab-button': { backgroundColor: '#F00' },
+});
+
 const App = () => {
   const [text, setText] = React.useState('ㅁㄴㅇㄹㄴㅇㄹa');
   const [isVisible, setVisible] = React.useState(false);
 
   const inputRef = createRef();
 
-  useEffect(() => {
-    // console.log(inputRef);
-
-    console.log(typeof []);
-  }, []);
-
   return (
-    <>
+    <ActBase styles={styles}>
       <StatusBar barStyle="dark-content" />
       <Modal isVisible={isVisible} onBackdropPress={() => setVisible(false)}>
         <View
@@ -65,6 +61,7 @@ const App = () => {
             <Option value={'2'}>123123123</Option>
             <Option value={'3'}>abcdefg</Option>
           </Select>
+          <Text>1212121</Text>
         </View>
       </Modal>
       <SafeAreaView style={{flex: 1}}>
@@ -113,12 +110,8 @@ const App = () => {
           </Form>
         </ScrollView>
       </SafeAreaView>
-    </>
+    </ActBase>
   );
 };
 
-const styles = StyleSheet.create({
-  'ab-button': {},
-});
-
-export default ActBase(App, {styles});
+export default App;

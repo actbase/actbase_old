@@ -1,24 +1,14 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import isArray from 'lodash/isArray';
-import { InputProps, ValidateResult, Validator } from '../inputs/index.props';
+import { ValidateResult, Validator } from '../inputs/types';
 import useStyles from '../apps/styles';
-import { ABContext, MARGIN_STYLES, measure, MeasureResult, TEXT_STYLE_NAMES } from '../apps/utils';
+import { ABContext, MARGIN_STYLES, measure, MeasureResult, TEXT_STYLE_NAMES } from '../common/utils';
 import { ChildExtraProps, FormContext } from '../form/Form';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
-
-export interface SelectProps extends InputProps {
-  options?: OptionProps[];
-  children?: React.ReactElement<OptionProps> | React.ReactElement<OptionProps>[];
-}
-
-export interface OptionProps {
-  value?: any;
-  children?: React.ReactNode;
-  view?: React.ReactNode;
-}
+import { OptionProps, SelectProps } from './types';
 
 const STYLE_GROUP_NAME = 'ab-select';
 

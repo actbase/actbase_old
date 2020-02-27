@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { FormContext } from '../form/Form';
-import { InputProps } from './index.props';
+import { InputProps } from './types';
 
 const HiddenField = React.memo((props: InputProps) => {
   const { name, value } = props;
