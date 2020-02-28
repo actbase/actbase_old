@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { ABContext, ContextArgs } from '../common/utils';
-import { setOverride } from './styles.data';
+import { setOverride } from './ResourceManager';
 import View from '../web/View';
 
 const ABApp = React.memo((props: any) => {

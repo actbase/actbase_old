@@ -1,4 +1,4 @@
-import { AnyObject } from '../../apps/styles.data';
+import { AnyObject } from '../../apps/ResourceManager';
 
 export const assets: AnyObject = {};
 

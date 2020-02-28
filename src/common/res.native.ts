@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { datas, enableStyles } from '../apps/styles.data';
+import { datas, enableStyles } from '../apps/ResourceManager';
 
 const applyedStyles: { [key: string]: any } = {};
 

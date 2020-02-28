@@ -1,5 +1,5 @@
 import arrowDown from './arrow_down.png';
-import { AnyObject } from '../../apps/styles.data';
+import { AnyObject } from '../../apps/ResourceManager';
 
 export const assets: AnyObject = {
   'ab-select-arrow-image': arrowDown,

@@ -103,10 +103,12 @@ const Select = (props: SelectProps) => {
             selected.view
           )}
         </View>
-        <Animated.Image source={require('./res/arrow_down.png')} style={{ width: 20, height: 20 }} />
+        <Animated.Image source={r.assets[`${STYLE_GROUP_NAME}-arrow-image`]} style={{ width: 20, height: 20 }} />
       </TouchableOpacity>
       <Absolute isVisible={false}>
-        <View style={{ width: 200, height: 200, backgroundColor: '#F00', alignItems: 'center', justifyContent: 'center' }}>
+        <View
+          style={{ width: 200, height: 200, backgroundColor: '#F00', alignItems: 'center', justifyContent: 'center' }}
+        >
           <Text>22222</Text>
         </View>
       </Absolute>

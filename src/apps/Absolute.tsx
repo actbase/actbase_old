@@ -5,6 +5,8 @@ import { ABContext } from '../common/utils';
 interface AbsoluteProps {
   isVisible: boolean;
   children: React.ReactNode;
+  left?: number;
+  top?: number;
 }
 
 const Absolute = React.memo((props: AbsoluteProps) => {
