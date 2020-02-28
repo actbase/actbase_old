@@ -4,10 +4,10 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { ABContext, ContextArgs } from '../common/utils';
 import { setOverride } from './styles.data';
+import View from '../web/View';
 
 const ABApp = React.memo((props: any) => {
-  // const nodes = React.useRef<React.ReactNode[]>([]);
-  // const setNodeSize = React.useState<number>(0)[1];
+  const [nodes, setNodes] = React.useState<React.ReactNode[]>([]);
 
   // setOverride(override);
 
@@ -15,52 +15,44 @@ const ABApp = React.memo((props: any) => {
   useEffect(() => setOverride('styles', styles), [styles]);
   useEffect(() => setOverride('assets', assets), [assets]);
 
-  //
-  // const attach = React.useCallback((node: React.ReactNode) => {
-  //   nodes.current.push(node);
-  //   setNodeSize(nodes.current.length);
-  //   return nodes.current.length;
-  // }, []);
-  //
-  // const detach = React.useCallback((arg: React.ReactNode | number) => {
-  //   if (typeof arg === 'number') {
-  //     const index = arg;
-  //     if (index >= 0) {
-  //       nodes.current?.splice(index, 1);
-  //     }
-  //     setNodeSize(nodes.current.length);
-  //   }
-  //   else {
-  //     const index = nodes.current.indexOf(arg);
-  //     if (index >= 0) {
-  //       nodes.current?.splice(index, 1);
-  //     }
-  //     setNodeSize(nodes.current.length);
-  //   }
-  // }, []);
-  //
+  const attach = React.useCallback((node: React.ReactNode) => {
+    setNodes([...nodes, node]);
+    return nodes.length + 1;
+  }, []);
+
+  const detach = React.useCallback((arg: React.ReactNode | number) => {
+    if (typeof arg === 'number') {
+      const index = arg;
+      if (index >= 0) {
+        const items = [...nodes];
+        items.splice(index, 1);
+        setNodes(items);
+      }
+    }
+  }, []);
+
   // const replace = React.useCallback((node: React.ReactNode, index: number) => {
-  //   nodes.current?.splice(index, 1, node);
-  //   setNodeSize(nodes.current.length);
-  // }, []);
-  //
-  // const pop = React.useCallback(() => {
-  //   nodes.current?.splice(nodes.current?.length - 2, 1);
-  //   setNodeSize(nodes.current.length);
+  //   // nodes.current?.splice(index, 1, node);
+  //   // setNodeSize(nodes.current.length);
   // }, []);
 
-  const value: ContextArgs = {};
-  // attach, detach, replace, pop
+  const pop = React.useCallback(() => {
+    // nodes.current?.splice(nodes.current?.length - 2, 1);
+    // setNodeSize(nodes.current.length);
+  }, []);
+
+  //replace,
+  const value: ContextArgs = { attach, detach, pop };
 
   return (
     <ABContext.Provider value={value}>
       <>
         {props.children}
-        {/*{nodes?.current?.map((node, index) => (*/}
-        {/*  <View key={`${index}`} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>*/}
-        {/*    {node}*/}
-        {/*  </View>*/}
-        {/*))}*/}
+        {nodes?.map((node, index) => (
+          <View key={`${index}`} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+            {node}
+          </View>
+        ))}
       </>
     </ABContext.Provider>
   );

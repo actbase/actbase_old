@@ -16,10 +16,13 @@ const removeStyle = (name: string): void => {
   enableStyles.splice(enableStyles.indexOf(name), 1);
 };
 
-const useStyles = (name: string): any => {
+const useResource = (name: string): any => {
   React.useEffect(() => () => removeStyle(name), []);
   applyStyle(name);
-  return applyedStyles[name];
+  return {
+    styles: applyedStyles[name],
+    assets: datas[name].assets,
+  };
 };
 
-export default useStyles;
+export default useResource;

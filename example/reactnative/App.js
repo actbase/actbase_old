@@ -9,6 +9,7 @@
 import React, {createRef} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import ActBase, {
+  Absolute,
   Button,
   Form,
   Input,
@@ -47,6 +48,23 @@ const App = () => {
 
   return (
     <ActBase styles={styles}>
+      <Absolute isVisible={true}>
+        <View
+          style={{
+            width: 200,
+            height: 200,
+            backgroundColor: '#F00',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text>asd111f</Text>
+        </View>
+      </Absolute>
+
+      <View>
+        <Text>333333</Text>
+      </View>
+
       <StatusBar barStyle="dark-content" />
       <Modal isVisible={isVisible} onBackdropPress={() => setVisible(false)}>
         <View
@@ -56,14 +74,15 @@ const App = () => {
             width: 200,
             height: 200,
           }}>
-          <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>
-            <Option value={'1'}>가나다</Option>
-            <Option value={'2'}>123123123</Option>
-            <Option value={'3'}>abcdefg</Option>
-          </Select>
+          {/*<Select name={'select'} value={'1'} placeholder={'입력하세여..'}>*/}
+          {/*  <Option value={'1'}>가나다</Option>*/}
+          {/*  <Option value={'2'}>123123123</Option>*/}
+          {/*  <Option value={'3'}>abcdefg</Option>*/}
+          {/*</Select>*/}
           <Text>1212121</Text>
         </View>
       </Modal>
+
       <SafeAreaView style={{flex: 1}}>
         <ScrollView style={{flex: 1}}>
           <Form
@@ -91,13 +110,13 @@ const App = () => {
               validateMode={'submit'}
             />
 
-            <View style={{width: 200, marginBottom: 50}}>
-              <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>
-                <Option value={'1'}>가나다</Option>
-                <Option value={'2'}>123123123</Option>
-                <Option value={'3'}>abcdefg</Option>
-              </Select>
-            </View>
+            {/*<View style={{width: 200, marginBottom: 50}}>*/}
+            {/*  <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>*/}
+            {/*    <Option value={'1'}>가나다</Option>*/}
+            {/*    <Option value={'2'}>123123123</Option>*/}
+            {/*    <Option value={'3'}>abcdefg</Option>*/}
+            {/*  </Select>*/}
+            {/*</View>*/}
 
             <Button type={'submit'}>asdf</Button>
 
@@ -114,4 +133,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default React.memo(App);

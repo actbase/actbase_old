@@ -63,34 +63,33 @@ const Modal = (props: ModalProps) => {
     }
   }, [isVisible]);
 
-  useEffect(() => {
-    console.log('children change..')
-    const size = getWindowSize();
-    const opacity = anim.current;
-    const translateY = anim.current.interpolate({
-      inputRange: [0, 1],
-      outputRange: [size.height, 0],
-    });
-
-    viewRef.current = (
-      <Animated.ScrollView
-        style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', opacity }}
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
-        <Animated.View
-          style={{
-            flexGrow: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            transform: [{ translateY }],
-          }}
-        >
-          <TouchableOpacity style={StyleSheet.absoluteFill} onPress={onBackdropPress} />
-          {children}
-        </Animated.View>
-      </Animated.ScrollView>
-    );
-  }, [children]);
+  // useEffect(() => {
+  //   const size = getWindowSize();
+  //   const opacity = anim.current;
+  //   const translateY = anim.current.interpolate({
+  //     inputRange: [0, 1],
+  //     outputRange: [size.height, 0],
+  //   });
+  //
+  //   viewRef.current = (
+  //     <Animated.ScrollView
+  //       style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', opacity }}
+  //       contentContainerStyle={{ flexGrow: 1 }}
+  //     >
+  //       <Animated.View
+  //         style={{
+  //           flexGrow: 1,
+  //           alignItems: 'center',
+  //           justifyContent: 'center',
+  //           transform: [{ translateY }],
+  //         }}
+  //       >
+  //         <TouchableOpacity style={StyleSheet.absoluteFill} onPress={onBackdropPress} />
+  //         {children}
+  //       </Animated.View>
+  //     </Animated.ScrollView>
+  //   );
+  // }, [children]);
 
   return null;
 };
