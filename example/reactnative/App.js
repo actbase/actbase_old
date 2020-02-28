@@ -41,94 +41,106 @@ const styles = StyleSheet.create({
 });
 
 const App = () => {
+  console.log('AppRender...');
   const [text, setText] = React.useState('ㅁㄴㅇㄹㄴㅇㄹa');
   const [isVisible, setVisible] = React.useState(false);
+
+  const [page, setPage] = React.useState(0);
 
   const inputRef = createRef();
 
   return (
     <ActBase styles={styles}>
-      <Absolute isVisible={true}>
-        <View
-          style={{
-            width: 200,
-            height: 200,
-            backgroundColor: '#F00',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Text>asd111f</Text>
-        </View>
-      </Absolute>
-
-      <View>
-        <Text>333333</Text>
-      </View>
-
-      <StatusBar barStyle="dark-content" />
-      <Modal isVisible={isVisible} onBackdropPress={() => setVisible(false)}>
-        <View
-          style={{
-            backgroundColor: '#FFF',
-            margin: 20,
-            width: 200,
-            height: 200,
-          }}>
-          {/*<Select name={'select'} value={'1'} placeholder={'입력하세여..'}>*/}
-          {/*  <Option value={'1'}>가나다</Option>*/}
-          {/*  <Option value={'2'}>123123123</Option>*/}
-          {/*  <Option value={'3'}>abcdefg</Option>*/}
-          {/*</Select>*/}
-          <Text>1212121</Text>
-        </View>
-      </Modal>
-
-      <SafeAreaView style={{flex: 1}}>
-        <ScrollView style={{flex: 1}}>
-          <Form
-            style={{padding: 20}}
-            onSubmit={async data => {
-              await sleep(3000);
-              alert(JSON.stringify(data));
+      <>
+        <Absolute key={'a'} isVisible={false}>
+          <View
+            style={{
+              width: 200,
+              height: 200,
+              backgroundColor: '#F00',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
-            <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
+            <Text>asd111f</Text>
+          </View>
+        </Absolute>
 
-            <Input
-              name={'id'}
-              style={{marginBottom: 20}}
-              value={'MOON'}
-              clearButtonMode={'always'}
-              hint={'기본 디스크립션입니다'}
-              // onValidate={(value, values) => false}
-            />
+        <View>
+          <Text>333333</Text>
+        </View>
 
-            <Input
-              ref={inputRef}
-              name={'passowrd'}
-              style={{marginBottom: 20}}
-              // validators={validators.required}
-              validateMode={'submit'}
-            />
+        <StatusBar barStyle="dark-content" />
+        {/*<Modal isVisible={isVisible} onBackdropPress={() => setVisible(false)}>*/}
+        {/*  <View*/}
+        {/*    style={{*/}
+        {/*      backgroundColor: '#FFF',*/}
+        {/*      margin: 20,*/}
+        {/*      width: 200,*/}
+        {/*      height: 200,*/}
+        {/*    }}>*/}
+        {/*    /!*<Select name={'select'} value={'1'} placeholder={'입력하세여..'}>*!/*/}
+        {/*    /!*  <Option value={'1'}>가나다</Option>*!/*/}
+        {/*    /!*  <Option value={'2'}>123123123</Option>*!/*/}
+        {/*    /!*  <Option value={'3'}>abcdefg</Option>*!/*/}
+        {/*    /!*</Select>*!/*/}
+        {/*    <Text>1212121</Text>*/}
+        {/*  </View>*/}
+        {/*</Modal>*/}
 
-            {/*<View style={{width: 200, marginBottom: 50}}>*/}
-            {/*  <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>*/}
-            {/*    <Option value={'1'}>가나다</Option>*/}
-            {/*    <Option value={'2'}>123123123</Option>*/}
-            {/*    <Option value={'3'}>abcdefg</Option>*/}
-            {/*  </Select>*/}
-            {/*</View>*/}
-
-            <Button type={'submit'}>asdf</Button>
-
+        <SafeAreaView style={{flex: 1}}>
+          <ScrollView style={{flex: 1}}>
             <Button
               type={'button'}
               tpl={'link'}
-              onPress={() => setVisible(true)}>
-              모달띠우기
+              onPress={() => setPage(page => page + 1)}>
+              {`${page} page`}
             </Button>
-          </Form>
-        </ScrollView>
-      </SafeAreaView>
+
+            {/*<Form*/}
+            {/*  style={{padding: 20}}*/}
+            {/*  onSubmit={async data => {*/}
+            {/*    await sleep(3000);*/}
+            {/*    alert(JSON.stringify(data));*/}
+            {/*  }}>*/}
+            {/*  <Input type={'hidden'} name={'aaa'} value={'bbbb'} />*/}
+
+            {/*  <Input*/}
+            {/*    name={'id'}*/}
+            {/*    style={{marginBottom: 20}}*/}
+            {/*    value={'MOON'}*/}
+            {/*    clearButtonMode={'always'}*/}
+            {/*    hint={'기본 디스크립션입니다'}*/}
+            {/*    // onValidate={(value, values) => false}*/}
+            {/*  />*/}
+
+            {/*  <Input*/}
+            {/*    ref={inputRef}*/}
+            {/*    name={'passowrd'}*/}
+            {/*    style={{marginBottom: 20}}*/}
+            {/*    // validators={validators.required}*/}
+            {/*    validateMode={'submit'}*/}
+            {/*  />*/}
+
+            {/*  /!*<View style={{width: 200, marginBottom: 50}}>*!/*/}
+            {/*  /!*  <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>*!/*/}
+            {/*  /!*    <Option value={'1'}>가나다</Option>*!/*/}
+            {/*  /!*    <Option value={'2'}>123123123</Option>*!/*/}
+            {/*  /!*    <Option value={'3'}>abcdefg</Option>*!/*/}
+            {/*  /!*  </Select>*!/*/}
+            {/*  /!*</View>*!/*/}
+
+            {/*  <Button type={'submit'}>asdf</Button>*/}
+
+            {/*  <Button*/}
+            {/*    type={'button'}*/}
+            {/*    tpl={'link'}*/}
+            {/*    onPress={() => setVisible(true)}>*/}
+            {/*    모달띠우기*/}
+            {/*  </Button>*/}
+            {/*</Form>*/}
+          </ScrollView>
+        </SafeAreaView>
+      </>
     </ActBase>
   );
 };
