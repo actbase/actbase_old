@@ -36,7 +36,7 @@ const validators = {
 };
 
 const styles = StyleSheet.create({
-  'ab-button': { backgroundColor: '#F00' },
+  'ab-button': {backgroundColor: '#F00'},
 });
 
 const App = () => {

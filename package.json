@@ -10,7 +10,7 @@
     "email": "apps@trabricks.com"
   },
   "scripts": {
-    "build": "rm -rf ./lib && tsc -p src/tsconfig.json && copyfiles -u 1 ./src/**/*.json ./src/**/**/*.json ./lib/ && babel lib --out-dir lib",
+    "build": "rm -rf ./lib && tsc -p src/tsconfig.json && copyfiles -u 1 ./src/**/*.json ./src/**/**/*.jsonn ./src/**/**/*.png ./lib/ && babel lib --out-dir lib",
     "example": "npm run build && rm -rf ./example/reactnative/actbase && cp -r ./lib ./example/reactnative/actbase",
     "prepublish": "npm run build"
   },

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { enableStyles, styles } from './styles.data';
+import { datas, enableStyles } from '../apps/styles.data';
 
 const applyedStyles: { [key: string]: any } = {};
 
 const applyStyle = (name: string): void => {
   enableStyles.push(name);
   if (!applyedStyles[name]) {
-    applyedStyles[name] = StyleSheet.create(styles[name]);
+    applyedStyles[name] = StyleSheet.create(datas[name].styles);
   }
 };
 

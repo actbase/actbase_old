@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { getWindowSize } from '../common/utils';
 import { RowContext } from './Row';
 import View from '../web/View';
-import useStyles from '../apps/styles';
+import useStyles from '../common/res';
 
 export interface ColProps {
   span: number | 'auto' | 'none';

@@ -1,0 +1,35 @@
+import arrowDown from './arrow_down.png';
+import { AnyObject } from '../../apps/styles.data';
+
+export const assets: AnyObject = {
+  'ab-select-arrow-image': arrowDown,
+};
+
+export const styles: AnyObject = {
+  'ab-select': {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  'ab-select-placeholder': {
+
+  },
+  'ab-select-tpl-default': {
+    borderRadius: 4,
+    paddingTop: 0,
+    paddingRight: 10,
+    paddingBottom: 0,
+    paddingLeft: 10,
+    height: 38,
+    fontSize: 14,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#d9d9d9',
+    borderStyle: 'solid',
+    color: 'rgba(0, 0, 0, 0.65)',
+  },
+};
+
+export default {
+  assets,
+  styles,
+};

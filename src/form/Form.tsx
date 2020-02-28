@@ -3,76 +3,21 @@ import forIn from 'lodash/forIn';
 import isEqual from 'lodash/isEqual';
 import View from '../web/View';
 import { measure } from '../common/utils';
-
-export interface FormProps {
-  style?: any;
-  output: 'json' | 'FormData';
-  onSubmit?: (data: FormData | FormJson) => void;
-  onError?: (data: any) => void;
-  onLayout?: (event: { nativeEvent: { layout: { x: number; y: number; width: number; height: number } } }) => void;
-}
-
-export interface FormContextArgs {
-  subscribe?: (oRef: React.MutableRefObject<number>, input: any, options: ChildOption) => void;
-  unsubscribe?: (oRef: React.MutableRefObject<number>) => void;
-  submit?: () => any;
-}
-
-export interface FormJson {
-  [key: string]: any;
-}
-
-export interface Children {
-  [key: string]: {
-    input: any;
-    options: {
-      name?: string;
-      focus?: () => void;
-      blur?: () => void;
-      setProps: (data: ChildExtraProps) => void;
-      getValue: () => any;
-      onValidate: (value: any, values: any) => FieldError;
-    };
-    area: number;
-  };
-}
-
-export interface ChildOption {
-  name?: string;
-  setProps?: any;
-  getValue?: any;
-  onValidate?: any;
-  focus?: any;
-  blur?: any;
-}
-
-export interface ChildExtraProps {
-  returnKeyType?: string;
-  onSubmitEditing?: any;
-  submitting?: boolean;
-  submited?: boolean;
-  hint?: string;
-  error?: 'success' | 'warn' | 'error';
-}
-
-export interface FieldError {
-  level?: 'success' | 'warn' | 'error';
-  message?: string;
-}
+import { ExtraProps, Children, FieldError, FormContextArgs, FormJson, FormProps } from './res/types';
 
 export const FormContext = React.createContext<FormContextArgs>({});
 
 const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
   const items = React.useRef<Children>({});
   const index = React.useRef<number>(0);
-  const subscribe = React.useCallback((oRef, input, options) => {
+  const subscribe = React.useCallback((oRef, node, options) => {
     let name = oRef.current;
     if (!name) {
       name = `FormField_${index.current}`;
       oRef.current = name;
       index.current = index.current + 1;
     }
-    items.current[name] = { input, options, area: 0 };
+    items.current[name] = { node, options, area: 0 };
   }, []);
 
   const unsubscribe = React.useCallback(oRef => {
@@ -92,8 +37,8 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
 
     for (let key of Object.keys(items?.current)) {
       const el = items?.current[key];
-      if (el.input) {
-        const pos = await measure(el.input);
+      if (el.node) {
+        const pos = await measure(el.node);
         const area = -parseFloat(`${Math.floor(pos?.pageY)}.${Math.floor(pos?.pageX)}`);
         items.current[key].area = area;
       }
@@ -104,7 +49,7 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
       ?.sort((a, b) => (a.area < b.area ? 1 : a.area > b.area ? -1 : 0));
 
     elements?.forEach((v: any, index: number) => {
-      const args: ChildExtraProps = {};
+      const args: ExtraProps = {};
       if (elements.length - 1 <= index) {
         args.returnKeyType = 'done';
         args.onSubmitEditing = submit;
@@ -129,8 +74,7 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
         } else if (params[opt.name]?.push !== undefined) {
           params[opt.name].push(opt.getValue());
         } else if (params[opt.name] !== null && params[opt.name] !== undefined) {
-          const values = [...params[opt.name], opt.getValue()];
-          params[opt.name] = values;
+          params[opt.name] = [...params[opt.name], opt.getValue()];
         }
         const error: FieldError = opt.onValidate?.(opt.getValue(), params[opt.name]);
         if (error && (!error.level || error.level === 'error')) {
@@ -161,7 +105,7 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
     }
 
     forIn(items?.current, v => {
-      v.options?.setProps?.({ submitting: false, submited: true });
+      v.options?.setProps?.({ submitting: false, submitted: true });
     });
   }, []);
 

@@ -6,10 +6,11 @@ import isArray from 'lodash/isArray';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
 
-import { ChildExtraProps, FormContext } from '../form/Form';
+import { FormContext } from '../form/Form';
 import { MARGIN_STYLES, TEXT_STYLE_NAMES } from '../common/utils';
-import useStyles from '../apps/styles';
-import { InputProps, ValidateResult, Validator } from '../inputs/types';
+import useStyles from '../common/res';
+import { InputProps, ValidateResult, Validator } from '../inputs/res/types';
+import { ExtraProps } from '../form/res/types';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
@@ -51,12 +52,12 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
     ...oProps
   } = props;
 
-  const [extraProps, setExtraProps] = useState<ChildExtraProps>({});
+  const [extraProps, setExtraProps] = useState<ExtraProps>({});
   const setProps = useCallback(
-    (props: ChildExtraProps) => {
+    (props: ExtraProps) => {
       if (!isEqual(props, extraProps)) {
         setExtraProps(p => {
-          const o = { ...p, ...props };
+          const o: ExtraProps = { ...p, ...props };
           if (multiline) o.onSubmitEditing = null;
           return o;
         });
@@ -65,10 +66,10 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
     [extraProps],
   );
 
-  const eProps: ChildExtraProps = {
+  const eProps: ExtraProps = {
     hint: extraProps.hint || props.hint,
     error: extraProps.error,
-    submited: extraProps.submited || false,
+    submitted: extraProps.submitted || false,
   };
 
   let suffix = '';
@@ -118,7 +119,7 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
         validateMode === 'always' ||
         validateMode === 'while-editing' ||
         validateMode === 'focus' ||
-        (validateMode == 'submit' && extraProps.submited);
+        (validateMode == 'submit' && extraProps.submitted);
       if (validateEnabled) onValidate(text);
     },
     [extraProps, validateMode],

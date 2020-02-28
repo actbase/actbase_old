@@ -1,9 +1,10 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { TEXT_STYLE_NAMES } from '../common/utils';
-import { ChildExtraProps, FormContext } from '../form/Form';
+import { FormContext } from '../form/Form';
 import { isEqual, omit, pick } from 'lodash';
-import useStyles from '../apps/styles';
+import useStyles from '../common/res';
+import { ExtraProps } from '../form/res/types';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
@@ -28,8 +29,8 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
   const nameRef = useRef<number>(0);
   useEffect(() => () => formContext.unsubscribe?.(nameRef), []);
 
-  const [extraProps, setExtraProps] = useState<ChildExtraProps>({});
-  const setProps = (props: ChildExtraProps) => {
+  const [extraProps, setExtraProps] = useState<ExtraProps>({});
+  const setProps = (props: ExtraProps) => {
     if (!isEqual(props, extraProps)) {
       setExtraProps(props);
     }

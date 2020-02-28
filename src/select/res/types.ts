@@ -1,4 +1,4 @@
-import { InputProps } from '../inputs/types';
+import { InputProps } from '../../inputs/res/types';
 import React from 'react';
 
 export interface SelectProps extends InputProps {

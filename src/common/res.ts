@@ -1,13 +1,13 @@
 import * as React from 'react';
 import jss from 'jss';
-import { enableStyles, styles } from './styles.data';
+import { datas, enableStyles } from '../apps/styles.data';
 
 const applyedStyles: { [key: string]: any } = {};
 
 const applyStyle = (name: string): void => {
   enableStyles.push(name);
   if (!applyedStyles[name]) {
-    const sheet = jss.createStyleSheet(styles[name], { meta: name }).attach();
+    const sheet = jss.createStyleSheet(datas[name].styles, { meta: name }).attach();
     applyedStyles[name] = sheet;
   }
 };

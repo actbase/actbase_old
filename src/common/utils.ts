@@ -36,7 +36,7 @@ export interface ContextArgs {
 
 export const ABContext = React.createContext<ContextArgs>({});
 
-export const measure = (target: number): Promise<MeasureResult> => {
+export const measure = (target: any): Promise<MeasureResult> => {
   return new Promise((resolve, reject) => {
     if (target) {
       resolve({ originX: 0, originY: 0, width: 0, height: 0, pageX: 0, pageY: 0 });

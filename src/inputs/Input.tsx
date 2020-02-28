@@ -1,7 +1,7 @@
 import React from 'react';
 import TextInput from '../textinput/TextInput';
 import Hidden from './Hidden';
-import { InputProps } from './types';
+import { InputProps } from './res/types';
 
 const INPUT_TYPES: { [key: string]: any } = {
   hidden: Hidden,
@@ -18,6 +18,7 @@ const Input = React.forwardRef((props: InputProps, ref: any) => {
 
 Input.defaultProps = {
   type: 'text',
+  tpl: 'default',
 };
 
 export default Input;

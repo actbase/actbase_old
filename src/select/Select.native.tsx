@@ -1,42 +1,72 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import * as React from 'react';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import isArray from 'lodash/isArray';
-import { ValidateResult, Validator } from '../inputs/types';
-import useStyles from '../apps/styles';
-import { ABContext, MARGIN_STYLES, measure, MeasureResult, TEXT_STYLE_NAMES } from '../common/utils';
-import { ChildExtraProps, FormContext } from '../form/Form';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
-import { OptionProps, SelectProps } from './types';
+
+import { ABContext, MARGIN_STYLES, measure, MeasureResult, TEXT_STYLE_NAMES } from '../common/utils';
+import useStyles from '../common/res';
+
+import { FormContext } from '../form/Form';
+import { ExtraProps } from '../form/res/types';
+
+import { OptionProps, SelectProps } from './res/types';
+import useError from '../inputs/useError';
 
 const STYLE_GROUP_NAME = 'ab-select';
 
-const Select = React.memo((props: SelectProps) => {
-  const formContext = useContext(FormContext);
-  const styles = useStyles(STYLE_GROUP_NAME);
-  const abContext = useContext(ABContext);
-
-  const anim = React.useRef(new Animated.Value(0));
-  const optionListView = useRef<React.ReactNode>();
-
-  const children = isArray(props.children) ? props.children : [props.children];
-  const options: OptionProps[] =
-    props.options || children.map(element => ({ value: element?.props.value, view: element?.props.children }));
-
-  const inputRef = useRef<any>();
+const Select = (props: SelectProps) => {
   const { name, tpl, style, placeholder, value, validators, hintStyle } = props;
-  const [selected, setSelected] = useState<OptionProps | null | undefined>(options?.find(v => v?.value === value));
 
-  const [extraProps, setExtraProps] = useState<ChildExtraProps>({});
-  const setProps = useCallback(
-    (props: ChildExtraProps) => {
+  const abContext = React.useContext(ABContext);
+  const styles = useStyles(STYLE_GROUP_NAME);
+
+  /** Form Context Sync **/
+  const formContext = React.useContext(FormContext);
+  const [error, onValidate] = useError(validators);
+
+  const nameRef = React.useRef<number>(0);
+  const nodeRef = React.useRef<any>();
+
+  const handleRef = (el: any) => {
+    nodeRef.current = el;
+    formContext.subscribe?.(nameRef, el, {
+      name,
+      getValue,
+      setProps,
+      onValidate,
+    });
+  };
+
+  React.useEffect(() => {
+    if (props.validateMode === 'always') {
+      onValidate(selected?.value, null);
+    }
+    return () => formContext.unsubscribe?.(nameRef);
+  }, []);
+
+  const [extraProps, setExtraProps] = React.useState<ExtraProps>({});
+  const setProps = React.useCallback(
+    (props: ExtraProps) => {
       if (!isEqual(props, extraProps)) {
         setExtraProps(p => ({ ...p, ...props }));
       }
     },
     [extraProps],
   );
+  /** Form Context Sync **/
+
+  const anim = React.useRef(new Animated.Value(0));
+  const optionListView = React.useRef<React.ReactNode>();
+
+  const children = isArray(props.children) ? props.children : [props.children];
+  const options: OptionProps[] =
+    props.options || children.map(element => ({ value: element?.props.value, view: element?.props.children }));
+
+  const [data, setData] = React.useState<OptionProps | null | undefined>();
+
+  const selected = options?.find(v => v?.value === value) || data;
 
   let suffix = '';
   if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
@@ -58,14 +88,14 @@ const Select = React.memo((props: SelectProps) => {
     });
 
     if (option?.value) {
-      setSelected(option);
+      setData(option);
     }
   };
 
   const handlePress = async () => {
     if (!abContext || !abContext.attach) return;
 
-    const offsets: MeasureResult = await measure(inputRef.current);
+    const offsets: MeasureResult = await measure(nodeRef.current);
     const translateY = anim.current.interpolate({
       inputRange: [0, 1],
       outputRange: [-20, 0],
@@ -109,60 +139,16 @@ const Select = React.memo((props: SelectProps) => {
     }).start();
   };
 
-  const [error, setError] = useState<ValidateResult | null>(null);
-
-  const onValidate = (value: any) => {
-    if (!validators) return null;
-    const _validators: Validator[] = isArray(validators) ? validators : [validators];
-
-    let currentError: ValidateResult | null = null;
-    for (const validator of _validators) {
-      const err = validator(value);
-      if (err) {
-        currentError = err;
-        break;
-      }
-    }
-
-    setError(currentError);
-    return currentError;
-  };
-
   const rotateZ = anim.current.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '-180deg'],
   });
 
-  const getValue = useCallback(() => {
+  const getValue = React.useCallback(() => {
     return selected?.value;
   }, [selected]);
 
-  const nameRef = useRef<number>(0);
-  useEffect(() => {
-    if (props.validateMode === 'always') {
-      onValidate(selected?.value);
-    }
-    return () => formContext.unsubscribe?.(nameRef);
-  }, []);
-
-  const handleRef = (el: any) => {
-    inputRef.current = el;
-    formContext.subscribe?.(nameRef, el, {
-      name,
-      setProps,
-      getValue,
-      onValidate,
-      focus: () => inputRef.current?.focus(),
-      blur: () => inputRef.current?.blur(),
-    });
-  };
-
   const hintElStyle = StyleSheet.flatten(hitClasses.map(v => styles[v]).concat([hintStyle]));
-  const eProps: ChildExtraProps = {
-    hint: extraProps.hint || props.hint,
-    error: extraProps.error,
-    submited: extraProps.submited || false,
-  };
 
   return (
     <View style={pick(elementStyle, MARGIN_STYLES)}>
@@ -182,17 +168,21 @@ const Select = React.memo((props: SelectProps) => {
           )}
         </View>
         <Animated.Image
-          source={require('../../assets/arrow_down.png')}
+          source={require('./res/arrow_down.png')}
           style={{ width: 20, height: 20, transform: [{ rotateZ }] }}
         />
       </TouchableOpacity>
-      {(!!error || !!eProps?.hint) && (
+      {(!!error || !!props?.hint) && (
         <View style={omit(hintElStyle, TEXT_STYLE_NAMES)}>
-          <Text style={pick(hintElStyle, TEXT_STYLE_NAMES)}>{error?.message || eProps?.hint}</Text>
+          <Text style={pick(hintElStyle, TEXT_STYLE_NAMES)}>{error?.message || props?.hint}</Text>
         </View>
       )}
     </View>
   );
-});
+};
 
-export default Select;
+Select.defaultProps = {
+  tpl: 'default',
+};
+
+export default React.memo(Select);

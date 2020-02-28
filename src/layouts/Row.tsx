@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { isArray } from 'lodash';
 import View from '../web/View';
-import useStyles from '../apps/styles';
+import useStyles from '../common/res';
 
 export type RowAligns = 'top' | 'middle' | 'bottom' | 'stretch';
 export type RowJustify = 'start' | 'end' | 'center' | 'space-around' | 'space-between';
