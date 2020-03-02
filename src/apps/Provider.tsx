@@ -1,7 +1,7 @@
 // import { OverrideData, setOverride } from './styles.data';
 // import View from '../web/View';
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ABContext, ContextArgs } from '../common/utils';
 import { setOverride } from './ResourceManager';
 import View from '../web/View';
@@ -9,11 +9,11 @@ import View from '../web/View';
 const ABApp = React.memo((props: any) => {
   const [nodes, setNodes] = React.useState<React.ReactNode[]>([]);
 
-  // setOverride(override);
-
   const { styles, assets } = props;
-  useEffect(() => setOverride('styles', styles), [styles]);
-  useEffect(() => setOverride('assets', assets), [assets]);
+  useEffect(() => {
+    setOverride('styles', styles);
+    setOverride('assets', assets);
+  }, [styles, assets]);
 
   const attach = React.useCallback((node: React.ReactNode) => {
     setNodes([...nodes, node]);
@@ -42,7 +42,7 @@ const ABApp = React.memo((props: any) => {
   }, []);
 
   //replace,
-  const value: ContextArgs = { attach, detach, pop };
+  const value: ContextArgs = useMemo(() => ({ attach, detach, pop }), []);
 
   return (
     <ABContext.Provider value={value}>
