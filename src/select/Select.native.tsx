@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 import omit from 'lodash/omit';
 
-import { ABContext, MARGIN_STYLES, TEXT_STYLE_NAMES } from '../common/utils.native';
+import { MARGIN_STYLES, TEXT_STYLE_NAMES } from '../common/utils.native';
 import getResource from '../common/res.native';
 
 import { FormContext } from '../form/Form';
@@ -14,11 +14,27 @@ import { ExtraProps } from '../form/res/types';
 import { OptionProps, SelectProps } from './res/types';
 import useError from '../inputs/useError';
 import Absolute from '../apps/Absolute';
+import { measure, MeasureResult } from '../common/utils';
 
 const STYLE_GROUP_NAME = 'ab-select';
 
+const COVER_STYLES = [
+  'borderWidth',
+  'borderLeftWidth',
+  'borderRightWidth',
+  'borderTopWidth',
+  'borderBottomWidth',
+  'borderColor',
+  'borderLeftColor',
+  'borderRightColor',
+  'borderTopColor',
+  'borderBottomColor',
+  'borderRadius',
+  'backgroundColor',
+];
+
 const Select = (props: SelectProps) => {
-  const { name, tpl, style, placeholder, value, validators, hintStyle } = props;
+  const { name, tpl, style, placeholder, value, validators, hintStyle, onChangeValue } = props;
 
   /** Form Context Sync **/
   const formContext = React.useContext(FormContext);
@@ -71,10 +87,30 @@ const Select = (props: SelectProps) => {
   const hitClassNames = [`${STYLE_GROUP_NAME}-hint`];
 
   /*** event listener ***/
-  const handlePress = () => {};
+  const [offsets, setOffsets] = React.useState<MeasureResult | null>(null);
+  const handlePress = async () => {
+    setOffsets(await measure(nodeRef.current));
+    Animated.timing(anim.current, {
+      toValue: 1,
+      duration: 200,
+    }).start();
+  };
+  const handleRelease = (option?: any) => {
+    Animated.timing(anim.current, {
+      toValue: 0,
+      duration: 150,
+    }).start(() => {
+      setOffsets(null);
+    });
+
+    if (option?.value) {
+      setData(option);
+      onChangeValue?.(option);
+    }
+  };
 
   /*** to Render ***/
-  const abContext = React.useContext(ABContext);
+  const anim = React.useRef(new Animated.Value(0));
   const r = getResource(STYLE_GROUP_NAME);
 
   const elementStyle = StyleSheet.flatten(
@@ -84,8 +120,16 @@ const Select = (props: SelectProps) => {
     hitClassNames.map(v => [r.styles[v], r.styles[`${v}-tpl-${tpl}`]]).concat([hintStyle]),
   );
 
-  console.log(setData, abContext);
-  //, transform: [{ rotateZ }]
+  const rotateZ = anim.current.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '-180deg'],
+  });
+
+  const translateY = anim.current.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-20, 0],
+  });
+
   return (
     <View style={pick(elementStyle, MARGIN_STYLES)}>
       <TouchableOpacity
@@ -103,14 +147,43 @@ const Select = (props: SelectProps) => {
             selected.view
           )}
         </View>
-        <Animated.Image source={r.assets[`${STYLE_GROUP_NAME}-arrow-image`]} style={{ width: 20, height: 20 }} />
+        <Animated.Image
+          source={{ uri: r.assets[`${STYLE_GROUP_NAME}-arrow-image`] }}
+          style={[
+            r.styles[`${STYLE_GROUP_NAME}-arrow`],
+            r.styles[`${STYLE_GROUP_NAME}-arrow-tpl-${tpl}`],
+            { transform: [{ rotateZ }] },
+          ]}
+        />
       </TouchableOpacity>
-      <Absolute isVisible={false}>
-        <View
-          style={{ width: 200, height: 200, backgroundColor: '#F00', alignItems: 'center', justifyContent: 'center' }}
-        >
-          <Text>22222</Text>
-        </View>
+      <Absolute isVisible={offsets !== null}>
+        <>
+          <TouchableOpacity style={[StyleSheet.absoluteFill]} onPress={handleRelease} />
+          <View style={{ position: 'absolute', top: (offsets?.pageY || 0) + 38 + 5, left: offsets?.pageX }}>
+            <Animated.ScrollView
+              style={[
+                pick(elementStyle, COVER_STYLES),
+                {
+                  width: offsets?.width,
+                  minHeight: offsets?.height,
+                  transform: [{ translateY }],
+                  opacity: anim.current,
+                  maxHeight: 200,
+                },
+              ]}
+            >
+              {options.map((option, index) => (
+                <TouchableOpacity
+                  key={`${option.value}${index}`}
+                  onPress={() => handleRelease(option)}
+                  style={{ height: 40, justifyContent: 'center', paddingHorizontal: 10 }}
+                >
+                  {typeof option.view === 'string' ? <Text>{option.view}</Text> : option.view}
+                </TouchableOpacity>
+              ))}
+            </Animated.ScrollView>
+          </View>
+        </>
       </Absolute>
       {(!!error || !!props?.hint) && (
         <View style={omit(hintElStyle, TEXT_STYLE_NAMES)}>
@@ -119,91 +192,6 @@ const Select = (props: SelectProps) => {
       )}
     </View>
   );
-
-  //
-  // const anim = React.useRef(new Animated.Value(0));
-  // const optionListView = React.useRef<React.ReactNode>();
-  //
-  //
-  //
-  // let suffix = '';
-  // if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
-  //   suffix = `-tpl-${tpl}`;
-  // }
-  //
-  //
-  //
-  // const handleRelease = (option?: any) => {
-  //   Animated.timing(anim.current, {
-  //     toValue: 0,
-  //     duration: 150,
-  //   }).start(() => {
-  //     abContext.detach?.(optionListView.current);
-  //   });
-  //
-  //   if (option?.value) {
-  //     setData(option);
-  //   }
-  // };
-  //
-  // const handlePress = async () => {
-  //   if (!abContext || !abContext.attach) return;
-  //
-  //   const offsets: MeasureResult = await measure(nodeRef.current);
-  //   const translateY = anim.current.interpolate({
-  //     inputRange: [0, 1],
-  //     outputRange: [-20, 0],
-  //   });
-  //
-  //   optionListView.current = (
-  //     <>
-  //       <TouchableOpacity style={{ flex: 1 }} onPress={handleRelease} />
-  //       <View style={{ position: 'absolute', top: offsets.pageY + 38 + 5, left: offsets.pageX }}>
-  //         <Animated.ScrollView
-  //           style={{
-  //             width: offsets.width,
-  //             minHeight: offsets.height,
-  //             opacity: anim.current,
-  //             maxHeight: 200,
-  //             backgroundColor: '#fff',
-  //             borderWidth: 1,
-  //             borderRadius: 4,
-  //             borderColor: '#ddd',
-  //             transform: [{ translateY }],
-  //           }}
-  //         >
-  //           {options.map((option, index) => (
-  //             <TouchableOpacity
-  //               key={`${option.value}${index}`}
-  //               onPress={() => handleRelease(option)}
-  //               style={{ height: 40, justifyContent: 'center', paddingHorizontal: 10 }}
-  //             >
-  //               {typeof option.view === 'string' ? <Text>{option.view}</Text> : option.view}
-  //             </TouchableOpacity>
-  //           ))}
-  //         </Animated.ScrollView>
-  //       </View>
-  //     </>
-  //   );
-  //
-  //   abContext.attach(optionListView.current);
-  //   Animated.timing(anim.current, {
-  //     toValue: 1,
-  //     duration: 200,
-  //   }).start();
-  // };
-  //
-  // const rotateZ = anim.current.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: ['0deg', '-180deg'],
-  // });
-  //
-  // const getValue = React.useCallback(() => {
-  //   return selected?.value;
-  // }, [selected]);
-  //
-  //
-  //
 };
 
 Select.defaultProps = {
