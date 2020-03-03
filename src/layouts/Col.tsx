@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { getWindowSize } from '../common/utils';
 import { RowContext } from './Row';
 import View from '../web/View';
-import useStyles from '../common/res';
+import getResource from '../common/res.native';
 
 export interface ColProps {
   span: number | 'auto' | 'none';
@@ -21,7 +21,7 @@ const Col: React.FC<ColProps> = (props: ColProps): React.ReactElement => {
 
   const { width } = getWindowSize();
   const rowContext = useContext(RowContext);
-  const styles = useStyles(STYLE_GROUP_NAME);
+  const r = getResource(STYLE_GROUP_NAME);
 
   let ratio;
   if (width <= 576) {
@@ -51,7 +51,7 @@ const Col: React.FC<ColProps> = (props: ColProps): React.ReactElement => {
   return (
     <View
       style={[
-        styles[`${STYLE_GROUP_NAME}-col`],
+        r.styles[`${STYLE_GROUP_NAME}-col`],
         {
           ...extraStyle,
           paddingLeft: gutterH / 2,

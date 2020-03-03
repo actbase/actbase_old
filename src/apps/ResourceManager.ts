@@ -1,4 +1,4 @@
-import { assign, forIn } from 'lodash';
+import { forIn } from 'lodash';
 
 import * as R_LAYOUT_DATA from '../layouts/res/styles';
 import * as R_BUTTON_DATA from '../buttons/res/styles';
@@ -29,7 +29,7 @@ export const setOverride = (type: 'styles' | 'assets', arg: { [key: string]: { s
   forIn(arg, (value, key: string) => {
     const name = RES_NAMES.find(v => key.startsWith(v));
     if (name && datas[name][type]) {
-      datas[name][type][key] = assign(datas[name][type][key], value);
+      datas[name][type][key] = { ...(datas[name][type][key] || {}), ...value };
     }
   });
 };

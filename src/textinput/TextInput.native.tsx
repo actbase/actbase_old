@@ -1,16 +1,16 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import isEqual from 'lodash/isEqual';
-import isArray from 'lodash/isArray';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
 
 import { FormContext } from '../form/Form';
 import { MARGIN_STYLES, TEXT_STYLE_NAMES } from '../common/utils';
-import useStyles from '../common/res';
-import { InputProps, ValidateResult, Validator } from '../inputs/res/types';
+import { InputProps } from '../inputs/res/types';
 import { ExtraProps } from '../form/res/types';
+import useError from '../inputs/useError';
+import getResource from '../common/res.native';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
@@ -27,17 +27,13 @@ const propTemplate: { [key: string]: any } = {
   },
 };
 
-const TextField = React.forwardRef((props: InputProps, ref: any) => {
-  const formContext = useContext(FormContext);
-  const inputRef = useRef<any>();
-
-  const styles = useStyles(STYLE_GROUP_NAME);
-
+const TextField = React.forwardRef((props: InputProps) => {
   const {
     type,
     tpl,
     style,
     name,
+    value,
     onChangeText,
     leftDeco,
     rightDeco,
@@ -52,75 +48,77 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
     ...oProps
   } = props;
 
-  const [extraProps, setExtraProps] = useState<ExtraProps>({});
-  const setProps = useCallback(
+  /** Form Context Sync **/
+  const formContext = React.useContext(FormContext);
+  const [error, onValidate] = useError(validators);
+
+  const nameRef = React.useRef<number>(0);
+  const nodeRef = React.useRef<any>();
+
+  const handleRef = (el: any) => {
+    nodeRef.current = el;
+    // ref = el;
+    formContext.subscribe?.(nameRef, el, {
+      name,
+      setProps,
+      getValue,
+      onValidate,
+      focus: () => nodeRef.current?.focus(),
+      blur: () => nodeRef.current?.blur(),
+    });
+  };
+
+  React.useEffect(() => {
+    if (props.validateMode === 'always') {
+      onValidate(text, null);
+    }
+    return () => formContext.unsubscribe?.(nameRef);
+  }, []);
+
+  const [extraProps, setExtraProps] = React.useState<ExtraProps>({});
+  const setProps = React.useCallback(
     (props: ExtraProps) => {
       if (!isEqual(props, extraProps)) {
-        setExtraProps(p => {
-          const o: ExtraProps = { ...p, ...props };
-          if (multiline) o.onSubmitEditing = null;
-          return o;
-        });
+        setExtraProps(p => ({ ...p, ...props }));
       }
     },
     [extraProps],
   );
+  /** Form Context Sync **/
 
-  const eProps: ExtraProps = {
-    hint: extraProps.hint || props.hint,
-    error: extraProps.error,
-    submitted: extraProps.submitted || false,
-  };
+  const [data, setData] = React.useState<string | null | undefined>(value);
+  const text = value || data;
 
-  let suffix = '';
-  if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
-    suffix = `-tpl-${tpl}`;
-  }
+  const getValue = React.useCallback(() => {
+    return text;
+  }, [text]);
 
-  const classes = [`${STYLE_GROUP_NAME}${suffix}`];
-  const hitClasses = [`${STYLE_GROUP_NAME}${suffix}-hint`];
-
-  const [focused, setFocused] = useState(false);
-  if (focused) classes.push(`${STYLE_GROUP_NAME}${suffix}-focused`);
-  if (disabled) classes.push(`${STYLE_GROUP_NAME}${suffix}-disabled`);
-  if (multiline) classes.push(`${STYLE_GROUP_NAME}${suffix}-multiline`);
-
-  const [error, setError] = useState<ValidateResult | null>(null);
-
-  const onValidate = (value: any) => {
-    if (!validators) return null;
-    const _validators: Validator[] = isArray(validators) ? validators : [validators];
-
-    let currentError: ValidateResult | null = null;
-    for (const validator of _validators) {
-      const err = validator(value);
-      if (err) {
-        currentError = err;
-        break;
-      }
-    }
-
-    setError(currentError);
-    return currentError;
-  };
+  /*** style dimensions ***/
+  const classNames = [`${STYLE_GROUP_NAME}`];
+  const hitClassNames = [`${STYLE_GROUP_NAME}-hint`];
 
   if (error) {
-    classes.push(`${STYLE_GROUP_NAME}${suffix}-error`);
-    hitClasses.push(`${STYLE_GROUP_NAME}${suffix}-hint-error`);
+    classNames.push(`${STYLE_GROUP_NAME}-error`);
+    hitClassNames.push(`${STYLE_GROUP_NAME}-hint-error`);
   }
 
-  const [text, setText] = useState(props?.value || '');
+  const [focused, setFocused] = useState(false);
+  if (focused) classNames.push(`${STYLE_GROUP_NAME}-focused`);
+  if (disabled) classNames.push(`${STYLE_GROUP_NAME}-disabled`);
+  if (multiline) classNames.push(`${STYLE_GROUP_NAME}-multiline`);
+
+  /*** event listener ***/
   const handleChangeText = useCallback(
     (text: string) => {
       onChangeText && onChangeText(text);
-      setText?.(text);
+      setData?.(text);
 
       const validateEnabled =
         validateMode === 'always' ||
         validateMode === 'while-editing' ||
         validateMode === 'focus' ||
         (validateMode == 'submit' && extraProps.submitted);
-      if (validateEnabled) onValidate(text);
+      if (validateEnabled) onValidate(text, null);
     },
     [extraProps, validateMode],
   );
@@ -131,7 +129,7 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
       onFocus && onFocus(e);
 
       const validateEnabled = validateMode === 'focus';
-      if (validateEnabled) onValidate(text);
+      if (validateEnabled) onValidate(text, null);
     },
     [text, validateMode],
   );
@@ -142,50 +140,31 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
       onBlur && onBlur(e);
 
       const validateEnabled = validateMode === 'blur';
-      if (validateEnabled) onValidate(text);
+      if (validateEnabled) onValidate(text, null);
     },
     [text, validateMode],
   );
 
-  const getValue = useCallback(() => {
-    return text;
-  }, [text]);
-
-  const nameRef = useRef<number>(0);
-  useEffect(() => {
-    if (props.validateMode === 'always') {
-      onValidate(text);
-    }
-    return () => formContext.unsubscribe?.(nameRef);
-  }, []);
-
-  const handleRef = (el: any) => {
-    inputRef.current = el;
-    formContext.subscribe?.(nameRef, el, {
-      name,
-      setProps,
-      getValue,
-      onValidate,
-      focus: () => inputRef.current?.focus(),
-      blur: () => inputRef.current?.blur(),
-    });
-
-    if (typeof ref === 'function') {
-      ref(el);
-    } else if (ref && Object.keys(ref).indexOf('current') >= 0) {
-      ref.current = el;
-    }
-  };
-
   const handleClear = () => {
-    inputRef.current?.clear();
-    setText('');
+    nodeRef.current?.clear();
+    setData('');
   };
 
-  let className = classes.concat(classes.map(v => v.substring(1)));
-  const elementStyle = StyleSheet.flatten(className.map(v => styles[v]).concat([style]));
+  const eProps: ExtraProps = {
+    hint: extraProps.hint || props.hint,
+    error: extraProps.error,
+    submitted: extraProps.submitted || false,
+  };
 
-  const hintElStyle = StyleSheet.flatten(hitClasses.map(v => styles[v]).concat([hintStyle]));
+  /*** to Render ***/
+  const r = getResource(STYLE_GROUP_NAME);
+  const elementStyle = StyleSheet.flatten(
+    classNames.map(v => [r.styles[v], r.styles[`${v}-tpl-${tpl}`]]).concat([style]),
+  );
+
+  const hintElStyle = StyleSheet.flatten(
+    hitClassNames.map(v => [r.styles[v], r.styles[`${v}-tpl-${tpl}`]]).concat([hintStyle]),
+  );
 
   const clearMode1 = focused && clearButtonMode === 'while-editing';
   const clearMode2 = !focused && clearButtonMode === 'unless-editing';
@@ -219,10 +198,10 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
           {...oProps}
         />
         {clearButtonEnabled && (
-          <TouchableOpacity onPress={handleClear} activeOpacity={0.2} style={styles['ab-input-text-clear']}>
+          <TouchableOpacity onPress={handleClear} activeOpacity={0.2} style={r.styles['ab-input-text-clear']}>
             <View
               style={[
-                styles['ab-input-text-clear-line'],
+                r.styles['ab-input-text-clear-line'],
                 {
                   transform: [{ rotateZ: '45deg' }],
                 },
@@ -230,7 +209,7 @@ const TextField = React.forwardRef((props: InputProps, ref: any) => {
             />
             <View
               style={[
-                styles['ab-input-text-clear-line'],
+                r.styles['ab-input-text-clear-line'],
                 {
                   transform: [{ rotateZ: '-45deg' }],
                 },

@@ -37,7 +37,8 @@ const validators = {
 };
 
 const styles = StyleSheet.create({
-  'ab-button': {backgroundColor: '#F00'},
+  'ab-button-tpl-default': {backgroundColor: '#F00'},
+  'ab-button-tpl-pink': {backgroundColor: '#0F0'},
 });
 
 const App = () => {
@@ -70,22 +71,22 @@ const App = () => {
         </View>
 
         <StatusBar barStyle="dark-content" />
-        {/*<Modal isVisible={isVisible} onBackdropPress={() => setVisible(false)}>*/}
-        {/*  <View*/}
-        {/*    style={{*/}
-        {/*      backgroundColor: '#FFF',*/}
-        {/*      margin: 20,*/}
-        {/*      width: 200,*/}
-        {/*      height: 200,*/}
-        {/*    }}>*/}
-        {/*    /!*<Select name={'select'} value={'1'} placeholder={'입력하세여..'}>*!/*/}
-        {/*    /!*  <Option value={'1'}>가나다</Option>*!/*/}
-        {/*    /!*  <Option value={'2'}>123123123</Option>*!/*/}
-        {/*    /!*  <Option value={'3'}>abcdefg</Option>*!/*/}
-        {/*    /!*</Select>*!/*/}
-        {/*    <Text>1212121</Text>*/}
-        {/*  </View>*/}
-        {/*</Modal>*/}
+        <Modal isVisible={isVisible} onBackdropPress={() => setVisible(false)}>
+          <View
+            style={{
+              backgroundColor: '#FFF',
+              margin: 20,
+              width: 200,
+              height: 200,
+            }}>
+            <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>
+              <Option value={'1'}>가나다</Option>
+              <Option value={'2'}>123123123</Option>
+              <Option value={'3'}>abcdefg</Option>
+            </Select>
+            <Text>1212134321</Text>
+          </View>
+        </Modal>
 
         <SafeAreaView style={{flex: 1}}>
           <ScrollView style={{flex: 1}}>
@@ -129,7 +130,9 @@ const App = () => {
                 </Select>
               </View>
 
-              <Button type={'submit'}>asdf</Button>
+              <Button tpl={'pink'} type={'submit'}>
+                asdf
+              </Button>
 
               <Button
                 type={'button'}

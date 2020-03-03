@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { isArray } from 'lodash';
 import View from '../web/View';
-import useStyles from '../common/res';
+import getResource from '../common/res.native';
 
 export type RowAligns = 'top' | 'middle' | 'bottom' | 'stretch';
 export type RowJustify = 'start' | 'end' | 'center' | 'space-around' | 'space-between';
@@ -25,7 +25,7 @@ export const RowContext: React.Context<RowContextProps> = React.createContext<Ro
 const Row: React.FC<RowProps> = (props: RowProps): React.ReactElement => {
   const { style, align, justify, ...oProps } = props;
 
-  const styles = useStyles(STYLE_GROUP_NAME);
+  const r = getResource(STYLE_GROUP_NAME);
   const gutter: [number, number] = isArray(props.gutter) ? props.gutter : [props.gutter, props.gutter];
 
   const extStyle = {
@@ -33,8 +33,8 @@ const Row: React.FC<RowProps> = (props: RowProps): React.ReactElement => {
     marginRight: -(gutter[0] / 2),
     marginTop: -(gutter[1] / 2),
     marginBottom: -(gutter[1] / 2),
-    alignItems: styles.alignItems,
-    justifyContent: styles.justifyContent,
+    alignItems: r.styles.alignItems,
+    justifyContent: r.styles.justifyContent,
   };
 
   if (props.align === 'top') {
@@ -60,7 +60,7 @@ const Row: React.FC<RowProps> = (props: RowProps): React.ReactElement => {
   return (
     <RowContext.Provider value={{ gutter: gutter }}>
       <View style={style}>
-        <View style={[styles[`${STYLE_GROUP_NAME}-row`], extStyle]} {...oProps} />
+        <View style={[r.styles[`${STYLE_GROUP_NAME}-row`], extStyle]} {...oProps} />
       </View>
     </RowContext.Provider>
   );
