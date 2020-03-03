@@ -190,7 +190,7 @@ const TextField = React.forwardRef((props: InputProps) => {
           style={[{ flex: 1, height: elementStyle?.height }, pick(elementStyle, TEXT_STYLE_NAMES)]}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          editable={!disabled || !props.readonly || !extraProps.submitting}
+          editable={!disabled && !props.readonly && !extraProps.submitting}
           multiline={multiline}
           clearButtonMode={'never'}
           {...(!!type ? propTemplate[type] : {})}
