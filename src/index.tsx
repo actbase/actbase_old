@@ -2,7 +2,7 @@ import Provider from './apps/Provider';
 
 export { default as Provider } from './apps/Provider';
 export { default as Absolute } from './apps/Absolute';
-export { default as Button } from './buttons';
+export { default as Button } from './buttons/Button';
 export { default as ScrollView } from './scrollview';
 
 // Data Entry

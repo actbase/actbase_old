@@ -1,55 +1,52 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { TEXT_STYLE_NAMES } from '../common/utils';
 import { FormContext } from '../form/Form';
 import { isEqual, omit, pick } from 'lodash';
-import useStyles from '../common/res';
 import { ExtraProps } from '../form/res/types';
+import { ButtonProps } from './res/props';
+import getResource from '../common/res.native';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
-export interface ButtonProps {
-  type: 'button' | 'submit';
-  tpl?: string;
-  disabled: boolean;
-  onPress?: () => any;
-  onClick?: () => any;
-  onPressIn?: (e: any) => any;
-  onPressOut?: (e: any) => any;
-  forceInset: any;
-  style?: any;
-  children?: any;
-}
-
 const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
-  const formContext = useContext(FormContext);
-
-  const styles = useStyles(STYLE_GROUP_NAME);
-
-  const nameRef = useRef<number>(0);
-  useEffect(() => () => formContext.unsubscribe?.(nameRef), []);
-
-  const [extraProps, setExtraProps] = useState<ExtraProps>({});
-  const setProps = (props: ExtraProps) => {
-    if (!isEqual(props, extraProps)) {
-      setExtraProps(props);
-    }
-  };
-
   const { type, tpl, style, children, disabled, onPressIn, onPressOut, forceInset, ...oProps } = iProps;
 
-  const props = { ...oProps, ...extraProps };
+  /** Form Context Sync **/
+  const formContext = React.useContext(FormContext);
 
-  let suffix = '';
-  if (tpl && styles[`${STYLE_GROUP_NAME}-tpl-${tpl}`]) {
-    suffix = `-tpl-${tpl}`;
-  }
+  const nameRef = React.useRef<number>(0);
+  const nodeRef = React.useRef<any>();
 
-  const classes = [`${STYLE_GROUP_NAME}${suffix}`];
+  const handleRef = (el: any) => {
+    nodeRef.current = el;
+    formContext.subscribe?.(nameRef, el, {
+      setProps,
+    });
+  };
 
+  React.useEffect(() => {
+    return () => formContext.unsubscribe?.(nameRef);
+  }, []);
+
+  const [extraProps, setExtraProps] = React.useState<ExtraProps>({});
+  const setProps = React.useCallback(
+    (props: ExtraProps) => {
+      if (!isEqual(props, extraProps)) {
+        setExtraProps(p => ({ ...p, ...props }));
+      }
+    },
+    [extraProps],
+  );
+  /** Form Context Sync **/
+
+  /*** style dimensions ***/
+  const classNames = [`${STYLE_GROUP_NAME}`];
+
+  /*** event listener ***/
   const [press, setPress] = useState(false);
-  if (press) classes.push(`${STYLE_GROUP_NAME}${suffix}-press`);
-  if (disabled) classes.push(`${STYLE_GROUP_NAME}${suffix}-disabled`);
+  if (press) classNames.push(`${STYLE_GROUP_NAME}-press`);
+  if (disabled) classNames.push(`${STYLE_GROUP_NAME}-disabled`);
 
   const handlePressIn = useCallback(e => {
     onPressIn && onPressIn(e);
@@ -102,9 +99,13 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
     }
   }, [process]);
 
-  let className = classes.concat(classes.map(v => v.substring(1)));
+  /*** to Render ***/
+  const r = getResource(STYLE_GROUP_NAME);
+  const elementStyle = StyleSheet.flatten(
+    classNames.map(v => [r.styles[v], r.styles[`${v}-tpl-${tpl}`]]).concat([style]),
+  );
 
-  const elementStyle = StyleSheet.flatten(className.map(v => styles[v]).concat([style]));
+  const props = { ...oProps, ...extraProps };
 
   let contents = children;
   if (process === 2 || props?.submitting) {
@@ -128,7 +129,7 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
 
   return (
     <TouchableWithoutFeedback
-      ref={el => formContext.subscribe?.(nameRef, el, { setProps })}
+      ref={handleRef}
       onPress={handleClick}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
@@ -144,6 +145,7 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
 
 Button.defaultProps = {
   type: 'submit',
+  tpl: 'default',
   disabled: false,
 };
 
