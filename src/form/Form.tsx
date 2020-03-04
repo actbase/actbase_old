@@ -3,11 +3,11 @@ import forIn from 'lodash/forIn';
 import isEqual from 'lodash/isEqual';
 import View from '../web/View';
 import { measure } from '../common/utils';
-import { ExtraProps, Children, FieldError, FormContextArgs, FormJson, FormProps } from './res/types';
+import { Children, ExtraProps, FieldError, FormContextArgs, FormJson, FormProps } from './res/types';
 
 export const FormContext = React.createContext<FormContextArgs>({});
 
-const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
+const Form = React.forwardRef((props: FormProps, onRef: any) => {
   const items = React.useRef<Children>({});
   const index = React.useRef<number>(0);
   const subscribe = React.useCallback((oRef, node, options) => {
@@ -109,12 +109,22 @@ const Form: React.FC<FormProps> = (props: FormProps): React.ReactElement => {
     });
   }, []);
 
+  const refObject = {
+    submit,
+  };
+
+  if (typeof onRef === 'function') {
+    onRef?.(refObject);
+  } else if (onRef && Object.keys(onRef).indexOf('current') >= 0) {
+    onRef.current = refObject;
+  }
+
   const value = { subscribe, unsubscribe, submit };
   return (
     <FormContext.Provider value={value}>
       <View onLayout={handleLayout} {...oProps} />
     </FormContext.Provider>
   );
-};
+});
 
 export default Form;

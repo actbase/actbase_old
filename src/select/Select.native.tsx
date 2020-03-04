@@ -34,7 +34,7 @@ const COVER_STYLES = [
 ];
 
 const Select = (props: SelectProps) => {
-  const { name, tpl, style, placeholder, value, validators, hintStyle, onChangeValue } = props;
+  const { name, tpl, style, placeholder, value, initValue, validators, hintStyle, onChangeValue } = props;
 
   /** Form Context Sync **/
   const formContext = React.useContext(FormContext);
@@ -75,7 +75,9 @@ const Select = (props: SelectProps) => {
   const options: OptionProps[] =
     props.options || children.map(element => ({ value: element?.props.value, view: element?.props.children }));
 
-  const [data, setData] = React.useState<OptionProps | null | undefined>();
+  const [data, setData] = React.useState<OptionProps | null | undefined>(
+    options?.find(v => v?.value === value || v?.value === initValue),
+  );
   const selected = options?.find(v => v?.value === value) || data;
 
   const getValue = React.useCallback(() => {
@@ -116,6 +118,7 @@ const Select = (props: SelectProps) => {
   const elementStyle = StyleSheet.flatten(
     classNames.map(v => [r.styles[v], r.styles[`${v}-tpl-${tpl}`]]).concat([style]),
   );
+
   const hintElStyle = StyleSheet.flatten(
     hitClassNames.map(v => [r.styles[v], r.styles[`${v}-tpl-${tpl}`]]).concat([hintStyle]),
   );
@@ -140,9 +143,16 @@ const Select = (props: SelectProps) => {
       >
         <View style={{ flex: 1 }}>
           {!selected?.value ? (
-            <Text>{placeholder}</Text>
+            <Text
+              style={[
+                r.styles[`${STYLE_GROUP_NAME}-placeholder`],
+                r.styles[`${STYLE_GROUP_NAME}-placeholder-tpl-${tpl}`],
+              ]}
+            >
+              {placeholder}
+            </Text>
           ) : typeof selected.view === 'string' ? (
-            <Text>{selected.view}</Text>
+            <Text style={pick(elementStyle, TEXT_STYLE_NAMES)}>{selected.view}</Text>
           ) : (
             selected.view
           )}
@@ -159,7 +169,13 @@ const Select = (props: SelectProps) => {
       <Absolute isVisible={offsets !== null}>
         <>
           <TouchableOpacity style={[StyleSheet.absoluteFill]} onPress={handleRelease} />
-          <View style={{ position: 'absolute', top: (offsets?.pageY || 0) + 38 + 5, left: offsets?.pageX }}>
+          <View
+            style={{
+              position: 'absolute',
+              top: (offsets?.pageY || 0) + (offsets?.height || 0) + 5,
+              left: offsets?.pageX,
+            }}
+          >
             <Animated.ScrollView
               style={[
                 pick(elementStyle, COVER_STYLES),

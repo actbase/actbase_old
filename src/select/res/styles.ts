@@ -10,7 +10,10 @@ export const styles: AnyObject = {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  'ab-select-arrow': {},
+  'ab-select-arrow': {
+    width: 20,
+    height: 20,
+  },
   'ab-select-placeholder': {},
   'ab-select-tpl-default': {
     borderRadius: 4,
@@ -26,10 +29,7 @@ export const styles: AnyObject = {
     borderStyle: 'solid',
     color: 'rgba(0, 0, 0, 0.65)',
   },
-  'ab-select-arrow-tpl-default': {
-    width: 20,
-    height: 20,
-  },
+  'ab-select-arrow-tpl-default': {},
 };
 
 export default {

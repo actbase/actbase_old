@@ -34,6 +34,7 @@ const TextField = React.forwardRef((props: InputProps) => {
     style,
     name,
     value,
+    initValue,
     onChangeText,
     leftDeco,
     rightDeco,
@@ -86,7 +87,7 @@ const TextField = React.forwardRef((props: InputProps) => {
   );
   /** Form Context Sync **/
 
-  const [data, setData] = React.useState<string | null | undefined>(value);
+  const [data, setData] = React.useState<string | null | undefined>(value || initValue);
   const text = value || data;
 
   const getValue = React.useCallback(() => {
@@ -196,6 +197,7 @@ const TextField = React.forwardRef((props: InputProps) => {
           {...(!!type ? propTemplate[type] : {})}
           {...extraProps}
           {...oProps}
+          value={text}
         />
         {clearButtonEnabled && (
           <TouchableOpacity onPress={handleClear} activeOpacity={0.2} style={r.styles['ab-input-text-clear']}>

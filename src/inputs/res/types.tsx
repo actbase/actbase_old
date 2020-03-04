@@ -5,6 +5,7 @@ export interface InputProps extends TextInputProps {
   tpl: string;
   name?: string;
   value?: any;
+  initValue?: any;
   style?: any;
   onChangeText?: any;
   leftDeco?: any;

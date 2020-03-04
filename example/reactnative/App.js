@@ -97,20 +97,21 @@ const App = () => {
               {`${page} page`}
             </Button>
 
-            <Form
-              style={{padding: 20}}
-              onSubmit={async data => {
-                await sleep(3000);
-                alert(JSON.stringify(data));
-              }}>
+            {/*<Form*/}
+            {/*  style={{padding: 20}}*/}
+            {/*  onSubmit={async data => {*/}
+            {/*    await sleep(3000);*/}
+            {/*    alert(JSON.stringify(data));*/}
+            {/*  }}>*/}
               <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
 
               <Input
                 name={'id'}
                 style={{marginBottom: 20}}
-                value={'MOON'}
+                value={text}
                 clearButtonMode={'always'}
                 hint={'기본 디스크립션입니다'}
+                onChangeText={setText}
                 // onValidate={(value, values) => false}
               />
 
@@ -140,7 +141,7 @@ const App = () => {
                 onPress={() => setVisible(true)}>
                 모달띠우기
               </Button>
-            </Form>
+            {/*</Form>*/}
           </ScrollView>
         </SafeAreaView>
       </>
