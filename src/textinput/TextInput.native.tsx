@@ -149,6 +149,7 @@ const TextField = React.forwardRef((props: InputProps) => {
   const handleClear = () => {
     nodeRef.current?.clear();
     setData('');
+    onChangeText?.('');
   };
 
   const eProps: ExtraProps = {
