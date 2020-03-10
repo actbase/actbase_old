@@ -37,7 +37,7 @@ const validators = {
 };
 
 const styles = StyleSheet.create({
-  'ab-button-tpl-default': {backgroundColor: '#F00'},
+  'ab-button-tpl-default': {},
   'ab-button-tpl-pink': {backgroundColor: '#0F0'},
 });
 
@@ -97,12 +97,12 @@ const App = () => {
               {`${page} page`}
             </Button>
 
-            {/*<Form*/}
-            {/*  style={{padding: 20}}*/}
-            {/*  onSubmit={async data => {*/}
-            {/*    await sleep(3000);*/}
-            {/*    alert(JSON.stringify(data));*/}
-            {/*  }}>*/}
+            <Form
+              style={{padding: 20}}
+              onSubmit={async data => {
+                await sleep(3000);
+                alert(JSON.stringify(data));
+              }}>
               <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
 
               <Input
@@ -131,17 +131,17 @@ const App = () => {
                 </Select>
               </View>
 
-              <Button tpl={'pink'} type={'submit'}>
-                asdf
-              </Button>
+              <Button type={'submit'}>asdf</Button>
 
               <Button
                 type={'button'}
                 tpl={'link'}
-                onPress={() => setVisible(true)}>
+                onPress={() => {
+                  //setVisible(true)
+                }}>
                 모달띠우기
               </Button>
-            {/*</Form>*/}
+            </Form>
           </ScrollView>
         </SafeAreaView>
       </>

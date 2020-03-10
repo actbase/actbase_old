@@ -61,7 +61,7 @@ const Form = React.forwardRef((props: FormProps, onRef: any) => {
     });
   }, []);
 
-  const submit = React.useCallback(async () => {
+  const submit = async () => {
     const elements = Object.values(items?.current).filter(v => !!v.options?.name);
 
     let formErrors: FieldError[] = [];
@@ -107,7 +107,7 @@ const Form = React.forwardRef((props: FormProps, onRef: any) => {
     forIn(items?.current, v => {
       v.options?.setProps?.({ submitting: false, submitted: true });
     });
-  }, []);
+  };
 
   const refObject = {
     submit,

@@ -20,9 +20,11 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
 
   const handleRef = (el: any) => {
     nodeRef.current = el;
-    formContext.subscribe?.(nameRef, el, {
-      setProps,
-    });
+    if (type !== 'button' && !(oProps.onPress || oProps.onClick)) {
+      formContext.subscribe?.(nameRef, el, {
+        setProps,
+      });
+    }
   };
 
   React.useEffect(() => {
