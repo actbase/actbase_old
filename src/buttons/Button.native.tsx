@@ -99,7 +99,7 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
       console.warn(e);
       setProcess(0);
     }
-  }, [process]);
+  }, [process, formContext]);
 
   /*** to Render ***/
   const r = getResource(STYLE_GROUP_NAME);
