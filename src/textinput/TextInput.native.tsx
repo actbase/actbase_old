@@ -27,7 +27,7 @@ const propTemplate: { [key: string]: any } = {
   },
 };
 
-const TextField = React.forwardRef((props: InputProps) => {
+const TextField = React.forwardRef((props: InputProps, onRef: any) => {
   const {
     type,
     tpl,
@@ -171,6 +171,14 @@ const TextField = React.forwardRef((props: InputProps) => {
   const clearMode1 = focused && clearButtonMode === 'while-editing';
   const clearMode2 = !focused && clearButtonMode === 'unless-editing';
   const clearButtonEnabled = clearButtonMode !== 'never' && (clearButtonMode === 'always' || clearMode1 || clearMode2);
+
+  const refObject = {};
+
+  if (typeof onRef === 'function') {
+    onRef?.(refObject);
+  } else if (onRef && Object.keys(onRef).indexOf('current') >= 0) {
+    onRef.current = refObject;
+  }
 
   return (
     <View style={pick(elementStyle, MARGIN_STYLES)}>
