@@ -135,6 +135,15 @@ const App = () => {
 
               <Button
                 type={'button'}
+                onPress={async () => {
+                  await sleep(3000);
+                  alert('a');
+                }}>
+                wait
+              </Button>
+
+              <Button
+                type={'button'}
                 tpl={'link'}
                 onPress={() => {
                   //setVisible(true)

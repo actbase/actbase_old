@@ -9,7 +9,7 @@ import getResource from '../common/res.native';
 
 const STYLE_GROUP_NAME = 'ab-button';
 
-const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
+const Button: React.FC<ButtonProps> = (iProps: ButtonProps, onRef: any) => {
   const { type, tpl, style, children, disabled, onPressIn, onPressOut, forceInset, ...oProps } = iProps;
 
   /** Form Context Sync **/
@@ -129,14 +129,22 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps) => {
     innerStyle = pick(elementStyle, ['height', 'minHeight', 'maxHeight', 'alignItems', 'justifyContent']);
   }
 
+  const refObject = {};
+
+  if (typeof onRef === 'function') {
+    onRef?.(refObject);
+  } else if (onRef && Object.keys(onRef).indexOf('current') >= 0) {
+    onRef.current = refObject;
+  }
+
   return (
     <TouchableWithoutFeedback
       ref={handleRef}
+      {...oProps}
+      disabled={process > 0 || disabled || extraProps?.submitting}
       onPress={handleClick}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      disabled={process > 0 || disabled || extraProps?.submitting}
-      {...oProps}
     >
       <Element1 style={coverStyle} {...args}>
         <Element2 style={innerStyle} children={contents} />
