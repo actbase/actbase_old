@@ -89,7 +89,7 @@ const App = () => {
         </Modal>
 
         <SafeAreaView style={{flex: 1}}>
-          <ScrollView style={{flex: 1}}>
+          <ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
             <Button
               type={'button'}
               tpl={'link'}
@@ -98,7 +98,7 @@ const App = () => {
             </Button>
 
             <Form
-              style={{padding: 20}}
+              style={{padding: 20, flex: 1}}
               onSubmit={async data => {
                 await sleep(3000);
                 alert(JSON.stringify(data));
@@ -150,6 +150,19 @@ const App = () => {
                 }}>
                 모달띠우기
               </Button>
+
+              <View style={{flex: 1}} />
+
+              <View>
+                <Select
+                  name={'select'}
+                  value={'1'}
+                  placeholder={'입력하세여..'}>
+                  <Option value={'1'}>가나다</Option>
+                  <Option value={'2'}>123123123</Option>
+                  <Option value={'3'}>abcdefg</Option>
+                </Select>
+              </View>
             </Form>
           </ScrollView>
         </SafeAreaView>

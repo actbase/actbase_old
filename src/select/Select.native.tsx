@@ -14,7 +14,16 @@ import { ExtraProps } from '../form/res/types';
 import { OptionProps, SelectProps } from './res/types';
 import useError from '../inputs/useError';
 import Absolute from '../apps/Absolute';
-import { measure, MeasureResult } from '../common/utils';
+import { getWindowSize, measure } from '../common/utils';
+
+export interface OffsetProps {
+  left: number;
+  top: any;
+  bottom: any;
+  width: number;
+  height: number;
+  reverse: boolean;
+}
 
 const STYLE_GROUP_NAME = 'ab-select';
 
@@ -89,9 +98,27 @@ const Select = (props: SelectProps) => {
   const hitClassNames = [`${STYLE_GROUP_NAME}-hint`];
 
   /*** event listener ***/
-  const [offsets, setOffsets] = React.useState<MeasureResult | null>(null);
+  const [offsets, setOffsets] = React.useState<OffsetProps | null>(null);
   const handlePress = async () => {
-    setOffsets(await measure(nodeRef.current));
+    const size = await getWindowSize();
+    const pos = await measure(nodeRef.current);
+
+    const offsets: OffsetProps = {
+      top: (pos?.pageY || 0) + (pos?.height || 0) + 5,
+      bottom: 'auto',
+      left: pos?.pageX,
+      width: pos?.width,
+      height: pos?.height,
+      reverse: false,
+    };
+
+    if (size.height - pos.pageY < 200 + pos.height) {
+      offsets.reverse = true;
+      offsets.top = 'auto'; //pos.pageY;// - (200 + pos.height + 5);
+      offsets.bottom = size.height - pos.pageY + 5;
+    }
+
+    setOffsets(offsets);
     Animated.timing(anim.current, {
       toValue: 1,
       duration: 200,
@@ -130,7 +157,7 @@ const Select = (props: SelectProps) => {
 
   const translateY = anim.current.interpolate({
     inputRange: [0, 1],
-    outputRange: [-20, 0],
+    outputRange: offsets?.reverse ? [20, 0] : [-20, 0],
   });
 
   return (
@@ -172,8 +199,9 @@ const Select = (props: SelectProps) => {
           <View
             style={{
               position: 'absolute',
-              top: (offsets?.pageY || 0) + (offsets?.height || 0) + 5,
-              left: offsets?.pageX,
+              top: offsets?.top,
+              bottom: offsets?.bottom,
+              left: offsets?.left,
             }}
           >
             <Animated.ScrollView

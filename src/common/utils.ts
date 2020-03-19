@@ -16,6 +16,7 @@ export interface MeasureResult {
   pageY: number;
 }
 
+
 export interface ScaledSize {
   width: number;
   height: number;

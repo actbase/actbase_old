@@ -61,7 +61,7 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps, onRef: any) => {
   }, []);
 
   const [process, setProcess] = useState(0);
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     if (process > 0) return;
     setProcess(1);
 
@@ -99,7 +99,7 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps, onRef: any) => {
       console.warn(e);
       setProcess(0);
     }
-  }, [process, formContext]);
+  };
 
   /*** to Render ***/
   const r = getResource(STYLE_GROUP_NAME);
