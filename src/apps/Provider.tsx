@@ -1,13 +1,13 @@
-// import { OverrideData, setOverride } from './styles.data';
-// import View from '../web/View';
 import * as React from 'react';
 import { useEffect, useMemo } from 'react';
 import { ABContext, ContextArgs } from '../common/utils';
 import { setOverride } from './ResourceManager';
 import View from '../web/View';
 
-const ABApp = React.memo((props: any) => {
-  const [nodes, setNodes] = React.useState<React.ReactNode[]>([]);
+const ABApp = (props: any) => {
+  const [nodeIdx, setNodeIdx] = React.useState();
+  console.log('nodeIdx', nodeIdx);
+  const nodes = React.useRef<React.ReactNode[]>([]);
 
   const { styles, assets } = props;
   useEffect(() => {
@@ -15,40 +15,45 @@ const ABApp = React.memo((props: any) => {
     setOverride('assets', assets);
   }, [styles, assets]);
 
-  const attach = React.useCallback((node: React.ReactNode) => {
-    setNodes([...nodes, node]);
-    return nodes.length + 1;
-  }, []);
+  const attach = (node: React.ReactNode, idx?: number | undefined): number => {
+    if (idx) {
+      nodes.current.splice(idx - 1);
+    }
 
-  const detach = React.useCallback((arg: React.ReactNode | number) => {
+    nodes.current = [...nodes?.current, node];
+
+    const nidx = nodes.current.length;
+    setNodeIdx(nidx);
+    return nidx;
+  };
+
+  const detach = (arg: React.ReactNode | number) => {
     if (typeof arg === 'number') {
       const index = arg;
       if (index >= 0) {
-        const items = [...nodes];
-        items.splice(index, 1);
-        setNodes(items);
+        const items = [...nodes.current];
+        items.splice(index - 1);
+
+        nodes.current = items;
+        const idx = nodes.current.length;
+        setNodeIdx(idx);
       }
     }
-  }, []);
-
-  // const replace = React.useCallback((node: React.ReactNode, index: number) => {
-  //   // nodes.current?.splice(index, 1, node);
-  //   // setNodeSize(nodes.current.length);
-  // }, []);
+  };
 
   const pop = React.useCallback(() => {
+    // return absoluteManager.current?.pop();
     // nodes.current?.splice(nodes.current?.length - 2, 1);
     // setNodeSize(nodes.current.length);
   }, []);
 
-  //replace,
   const value: ContextArgs = useMemo(() => ({ attach, detach, pop }), []);
 
   return (
     <ABContext.Provider value={value}>
       <>
         {props.children}
-        {nodes?.map((node, index) => (
+        {nodes.current?.map((node, index) => (
           <View key={`${index}`} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
             {node}
           </View>
@@ -56,50 +61,6 @@ const ABApp = React.memo((props: any) => {
       </>
     </ABContext.Provider>
   );
-});
+};
 
-//
-// const ABApp = (RootComponent: React.ComponentType, override: OverrideData): React.FC => {
-//   setOverride(override);
-//
-//   const HoC = (props: any): React.ReactElement => {
-//     const nodes = useRef<React.ReactNode[]>([]);
-//     const setNodeSize = React.useState<number>(0)[1];
-//
-//     const attach = useCallback((node: React.ReactNode) => {
-//       nodes.current.push(node);
-//       setNodeSize(nodes.current.length);
-//     }, []);
-//
-//     const detach = useCallback((node: React.ReactNode) => {
-//       const index = nodes.current.indexOf(node);
-//       if (index >= 0) {
-//         nodes.current?.splice(index, 1);
-//       }
-//       setNodeSize(nodes.current.length);
-//     }, []);
-//
-//     const pop = useCallback(() => {
-//       nodes.current?.splice(nodes.current?.length - 2, 1);
-//       setNodeSize(nodes.current.length);
-//     }, []);
-//
-//     const value: ContextArgs = { attach, detach, pop };
-//     return (
-//       <ABContext.Provider value={value}>
-//         <>
-//           <RootComponent {...props} />
-//           {nodes?.current?.map((node, index) => (
-//             <View key={`${index}`} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-//               {node}
-//             </View>
-//           ))}
-//         </>
-//       </ABContext.Provider>
-//     );
-//   };
-//
-//   return HoC;
-// };
-//
-export default ABApp;
+export default React.memo(ABApp);

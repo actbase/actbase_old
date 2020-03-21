@@ -1,13 +1,12 @@
+import { ABEProps } from '../../apps/res/props';
 
-export interface ButtonProps {
+export interface ButtonProps extends ABEProps {
   type: 'button' | 'submit';
-  tpl?: string;
   disabled: boolean;
-  onPress?: () => any;
   onClick?: () => any;
+  onPress?: () => any;
   onPressIn?: (e: any) => any;
   onPressOut?: (e: any) => any;
   forceInset: any;
-  style?: any;
   children?: any;
 }

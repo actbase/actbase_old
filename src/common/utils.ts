@@ -1,31 +1,10 @@
 import * as React from 'react';
 import { ReactNode } from 'react';
+import { AbsoluteComponent, MeasureResult, ScaledSize } from '../apps/res/props';
 
-export interface AbsoluteComponent {
-  child: any;
-  x: number;
-  y: number;
-}
-
-export interface MeasureResult {
-  originX: number;
-  originY: number;
-  width: number;
-  height: number;
-  pageX: number;
-  pageY: number;
-}
-
-
-export interface ScaledSize {
-  width: number;
-  height: number;
-  scale: number;
-  fontScale: number;
-}
 
 export interface ContextArgs {
-  attach?: (node: ReactNode) => number;
+  attach?: (node: ReactNode, idx?: number | undefined) => number;
   detach?: (node: ReactNode) => void;
   pop?: () => void;
   replace?: (node: ReactNode, index: number) => void;

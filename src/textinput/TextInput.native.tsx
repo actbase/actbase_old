@@ -58,7 +58,6 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
 
   const handleRef = (el: any) => {
     nodeRef.current = el;
-    // ref = el;
     formContext.subscribe?.(nameRef, el, {
       name,
       setProps,

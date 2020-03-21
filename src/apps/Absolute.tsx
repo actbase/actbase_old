@@ -1,10 +1,9 @@
-import React, { useCallback, useContext, useRef } from 'react';
-import isEqual from 'lodash/isEqual';
-import View from '../web/View';
+import React, { useCallback, useContext, useState } from 'react';
 import { ABContext } from '../common/utils';
 
 interface AbsoluteProps {
   isVisible: boolean;
+  name?: string;
   children: React.ReactNode;
   left?: number;
   top?: number;
@@ -12,33 +11,34 @@ interface AbsoluteProps {
 }
 
 const Absolute: React.FC<AbsoluteProps> = (props: AbsoluteProps) => {
-  const { isVisible, children, left, top, onClose } = props;
+  const { isVisible, children } = props;
   const context = useContext(ABContext);
-  const idx = useRef<number | undefined>(-1);
+  const [idx, setIdx] = useState<number>(-1);
 
   const dispose = useCallback(() => {
-    if (context.detach && typeof idx.current === 'number' && idx.current >= 0) {
-      context.detach(idx.current);
+    console.log('dispose', idx, props);
+    if (context.detach && idx >= 0) {
+      context.detach(idx);
     }
-  }, []);
+  }, [idx]);
 
   React.useEffect(() => {
-    dispose();
-
     if (isVisible) {
-      idx.current = context.attach?.(children);
+      if (idx < 0) {
+        setIdx(context.attach?.(children) || -1);
+      } else {
+        context.attach?.(children, idx);
+      }
     }
-  }, [isVisible, children, left, top, onClose]);
+
+    if (isVisible && idx < 0) {
+    } else if (!isVisible && idx > 0) {
+      dispose();
+    }
+  }, [isVisible, children, idx]);
 
   React.useEffect(() => dispose, []);
-  return <View />;
+  return <></>;
 };
 
-Absolute.defaultProps = {
-  left: 0,
-  top: 0,
-};
-
-export default React.memo(Absolute, (prevProps, nextProps) => {
-  return isEqual(prevProps, nextProps);
-});
+export default Absolute;
