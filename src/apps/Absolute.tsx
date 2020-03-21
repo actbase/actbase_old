@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import { ABContext } from '../common/utils';
 
 interface AbsoluteProps {
@@ -13,29 +13,27 @@ interface AbsoluteProps {
 const Absolute: React.FC<AbsoluteProps> = (props: AbsoluteProps) => {
   const { isVisible, children } = props;
   const context = useContext(ABContext);
-  const [idx, setIdx] = useState<number>(-1);
+  const idx = useRef<number>(-1);
 
   const dispose = useCallback(() => {
-    console.log('dispose', idx, props);
-    if (context.detach && idx >= 0) {
+    console.log('dispose', context, idx);
+    if (context.detach && idx.current >= 0) {
       context.detach(idx);
+      idx.current = -1;
     }
-  }, [idx]);
+  }, []);
 
   React.useEffect(() => {
     if (isVisible) {
-      if (idx < 0) {
-        setIdx(context.attach?.(children) || -1);
+      if (idx.current < 0) {
+        idx.current = context.attach?.(children) || -1;
       } else {
-        context.attach?.(children, idx);
+        context.attach?.(children, idx.current);
       }
-    }
-
-    if (isVisible && idx < 0) {
-    } else if (!isVisible && idx > 0) {
+    } else {
       dispose();
     }
-  }, [isVisible, children, idx]);
+  }, [isVisible, children]);
 
   React.useEffect(() => dispose, []);
   return <></>;

@@ -37,6 +37,7 @@ const Forms = () => {
             width: 200,
             height: 200,
           }}>
+          <Text>222</Text>
           <Select name={'select'} value={'1'} placeholder={'입력하세여..'}>
             <Option value={'1'}>가나다</Option>
             <Option value={'2'}>123123123</Option>

@@ -17,14 +17,14 @@ const ABApp = (props: any) => {
 
   const attach = (node: React.ReactNode, idx?: number | undefined): number => {
     if (idx) {
-      nodes.current.splice(idx - 1);
+      nodes.current[idx - 1] = node;
+    } else {
+      nodes.current = [...nodes?.current, node];
     }
 
-    nodes.current = [...nodes?.current, node];
-
     const nidx = nodes.current.length;
-    setNodeIdx(nidx);
-    return nidx;
+    setNodeIdx({ nidx: nidx });
+    return idx || nidx;
   };
 
   const detach = (arg: React.ReactNode | number) => {
@@ -32,11 +32,13 @@ const ABApp = (props: any) => {
       const index = arg;
       if (index >= 0) {
         const items = [...nodes.current];
-        items.splice(index - 1);
+        items.splice(index - 1, items.length - index);
+
+        console.log("splices", index - 1, items.length - index);
 
         nodes.current = items;
         const idx = nodes.current.length;
-        setNodeIdx(idx);
+        setNodeIdx({ nidx: idx });
       }
     }
   };
@@ -54,7 +56,10 @@ const ABApp = (props: any) => {
       <>
         {props.children}
         {nodes.current?.map((node, index) => (
-          <View key={`${index}`} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+          <View
+            key={`${index}`}
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,0,0,0.2)' }}
+          >
             {node}
           </View>
         ))}
