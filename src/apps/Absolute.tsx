@@ -16,9 +16,8 @@ const Absolute: React.FC<AbsoluteProps> = (props: AbsoluteProps) => {
   const idx = useRef<number>(-1);
 
   const dispose = useCallback(() => {
-    console.log('dispose', context, idx);
     if (context.detach && idx.current >= 0) {
-      context.detach(idx);
+      context.detach(idx.current);
       idx.current = -1;
     }
   }, []);
