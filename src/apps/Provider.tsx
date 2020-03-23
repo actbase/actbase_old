@@ -6,6 +6,7 @@ import View from '../web/View';
 
 const ABApp = (props: any) => {
   const [, setNodeIdx] = React.useState();
+  const [dimen, setDimen] = React.useState({});
   const nodes = React.useRef<React.ReactNode[]>([]);
 
   const { styles, assets } = props;
@@ -16,6 +17,7 @@ const ABApp = (props: any) => {
 
   const value: ContextArgs = useMemo(
     () => ({
+      dimen,
       attach: (node: React.ReactNode, idx?: number | undefined): number => {
         if (idx) {
           nodes.current[idx - 1] = node;
@@ -43,19 +45,21 @@ const ABApp = (props: any) => {
         // setNodeSize(nodes.current.length);
       },
     }),
-    [],
+    [dimen],
   );
 
   return (
     <ABContext.Provider value={value}>
-      <>
+      <View onLayout={({ nativeEvent }) => {
+        setDimen({ height: nativeEvent?.layout.height, y: nativeEvent?.layout.y })
+      }} style={{ flex: 1 }}>
         {props.children}
         {nodes.current?.map((node, index) => (
           <View key={`${index}`} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
             {node}
           </View>
         ))}
-      </>
+      </View>
     </ABContext.Provider>
   );
 };

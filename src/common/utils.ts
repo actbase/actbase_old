@@ -4,6 +4,7 @@ import { AbsoluteComponent, MeasureResult, ScaledSize } from '../apps/res/props'
 
 
 export interface ContextArgs {
+  dimen?: any;
   attach?: (node: ReactNode, idx?: number | undefined) => number;
   detach?: (node: ReactNode) => void;
   pop?: () => void;

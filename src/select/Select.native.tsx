@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import isArray from 'lodash/isArray';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
@@ -14,7 +14,7 @@ import { ExtraProps } from '../form/res/types';
 import { OptionProps, SelectProps } from './res/types';
 import useError from '../inputs/useError';
 import Absolute from '../apps/Absolute';
-import { getWindowSize, measure } from '../common/utils';
+import { ABContext, getWindowSize, measure } from '../common/utils';
 
 export interface OffsetProps {
   left: number;
@@ -98,10 +98,15 @@ const Select = (props: SelectProps) => {
   const hitClassNames = [`${STYLE_GROUP_NAME}-hint`];
 
   /*** event listener ***/
+  const abContext = React.useContext(ABContext);
   const [offsets, setOffsets] = React.useState<OffsetProps | null>(null);
   const handlePress = async () => {
     const size = await getWindowSize();
     const pos = await measure(nodeRef.current);
+
+    if (Platform.OS === 'android' && size.height != abContext?.dimen?.height) {
+      size.height = abContext.dimen.height;
+    }
 
     const offsets: OffsetProps = {
       top: (pos?.pageY || 0) + (pos?.height || 0) + 5,
@@ -116,6 +121,7 @@ const Select = (props: SelectProps) => {
       offsets.reverse = true;
       offsets.top = 'auto'; //pos.pageY;// - (200 + pos.height + 5);
       offsets.bottom = size.height - pos.pageY + 5;
+      console.log(offsets, size, pos);
     }
 
     setOffsets(offsets);
