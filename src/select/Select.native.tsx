@@ -128,12 +128,14 @@ const Select = (props: SelectProps) => {
     Animated.timing(anim.current, {
       toValue: 1,
       duration: 200,
+      useNativeDriver: true,
     }).start();
   };
   const handleRelease = (option?: any) => {
     Animated.timing(anim.current, {
       toValue: 0,
       duration: 150,
+      useNativeDriver: true,
     }).start(() => {
       setOffsets(null);
     });

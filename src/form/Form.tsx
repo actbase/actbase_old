@@ -28,7 +28,7 @@ const Form = React.forwardRef((props: FormProps, onRef: any) => {
   const [lastLayout, setLastLayout] = React.useState({});
   const { onLayout, ...oProps } = props;
 
-  const handleLayout = React.useCallback(async e => {
+  const handleLayout = async (e: any) => {
     onLayout && onLayout(e);
     const { width, height } = e.nativeEvent.layout;
     const pos = { width, height };
@@ -59,7 +59,7 @@ const Form = React.forwardRef((props: FormProps, onRef: any) => {
       }
       v.options?.setProps?.(args);
     });
-  }, []);
+  };
 
   const submit = async () => {
     const elements = Object.values(items?.current).filter(v => !!v.options?.name);

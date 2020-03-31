@@ -65,6 +65,8 @@ export const COVER_STYLE_NAMES: string[] = [
   'borderRightColor',
   'borderBottomWidth',
   'borderBottomColor',
+  'borderStartColor',
+  'borderEndColor',
   'backgroundColor',
 ];
 

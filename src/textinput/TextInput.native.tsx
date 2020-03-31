@@ -120,7 +120,7 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
         (validateMode == 'submit' && extraProps.submitted);
       if (validateEnabled) onValidate(text, null);
     },
-    [extraProps, validateMode],
+    [extraProps, validateMode, onValidate],
   );
 
   const handleFocus = useCallback(
@@ -131,7 +131,7 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
       const validateEnabled = validateMode === 'focus';
       if (validateEnabled) onValidate(text, null);
     },
-    [text, validateMode],
+    [text, validateMode, onValidate],
   );
 
   const handleBlur = useCallback(
@@ -142,7 +142,7 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
       const validateEnabled = validateMode === 'blur';
       if (validateEnabled) onValidate(text, null);
     },
-    [text, validateMode],
+    [text, validateMode, onValidate],
   );
 
   const handleClear = () => {
