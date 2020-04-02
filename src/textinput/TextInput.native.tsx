@@ -74,13 +74,15 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef) => {
       onRef.current = el;
     }
 
+    const { focus, blur } = nodeRef.current;
+
     formContext.subscribe?.(nameRef, el, {
       name,
       setProps,
       getValue,
       onValidate,
-      focus: () => nodeRef.current?.focus(),
-      blur: () => nodeRef.current?.blur(),
+      focus,
+      blur,
     });
   };
 
@@ -95,10 +97,10 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef) => {
   const setProps = React.useCallback(
     (props: ExtraProps) => {
       if (!isEqual(props, extraProps)) {
-        setExtraProps(p => ({ ...p, ...props }));
+        setExtraProps(p => Object.assign({ ...p, ...props }, multiline ? { onSubmitEditing: () => false } : {}));
       }
     },
-    [extraProps],
+    [extraProps, multiline],
   );
   /** Form Context Sync **/
 
