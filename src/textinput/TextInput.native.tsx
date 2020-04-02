@@ -1,6 +1,14 @@
 import React, { useCallback, useState } from 'react';
 
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+} from 'react-native';
 import isEqual from 'lodash/isEqual';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
@@ -11,10 +19,11 @@ import { InputProps } from '../inputs/res/types';
 import { ExtraProps } from '../form/res/types';
 import useError from '../inputs/useError';
 import getResource from '../common/res.native';
+import { TextInputProps } from 'react-native';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
-const propTemplate: { [key: string]: any } = {
+const propTemplate: { [key: string]: TextInputProps } = {
   email: {
     keyboardType: 'email-address',
     autoCorrect: false,
@@ -27,7 +36,7 @@ const propTemplate: { [key: string]: any } = {
   },
 };
 
-const TextField = React.forwardRef((props: InputProps, onRef: any) => {
+const TextField = React.forwardRef<TextInput, InputProps>((props, onRef) => {
   const {
     type,
     tpl,
@@ -54,10 +63,17 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
   const [error, onValidate] = useError(validators);
 
   const nameRef = React.useRef<number>(0);
-  const nodeRef = React.useRef<any>();
+  const nodeRef = React.useRef<TextInput>();
 
-  const handleRef = (el: any) => {
+  const handleRef = (el: TextInput) => {
     nodeRef.current = el;
+
+    if (typeof onRef === 'function') {
+      onRef(el);
+    } else if (onRef && Object.keys(onRef).indexOf('current') >= 0) {
+      onRef.current = el;
+    }
+
     formContext.subscribe?.(nameRef, el, {
       name,
       setProps,
@@ -87,7 +103,7 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
   /** Form Context Sync **/
 
   const [data, setData] = React.useState<string | null | undefined>(value || initValue);
-  const text = value || data;
+  const text = value || data || '';
 
   const getValue = React.useCallback(() => {
     return text;
@@ -124,7 +140,7 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
   );
 
   const handleFocus = useCallback(
-    (e: any) => {
+    (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       setFocused(true);
       onFocus && onFocus(e);
 
@@ -135,7 +151,7 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
   );
 
   const handleBlur = useCallback(
-    (e: any) => {
+    (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       setFocused(false);
       onBlur && onBlur(e);
 
@@ -170,14 +186,6 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
   const clearMode1 = focused && clearButtonMode === 'while-editing';
   const clearMode2 = !focused && clearButtonMode === 'unless-editing';
   const clearButtonEnabled = clearButtonMode !== 'never' && (clearButtonMode === 'always' || clearMode1 || clearMode2);
-
-  const refObject = {};
-
-  if (typeof onRef === 'function') {
-    onRef?.(refObject);
-  } else if (onRef && Object.keys(onRef).indexOf('current') >= 0) {
-    onRef.current = refObject;
-  }
 
   return (
     <View style={pick(elementStyle, MARGIN_STYLES)}>

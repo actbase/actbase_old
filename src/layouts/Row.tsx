@@ -22,7 +22,7 @@ export const RowContext: React.Context<RowContextProps> = React.createContext<Ro
   gutter: [10, 10],
 });
 
-const Row: React.FC<RowProps> = (props: RowProps): React.ReactElement => {
+const Row: React.FC<RowProps> = props => {
   const { style, align, justify, ...oProps } = props;
 
   const r = getResource(STYLE_GROUP_NAME);
@@ -58,7 +58,7 @@ const Row: React.FC<RowProps> = (props: RowProps): React.ReactElement => {
   }
 
   return (
-    <RowContext.Provider value={{ gutter: gutter }}>
+    <RowContext.Provider value={{ gutter }}>
       <View style={style}>
         <View style={[r.styles[`${STYLE_GROUP_NAME}-row`], extStyle]} {...oProps} />
       </View>

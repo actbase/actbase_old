@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ReturnKeyTypeOptions, NativeSyntheticEvent, TextInputSubmitEditingEventData } from 'react-native';
 
 export interface FormProps {
   style?: any;
@@ -43,8 +44,8 @@ export interface ChildOption {
 }
 
 export interface ExtraProps {
-  returnKeyType?: string;
-  onSubmitEditing?: any;
+  returnKeyType?: ReturnKeyTypeOptions;
+  onSubmitEditing?: (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => void;
   submitting?: boolean;
   submitted?: boolean;
   hint?: string;

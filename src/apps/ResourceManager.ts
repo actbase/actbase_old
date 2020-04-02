@@ -4,9 +4,14 @@ import * as R_LAYOUT_DATA from '../layouts/res/styles';
 import * as R_BUTTON_DATA from '../buttons/res/styles';
 import * as R_TEXT_INPUT_DATA from '../textinput/res/styles';
 import * as R_SELECT_DATA from '../select/res/styles';
+import { StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 
 export interface AnyObject {
   [key: string]: any;
+}
+
+export interface StyleObject {
+  [key: string]: StyleProp<ViewStyle | TextStyle | ImageStyle>;
 }
 
 export const R_LAYOUT_NAME: string = 'ab-layout';

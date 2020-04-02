@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Platform, StyleSheet, Text, TouchableOpacity, View, GestureResponderEvent } from 'react-native';
 import isArray from 'lodash/isArray';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
@@ -42,7 +42,7 @@ const COVER_STYLES = [
   'backgroundColor',
 ];
 
-const Select = (props: SelectProps) => {
+const Select = <T extends unknown>(props: SelectProps<T>) => {
   const { name, tpl, style, placeholder, value, initValue, validators, hintStyle, onChangeValue } = props;
 
   /** Form Context Sync **/
@@ -50,9 +50,9 @@ const Select = (props: SelectProps) => {
   const [error, onValidate] = useError(validators);
 
   const nameRef = React.useRef<number>(0);
-  const nodeRef = React.useRef<any>();
+  const nodeRef = React.useRef<TouchableOpacity>();
 
-  const handleRef = (el: any) => {
+  const handleRef = (el: TouchableOpacity) => {
     nodeRef.current = el;
     formContext.subscribe?.(nameRef, el, {
       name,
@@ -81,10 +81,10 @@ const Select = (props: SelectProps) => {
   /** Form Context Sync **/
 
   const children = isArray(props.children) ? props.children : [props.children];
-  const options: OptionProps[] =
+  const options: OptionProps<T>[] =
     props.options || children.map(element => ({ value: element?.props.value, view: element?.props.children }));
 
-  const [data, setData] = React.useState<OptionProps | null | undefined>(
+  const [data, setData] = React.useState<OptionProps<T> | null | undefined>(
     options?.find(v => v?.value === value || v?.value === initValue),
   );
   const selected = options?.find(v => v?.value === value) || data;
@@ -131,7 +131,13 @@ const Select = (props: SelectProps) => {
       useNativeDriver: true,
     }).start();
   };
-  const handleRelease = (option?: any) => {
+
+  const isOption = (option: GestureResponderEvent | OptionProps<T> | null | undefined): option is OptionProps<T> => {
+    if (option) return 'value' in option;
+    else return false;
+  };
+
+  const handleRelease = (option: GestureResponderEvent | OptionProps<T> | null | undefined) => {
     Animated.timing(anim.current, {
       toValue: 0,
       duration: 150,
@@ -140,14 +146,14 @@ const Select = (props: SelectProps) => {
       setOffsets(null);
     });
 
-    if (option?.value) {
+    if (isOption(option)) {
       setData(option);
       onChangeValue?.(option);
     }
   };
 
   /*** to Render ***/
-  const anim = React.useRef(new Animated.Value(0));
+  const anim = React.useRef<Animated.Value>(new Animated.Value(0));
   const r = getResource(STYLE_GROUP_NAME);
 
   const elementStyle = StyleSheet.flatten(
