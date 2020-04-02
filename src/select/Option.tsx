@@ -1,7 +1,7 @@
 import React from 'react';
 import { OptionProps } from './res/types';
 
-const Option: React.FC<OptionProps> = () => {
+const Option: React.FC = <T extends unknown>(_props: OptionProps<T>) => {
   return null;
 };
 
