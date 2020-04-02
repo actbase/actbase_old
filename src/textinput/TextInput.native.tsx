@@ -27,7 +27,7 @@ const propTemplate: { [key: string]: any } = {
   },
 };
 
-const TextField = React.forwardRef((props: InputProps, onRef: any) => {
+const TextField = React.forwardRef<TextInput, InputProps>((props, onRef) => {
   const {
     type,
     tpl,
@@ -54,10 +54,17 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
   const [error, onValidate] = useError(validators);
 
   const nameRef = React.useRef<number>(0);
-  const nodeRef = React.useRef<any>();
+  const nodeRef = React.useRef<TextInput>();
 
-  const handleRef = (el: any) => {
+  const handleRef = (el: TextInput) => {
     nodeRef.current = el;
+
+    if (typeof onRef === 'function') {
+      onRef(el);
+    } else if (onRef && Object.keys(onRef).indexOf('current') >= 0) {
+      onRef.current = el;
+    }
+
     formContext.subscribe?.(nameRef, el, {
       name,
       setProps,
@@ -170,14 +177,6 @@ const TextField = React.forwardRef((props: InputProps, onRef: any) => {
   const clearMode1 = focused && clearButtonMode === 'while-editing';
   const clearMode2 = !focused && clearButtonMode === 'unless-editing';
   const clearButtonEnabled = clearButtonMode !== 'never' && (clearButtonMode === 'always' || clearMode1 || clearMode2);
-
-  const refObject = {};
-
-  if (typeof onRef === 'function') {
-    onRef?.(refObject);
-  } else if (onRef && Object.keys(onRef).indexOf('current') >= 0) {
-    onRef.current = refObject;
-  }
 
   return (
     <View style={pick(elementStyle, MARGIN_STYLES)}>
