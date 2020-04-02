@@ -10,7 +10,7 @@ interface AbsoluteProps {
   onClose?: () => void;
 }
 
-const Absolute: React.FC<AbsoluteProps> = (props: AbsoluteProps) => {
+const Absolute: React.FC<AbsoluteProps> = props => {
   const { isVisible, children } = props;
   const context = useContext(ABContext);
   const idx = useRef<number>(-1);

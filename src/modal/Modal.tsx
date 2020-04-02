@@ -1,23 +1,22 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import { Animated, StyleSheet, TouchableOpacity, ViewProps } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Animated, StyleSheet, TouchableOpacity, ViewProps, BackHandler } from 'react-native';
 import { getWindowSize } from '../common/utils';
 import Absolute from '../apps/Absolute';
 
 export interface ModalProps extends ViewProps {
-  children: ReactNode;
   isVisible: boolean;
-  onModalShow: () => void;
-  onModalWillShow: () => void;
-  onModalHide: () => void;
-  onModalWillHide: () => void;
-  onBackButtonPress: () => void;
-  onBackdropPress: () => void;
+  onModalShow?: () => void;
+  onModalWillShow?: () => void;
+  onModalHide?: () => void;
+  onModalWillHide?: () => void;
+  onBackButtonPress?: () => void;
+  onBackdropPress?: () => void;
 }
 
-const Modal = (props: ModalProps) => {
-  const { isVisible, children, onBackdropPress } = props;
-  const anim = React.useRef(new Animated.Value(0));
-  const [visible, setVisible] = useState(false);
+const Modal: React.FC<ModalProps> = props => {
+  const { isVisible, children, onBackdropPress, onBackButtonPress } = props;
+  const anim = React.useRef<Animated.Value>(new Animated.Value(0));
+  const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (isVisible) {
@@ -45,6 +44,13 @@ const Modal = (props: ModalProps) => {
     outputRange: [size.height, 0],
   });
 
+  React.useEffect(() => {
+    if (onBackButtonPress) BackHandler.addEventListener('hardwareBackPress', onBackButtonPress);
+    return () => {
+      if (onBackButtonPress) BackHandler.removeEventListener('hardwareBackPress', onBackButtonPress);
+    };
+  }, [onBackButtonPress]);
+
   return (
     <Absolute isVisible={visible}>
       <Animated.ScrollView
@@ -65,6 +71,10 @@ const Modal = (props: ModalProps) => {
       </Animated.ScrollView>
     </Absolute>
   );
+};
+
+Modal.defaultProps = {
+  onBackButtonPress: () => false,
 };
 
 export default Modal;

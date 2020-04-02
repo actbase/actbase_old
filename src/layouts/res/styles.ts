@@ -1,8 +1,8 @@
-import { AnyObject } from '../../apps/ResourceManager';
+import { StyleObject } from '../../apps/ResourceManager';
 
-export const assets: AnyObject = {};
+export const assets: StyleObject = {};
 
-export const styles: AnyObject = {
+export const styles: StyleObject = {
   'ab-layout-row': {
     display: 'flex',
     flexDirection: 'row',

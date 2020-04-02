@@ -1,6 +1,14 @@
 import React, { useCallback, useState } from 'react';
 
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+} from 'react-native';
 import isEqual from 'lodash/isEqual';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
@@ -11,10 +19,11 @@ import { InputProps } from '../inputs/res/types';
 import { ExtraProps } from '../form/res/types';
 import useError from '../inputs/useError';
 import getResource from '../common/res.native';
+import { TextInputProps } from 'react-native';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
-const propTemplate: { [key: string]: any } = {
+const propTemplate: { [key: string]: TextInputProps } = {
   email: {
     keyboardType: 'email-address',
     autoCorrect: false,
@@ -94,7 +103,7 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef) => {
   /** Form Context Sync **/
 
   const [data, setData] = React.useState<string | null | undefined>(value || initValue);
-  const text = value || data;
+  const text = value || data || '';
 
   const getValue = React.useCallback(() => {
     return text;
@@ -131,7 +140,7 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef) => {
   );
 
   const handleFocus = useCallback(
-    (e: any) => {
+    (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       setFocused(true);
       onFocus && onFocus(e);
 
@@ -142,7 +151,7 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef) => {
   );
 
   const handleBlur = useCallback(
-    (e: any) => {
+    (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       setFocused(false);
       onBlur && onBlur(e);
 

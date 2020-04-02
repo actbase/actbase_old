@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { ABContext, ContextArgs } from '../common/utils';
 import { setOverride } from './ResourceManager';
 import View from '../web/View';
+import { StyleSheet } from 'react-native';
 
 const ABApp = (props: any) => {
   const [, setNodeIdx] = React.useState();
@@ -18,7 +19,7 @@ const ABApp = (props: any) => {
   const value: ContextArgs = useMemo(
     () => ({
       dimen,
-      attach: (node: React.ReactNode, idx?: number | undefined): number => {
+      attach: (node: React.ReactNode, idx?: number): number => {
         if (idx) {
           nodes.current[idx - 1] = node;
         } else {
@@ -29,7 +30,7 @@ const ABApp = (props: any) => {
         setNodeIdx({ nidx: nidx });
         return idx || nidx;
       },
-      detach: (arg: React.ReactNode | number) => {
+      detach: (arg: React.ReactNode | number): void => {
         const index = typeof arg === 'number' ? arg : nodes.current.indexOf(arg);
         if (index >= 0) {
           const items = [...nodes.current];
@@ -50,12 +51,15 @@ const ABApp = (props: any) => {
 
   return (
     <ABContext.Provider value={value}>
-      <View onLayout={({ nativeEvent }) => {
-        setDimen({ height: nativeEvent?.layout.height, y: nativeEvent?.layout.y })
-      }} style={{ flex: 1 }}>
+      <View
+        onLayout={({ nativeEvent }) => {
+          setDimen({ height: nativeEvent?.layout.height, y: nativeEvent?.layout.y });
+        }}
+        style={{ flex: 1 }}
+      >
         {props.children}
         {nodes.current?.map((node, index) => (
-          <View key={`${index}`} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+          <View key={`${index}`} style={StyleSheet.absoluteFill}>
             {node}
           </View>
         ))}

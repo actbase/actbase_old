@@ -3,6 +3,7 @@ import { getWindowSize } from '../common/utils';
 import { RowContext } from './Row';
 import View from '../web/View';
 import getResource from '../common/res.native';
+import { StyleProp, ViewStyle } from 'react-native';
 
 export interface ColProps {
   span: number | 'auto' | 'none';
@@ -11,12 +12,12 @@ export interface ColProps {
   md?: number | 'auto' | 'none';
   lg?: number | 'auto' | 'none';
   xlg?: number | 'auto' | 'none';
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 const STYLE_GROUP_NAME = 'ab-layout';
 
-const Col: React.FC<ColProps> = (props: ColProps): React.ReactElement => {
+const Col: React.FC<ColProps> = props => {
   const { xs, sm, md, lg, xlg, span, ...oProps } = props;
 
   const { width } = getWindowSize();
@@ -36,13 +37,17 @@ const Col: React.FC<ColProps> = (props: ColProps): React.ReactElement => {
     ratio = xlg || span;
   }
 
-  let extraStyle: { [key: string]: any } = {};
+  const extraStyle: StyleProp<ViewStyle> = {};
   if (typeof ratio === 'number') {
-    extraStyle.width = `${100 * (Math.abs(ratio) / 12)}%`;
-    extraStyle.maxWidth = `${100 * (Math.abs(ratio) / 12)}%`;
-    extraStyle.flexGrow = 1;
+    Object.assign(extraStyle, {
+      width: `${100 * (Math.abs(ratio) / 12)}%`,
+      maxWidth: `${100 * (Math.abs(ratio) / 12)}%`,
+      flexGrow: 1,
+    });
   } else if (ratio === 'auto') {
-    extraStyle.flex = 1;
+    Object.assign(extraStyle, {
+      flex: 1,
+    });
   }
 
   const gutterH = rowContext.gutter[0] || 0;
@@ -52,8 +57,8 @@ const Col: React.FC<ColProps> = (props: ColProps): React.ReactElement => {
     <View
       style={[
         r.styles[`${STYLE_GROUP_NAME}-col`],
+        extraStyle,
         {
-          ...extraStyle,
           paddingLeft: gutterH / 2,
           paddingRight: gutterH / 2,
           paddingTop: gutterV / 2,
