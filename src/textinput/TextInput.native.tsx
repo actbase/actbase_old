@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
 
 import {
+  NativeSyntheticEvent,
   StyleSheet,
   Text,
   TextInput,
+  TextInputFocusEventData,
+  TextInputProps,
   TouchableOpacity,
   View,
-  NativeSyntheticEvent,
-  TextInputFocusEventData,
 } from 'react-native';
 import isEqual from 'lodash/isEqual';
 import omit from 'lodash/omit';
@@ -19,7 +20,6 @@ import { InputProps } from '../inputs/res/types';
 import { ExtraProps } from '../form/res/types';
 import useError from '../inputs/useError';
 import getResource from '../common/res.native';
-import { TextInputProps } from 'react-native';
 
 const STYLE_GROUP_NAME = 'ab-input-text';
 
@@ -36,7 +36,7 @@ const propTemplate: { [key: string]: TextInputProps } = {
   },
 };
 
-const TextField = React.forwardRef<TextInput, InputProps>((props, onRef:any) => {
+const TextField = React.forwardRef<TextInput, InputProps>((props, onRef: any) => {
   const {
     type,
     tpl,
@@ -74,15 +74,13 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef:any) => 
       onRef.current = el;
     }
 
-    const { focus, blur } = nodeRef.current;
-
     formContext.subscribe?.(nameRef, el, {
       name,
       setProps,
       getValue,
       onValidate,
-      focus,
-      blur,
+      focus: nodeRef.current?.focus,
+      blur: nodeRef.current?.blur,
     });
   };
 

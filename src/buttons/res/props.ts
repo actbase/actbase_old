@@ -9,4 +9,5 @@ export interface ButtonProps extends ABEProps {
   onPressOut?: (e: any) => any;
   forceInset: any;
   children?: any;
+  delay?: number;
 }

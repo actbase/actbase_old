@@ -10,7 +10,7 @@ import getResource from '../common/res.native';
 const STYLE_GROUP_NAME = 'ab-button';
 
 const Button: React.FC<ButtonProps> = (iProps: ButtonProps, onRef: any) => {
-  const { type, tpl, style, children, disabled, onPressIn, onPressOut, forceInset, ...oProps } = iProps;
+  const { type, tpl, style, children, disabled, onPressIn, onPressOut, forceInset, delay, ...oProps } = iProps;
 
   /** Form Context Sync **/
   const formContext = React.useContext(FormContext);
@@ -94,7 +94,7 @@ const Button: React.FC<ButtonProps> = (iProps: ButtonProps, onRef: any) => {
         }
       }
 
-      if (!isPromise) setTimeout(() => setProcess(0), 200);
+      if (!isPromise) setTimeout(() => setProcess(0), delay || 500);
     } catch (e) {
       console.warn(e);
       setProcess(0);
