@@ -1,6 +1,7 @@
 import React from 'react';
 import {SafeAreaView, StatusBar, Text, View} from 'react-native';
 import {Button, Form, Input, Modal, Option, ScrollView, Select} from 'actbase';
+import {useNavigation} from '@react-navigation/core';
 
 function sleep(time) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -24,6 +25,7 @@ const Forms = () => {
   const [page, setPage] = React.useState(0);
 
   const inputRef = React.createRef();
+  const navigation = useNavigation();
 
   return (
     <>
@@ -105,7 +107,8 @@ const Forms = () => {
               type={'button'}
               tpl={'link'}
               onPress={() => {
-                setVisible(true);
+                navigation.navigate('Page2');
+                // setVisible(true);
               }}>
               모달띠우기
             </Button>

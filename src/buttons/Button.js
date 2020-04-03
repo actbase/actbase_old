@@ -51,7 +51,7 @@ const Button = props => {
             console.warn(e);
           });
         } else {
-          setTimeout(() => setProcess(0), 200);
+          setTimeout(() => setProcess(0), 500);
         }
       } catch (e) {
         console.warn(e);

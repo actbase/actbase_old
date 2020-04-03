@@ -14,6 +14,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from './src/views/Home';
 import Forms from './src/views/Forms';
+import Page2 from './src/views/Page2';
 
 const styles = StyleSheet.create({
   'ab-button-tpl-default': {marginVertical: 5},
@@ -29,6 +30,11 @@ const App = () => {
         <Stack.Navigator>
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Forms" component={Forms} />
+          <Stack.Screen
+            name={'Page2'}
+            component={Page2}
+            options={{title: 'Page2'}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ActBase>

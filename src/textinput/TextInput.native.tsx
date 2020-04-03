@@ -36,7 +36,7 @@ const propTemplate: { [key: string]: TextInputProps } = {
   },
 };
 
-const TextField = React.forwardRef<TextInput, InputProps>((props, onRef) => {
+const TextField = React.forwardRef<TextInput, InputProps>((props, onRef:any) => {
   const {
     type,
     tpl,
