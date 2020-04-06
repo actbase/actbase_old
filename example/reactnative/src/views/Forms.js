@@ -61,13 +61,14 @@ const Forms = () => {
           <Form
             style={{padding: 20, flex: 1}}
             onSubmit={async data => {
-              await sleep(3000);
-              alert(JSON.stringify(data));
+              alert(text);
+              // await sleep(3000);
+              // alert(JSON.stringify(data));
             }}>
             <Input type={'hidden'} name={'aaa'} value={'bbbb'} />
 
             <Input
-              name={'id'}
+              // name={'id'}
               style={{marginBottom: 20}}
               value={text}
               clearButtonMode={'always'}

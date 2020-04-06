@@ -3,7 +3,8 @@ import forIn from 'lodash/forIn';
 import isEqual from 'lodash/isEqual';
 import View from '../web/View';
 import { measure } from '../common/utils';
-import { Children, ExtraProps, FieldError, FormContextArgs, FormJson, FormProps } from './res/types';
+import { Children, ExtraProps, FormContextArgs, FormJson, FormProps } from './res/types';
+import { ValidateResult } from '../inputs/res/types';
 
 export const FormContext = React.createContext<FormContextArgs>({});
 
@@ -52,10 +53,11 @@ const Form = React.forwardRef((props: FormProps, onRef: any) => {
       const args: ExtraProps = {};
       if (elements.length - 1 <= index) {
         args.returnKeyType = 'done';
-        args.onSubmitEditing = submit;
+        // args.onSubmitEditing = submit;
       } else {
         args.returnKeyType = 'next';
-        args.onSubmitEditing = elements[index + 1].options.focus;
+        args.nextElement = elements[index + 1].options;
+        // args.onSubmitEditing = elements[index + 1].options.focus;
       }
       v.options?.setProps?.(args);
     });
@@ -64,19 +66,19 @@ const Form = React.forwardRef((props: FormProps, onRef: any) => {
   const submit = async () => {
     const elements = Object.values(items?.current).filter(v => !!v.options?.name);
 
-    let formErrors: FieldError[] = [];
+    let formErrors: ValidateResult[] = [];
     const params: FormJson = {};
     elements.forEach(v => {
       const opt = v.options;
       if (opt?.name) {
         if (params[opt.name] === undefined) {
-          params[opt.name] = opt.getValue();
+          params[opt.name] = opt.getValue?.();
         } else if (params[opt.name]?.push !== undefined) {
-          params[opt.name].push(opt.getValue());
+          params[opt.name].push(opt.getValue?.());
         } else if (params[opt.name] !== null && params[opt.name] !== undefined) {
-          params[opt.name] = [...params[opt.name], opt.getValue()];
+          params[opt.name] = [...params[opt.name], opt.getValue?.()];
         }
-        const error: FieldError = opt.onValidate?.(opt.getValue(), params[opt.name]);
+        const error: ValidateResult | null | undefined = opt.onValidate?.(opt.getValue?.(), params[opt.name]);
         if (error && (!error.level || error.level === 'error')) {
           formErrors.push(error);
         }
