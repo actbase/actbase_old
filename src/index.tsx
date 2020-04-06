@@ -20,6 +20,14 @@ export { default as Col } from './layouts/Col';
 
 export { default as Modal } from './modal/Modal';
 
+export {
+  KeyboardSpacerContext,
+  useKeyboardSpacer,
+  KeyboardSpacerProvider,
+  KeyboardSpacer,
+  withKeyboardSpacer
+} from './keyboard/KeyboardSpacer';
+
 // Web Migrated
 export { default as View } from './web/View';
 export { default as Div } from './web/Div';
