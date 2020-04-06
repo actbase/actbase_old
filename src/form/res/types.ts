@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { ReturnKeyTypeOptions, NativeSyntheticEvent, TextInputSubmitEditingEventData } from 'react-native';
+import { ReturnKeyTypeOptions } from 'react-native';
+import { ValidateResult } from '../../inputs/res/types';
 
 export interface FormProps {
   style?: any;
@@ -22,30 +23,24 @@ export interface FormJson {
 export interface Children {
   [key: string]: {
     node: React.ReactNode;
-    options: {
-      name?: string;
-      focus?: () => void;
-      blur?: () => void;
-      setProps: (data: ExtraProps) => void;
-      getValue: () => any;
-      onValidate: (value: any, values: any) => FieldError;
-    };
+    options: ChildOption;
     area: number;
   };
 }
 
 export interface ChildOption {
   name?: string;
-  setProps?: any;
-  getValue?: any;
-  onValidate?: any;
-  focus?: any;
-  blur?: any;
+  focus?: () => void;
+  blur?: () => void;
+  setProps?: (data: ExtraProps) => void;
+  getValue?: () => any;
+  onValidate?: (value: any, values: any) => ValidateResult | null;
 }
 
 export interface ExtraProps {
   returnKeyType?: ReturnKeyTypeOptions;
-  onSubmitEditing?: (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => void;
+  // onSubmitEditing?: (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => void;
+  nextElement?: ChildOption;
   submitting?: boolean;
   submitted?: boolean;
   hint?: string;

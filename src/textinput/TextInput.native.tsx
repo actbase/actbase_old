@@ -167,6 +167,14 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef: any) =>
     onChangeText?.('');
   };
 
+  const handleSubmitEditing = () => {
+    if (extraProps.returnKeyType === 'done') {
+      formContext.submit?.();
+    } else if (extraProps.returnKeyType === 'next' && extraProps.nextElement) {
+      extraProps.nextElement.focus?.();
+    }
+  };
+
   const eProps: ExtraProps = {
     hint: extraProps.hint || props.hint,
     error: extraProps.error,
@@ -212,6 +220,7 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef: any) =>
           clearButtonMode={'never'}
           {...(!!type ? propTemplate[type] : {})}
           {...extraProps}
+          onSubmitEditing={handleSubmitEditing}
           {...oProps}
           value={text}
         />
