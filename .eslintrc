@@ -1,7 +1,4 @@
 {
-  "extends": [
-    "react-native-shinpei"
-  ],
   "parserOptions": {
     "ecmaVersion": "2018",
     "sourceType": "module",
@@ -11,22 +8,8 @@
       "experimentalObjectRestSpread": true
     }
   },
-  "overrides": [
-    {
-      "files": [
-        "**/*.tsx"
-      ],
-      "parserOptions": {
-        "project": "./tsconfig.json"
-      }
-    }
-  ],
-  "plugins": [
-    "react"
-  ],
-  "globals": {
-    "Promise": true,
-    "setTimeout": true,
-    "FormData": true
-  }
+  "parser": "babel-eslint",
+  "plugins": ["react"],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "globals": { "Promise": true, "setTimeout": true, "FormData": true }
 }

@@ -38,6 +38,7 @@
     "@babel/core": "^7.6.2",
     "@babel/node": "^7.7.7",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
     "@babel/plugin-transform-modules-commonjs": "^7.7.5",
     "@babel/plugin-transform-react-jsx": "^7.8.3",
     "@babel/preset-env": "^7.7.7",
@@ -67,10 +68,10 @@
     "prettier": "^1.19.1",
     "react": "*",
     "react-native": "*",
+    "react-native-safe-area-context": "^0.7.3",
     "ts-jest": "^25.2.0",
     "ts-node": "^8.6.2",
     "tslib": "^1.11.1",
-    "typescript": "^3.8.3",
-    "react-native-safe-area-context": "^0.7.3"
+    "typescript": "^3.8.3"
   }
 }
