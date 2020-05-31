@@ -211,16 +211,19 @@ const Select = <T extends unknown>(props: SelectProps<T>) => {
         <>
           <TouchableOpacity style={[StyleSheet.absoluteFill]} onPress={handleRelease} />
           <View
-            style={{
-              position: 'absolute',
-              top: offsets?.top,
-              bottom: offsets?.bottom,
-              left: offsets?.left,
-            }}
+            style={[
+              {
+                position: 'absolute',
+                top: offsets?.top,
+                bottom: offsets?.bottom,
+                left: offsets?.left,
+              },
+            ]}
           >
             <Animated.ScrollView
               style={[
                 pick(elementStyle, COVER_STYLES),
+                r.styles[`${STYLE_GROUP_NAME}-items-tpl-${tpl}`],
                 {
                   width: offsets?.width,
                   minHeight: offsets?.height,

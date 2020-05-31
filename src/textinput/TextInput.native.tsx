@@ -196,7 +196,7 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef: any) =>
   const clearButtonEnabled = clearButtonMode !== 'never' && (clearButtonMode === 'always' || clearMode1 || clearMode2);
 
   return (
-    <View style={pick(elementStyle, MARGIN_STYLES)}>
+    <View style={pick(elementStyle, [...MARGIN_STYLES, 'flex'])}>
       <View
         style={[
           omit(elementStyle, MARGIN_STYLES),
@@ -212,7 +212,10 @@ const TextField = React.forwardRef<TextInput, InputProps>((props, onRef: any) =>
         <TextInput
           ref={handleRef}
           onChangeText={handleChangeText}
-          style={[{ flex: 1, height: elementStyle?.height }, pick(elementStyle, TEXT_STYLE_NAMES)]}
+          style={[
+            { flex: 1, height: elementStyle?.height, paddingTop: 0, paddingBottom: 0, includeFontPadding: false },
+            pick(elementStyle, TEXT_STYLE_NAMES),
+          ]}
           onFocus={handleFocus}
           onBlur={handleBlur}
           editable={!disabled && !props.readonly && !extraProps.submitting}
