@@ -232,6 +232,7 @@ const Select = <T extends unknown>(props: SelectProps<T>) => {
                   maxHeight: 200,
                 },
               ]}
+              keyboardShouldPersistTaps='handled'
             >
               {options.map((option, index) => (
                 <TouchableOpacity
